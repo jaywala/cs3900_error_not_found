@@ -8,3 +8,8 @@ Drafted epics for some project ideas so we can compare,
  which project idea is best.
 Raised concern for project ideas, to ensure we choose a viable project.
 Researched on blockchains to see if one of our ideas are viable.   
+
+Week 3
+Participated in the team meeting on Wednesday. 
+Main achievements from the meeting: decided on project and epics.
+Wrote a draft of the proposal.  
