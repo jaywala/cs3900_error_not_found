@@ -1,0 +1,7 @@
+# Virtual Environment
+venv/
+
+# Assets
+
+# Developer Tools/IDEs
+.vscode/

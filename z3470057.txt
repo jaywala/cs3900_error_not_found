@@ -1,0 +1,11 @@
+Week 2
+- Group of 4 formed within the tutorial.
+- Participated in group discussion about which project to pursue.
+- Expanded on existing project specifications and discussed potential extensions.
+
+Week 3
+- Through group discussion, arrived at a final decision to go with topic 3.
+- Researched competing web services. E.g. airbnb
+- Researched technologies to use in developement.
+- Brainstorm project features and epics.
+- Worked on writing up the project proposal.
