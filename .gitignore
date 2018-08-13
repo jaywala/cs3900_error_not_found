@@ -1,5 +1,5 @@
 bin/
-
+capstone/__pycache__/
 
 # File types
 *.cfg
