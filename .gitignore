@@ -1,3 +1,9 @@
+bin/
+
+
+# File types
+*.cfg
+
 # Virtual Environment
 venv/
 
