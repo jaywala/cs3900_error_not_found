@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
-    'catalog',
-    'corsheaders'
+    #'catalog',
+    'corsheaders',
+    'catalog.apps.CatalogConfig',
 ]
 
 # rest frame work application definition
