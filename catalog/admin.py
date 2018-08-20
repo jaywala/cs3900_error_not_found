@@ -6,8 +6,21 @@ from .models import Advertisement
 
 class AdvertismentAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,    {'fields': ['accommodation_name']}),
-        ('Price', {'fields': ['base_price']}),
+        ('Accommodation Information',    {'fields': ['accommodation_name']}),
+        (None, {'fields': ['accommodation_description']}),
+        ('Rules', {'fields': ['house_rules']}),
+        (None, {'fields': ['booking_rules']}),
+        ('Base Price', {'fields': ['base_price']}),
+        ('Number of guests', {'fields': ['num_guests']}),
+        ('Rooms', {'fields': ['num_bedrooms']}),
+        (None, {'fields': ['num_bathrooms']}),
+        ('Location', {'fields': ['suburb']}),
+        (None, {'fields': ['state']}),
+        (None, {'fields': ['country']}),
     ]
+
+
+
+
 
 admin.site.register(Advertisement, AdvertismentAdmin)
