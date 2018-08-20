@@ -23,10 +23,13 @@ urlpatterns = [
 # tutorial said to replace all the contents here with below
 # commented out incase we need the previous code --> gladys
 from django.conf.urls import url
-from catalog import views
+from django.urls import path, include
+from django.contrib import admin
 
+from catalog import views
 
 urlpatterns = [
     url(r'^api/public/', views.public),
-    url(r'^api/private/', views.private)
+    url(r'^api/private/', views.private),
+    path('admin/', admin.site.urls),
 ]
