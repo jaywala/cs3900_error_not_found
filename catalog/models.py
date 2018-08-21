@@ -3,6 +3,30 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
+class User(models.Model):
+    user_name = models.CharField(max_length=25)
+    name = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.user_name
+
+
+class User_Reviews(models.Model):
+    rating = models.IntegerField()
+    title = models.CharField(max_length=50)
+    message = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.title
+
+class Accomodation_Reviews(models.Model):
+    rating = models.IntegerField()
+    title = models.CharField(max_length=50)
+    message = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.title
 
 class Advertisement(models.Model):
 
