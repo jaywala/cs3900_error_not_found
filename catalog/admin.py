@@ -1,8 +1,12 @@
 from django.contrib import admin
 
-from .models import Advertisement
+from .models import Advertisement, Amenities
 
 # Register your models here.
+
+class ChoiceInline(admin.TabularInline):
+    model = Amenities
+    extra = 3
 
 class AdvertismentAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -18,6 +22,7 @@ class AdvertismentAdmin(admin.ModelAdmin):
         (None, {'fields': ['state']}),
         (None, {'fields': ['country']}),
     ]
+    inlines = [ChoiceInline]
 
 
 

@@ -20,3 +20,12 @@ class Advertisement(models.Model):
 
     def __str__(self):
         return self.accommodation_name
+
+class Amenities(models.Model):
+    # on_delete=models.CASCADE this means if the advertisement is deleted
+    # the Amenities relying on the advertisement will also be deleted.
+    advert = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
+    feature = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.feature
