@@ -4,15 +4,19 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 
 class User(models.Model):
+
     user_name = models.CharField(max_length=25)
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
+    profile_pic = models.ImageField(upload_to = 'profile_pics/')
 
     def __str__(self):
         return self.user_name
 
 
-class User_Reviews(models.Model):
+class User_Review(models.Model):
+
+    user = models.ForeignKey(User, related_name='user_reviews', on_delete=models.CASCADE)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
@@ -20,16 +24,10 @@ class User_Reviews(models.Model):
     def __str__(self):
         return self.title
 
-class Accomodation_Reviews(models.Model):
-    rating = models.IntegerField()
-    title = models.CharField(max_length=50)
-    message = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return self.title
 
 class Advertisement(models.Model):
 
+    user = models.ForeignKey(User, related_name='advertisements', on_delete=models.CASCADE)
     accommodation_name = models.CharField(max_length=50)
     accommodation_description = models.CharField(max_length=1000, default='')
 
@@ -49,24 +47,36 @@ class Advertisement(models.Model):
     def __str__(self):
         return self.accommodation_name
 
+
+class Accomodation_Review(models.Model):
+
+    advert = models.ForeignKey(Advertisement, related_name='accomodation_reviews', on_delete=models.CASCADE)
+    rating = models.IntegerField()
+    title = models.CharField(max_length=50)
+    message = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.title
+
+
 class Amenities(models.Model):
-    # on_delete=models.CASCADE this means if the advertisement is deleted
-    # the Amenities relying on the advertisement will also be deleted.
-    advert = models.ForeignKey(Advertisement, on_delete=models.CASCADE)
+
+    advert = models.ForeignKey(Advertisement, related_name='amenities', on_delete=models.CASCADE)
     feature = models.CharField(max_length=200)
 
     def __str__(self):
         return self.feature
 
-class PropertyImage(models.Model):
-    property = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField()
 
-    #def __str__(self):
-    #    return self.property.related_name
+class PropertyImage(models.Model):
+
+    advert = models.ForeignKey(Advertisement, related_name='property_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to = 'accommodation_pics/')
+
 
 class Event(models.Model):
-    property = models.ForeignKey(Advertisement, related_name='calendar', on_delete=models.CASCADE)
+
+    advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
     day = models.DateField(u'Day of the event', help_text=u'Day of the event')
     start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
     end_time = models.TimeField(u'Final time', help_text=u'Final time')
@@ -77,8 +87,9 @@ class Event(models.Model):
         verbose_name_plural = u'Scheduling'
 
     def check_overlap(self, fixed_start, fixed_end, fixed_day, new_start, new_end, new_day):
+        # TODO: 
         """
-        TODO: need to check if the same day and also if it was a previous fixed event but due to
+        TODO need to check if the same day and also if it was a previous fixed event but due to
         a previous error it's checking itself again. need to somehow differenciate events
         that was previously booked.
         """

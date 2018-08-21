@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Advertisement, Amenities, PropertyImage, Event
+from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
+from .models import User, User_Review
 
-# Register your models here.
 
 class AmenitiesInline(admin.TabularInline):
     model = Amenities
@@ -16,11 +16,31 @@ class PropertyImageInline(admin.TabularInline):
 
 class EventInline(admin.TabularInline):
     model = Event
+    extra = 3
     #list_display = ['day', 'start_time', 'end_time', 'notes']
 
 
-class AdvertismentAdmin(admin.ModelAdmin):
+class UserReviewInline(admin.TabularInline):
+    model = User_Review
+    extra = 3
+
+class AccommodationReviewInline(admin.TabularInline):
+    model = Accomodation_Review
+    extra = 3
+
+class UserAdmin(admin.ModelAdmin):
     fieldsets = [
+        (None, {'fields': ['user_name']}),
+        (None, {'fields': ['name']}),
+        (None, {'fields': ['email']}),
+        (None, {'fields': ['profile_pic']})
+    ]
+    inlines = [UserReviewInline]
+
+
+class AdvertisementAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Owner', {'fields': ['user']}),
         ('Accommodation Information',    {'fields': ['accommodation_name']}),
         (None, {'fields': ['accommodation_description']}),
         ('Rules', {'fields': ['house_rules']}),
@@ -33,9 +53,8 @@ class AdvertismentAdmin(admin.ModelAdmin):
         (None, {'fields': ['state']}),
         (None, {'fields': ['country']}),
     ]
-    inlines = [AmenitiesInline, PropertyImageInline, EventInline]
+    inlines = [AmenitiesInline, PropertyImageInline, EventInline, AccommodationReviewInline]
 
 
-
-
-admin.site.register(Advertisement, AdvertismentAdmin)
+admin.site.register(Advertisement, AdvertisementAdmin)
+admin.site.register(User, UserAdmin)
