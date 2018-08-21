@@ -52,9 +52,12 @@ class Event(models.Model):
         verbose_name = u'Scheduling'
         verbose_name_plural = u'Scheduling'
 
-''' (there is a bug here, forgot to change back to gladys branch.
-just leave this commented out till I fix it.)
-    def check_overlap(self, fixed_start, fixed_end, new_start, new_end):
+    def check_overlap(self, fixed_start, fixed_end, fixed_day, new_start, new_end, new_day):
+        """
+        TODO: need to check if the same day and also if it was a previous fixed event but due to
+        a previous error it's checking itself again. need to somehow differenciate events
+        that was previously booked.
+        """
         overlap = False
         if new_start == fixed_end or new_end == fixed_start:    #edge case
             overlap = False
@@ -76,8 +79,7 @@ just leave this commented out till I fix it.)
         events = Event.objects.filter(day=self.day)
         if events.exists():
             for event in events:
-                if self.check_overlap(event.start_time, event.end_time, self.start_time, self.end_time):
+                if self.check_overlap(event.start_time, event.end_time, event.day, self.start_time, self.end_time, self.day):
                     raise ValidationError(
                         'There is an overlap with another event: ' + str(event.day) + ', ' + str(
                             event.start_time) + '-' + str(event.end_time))
-'''
