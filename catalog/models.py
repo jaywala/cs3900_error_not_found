@@ -29,3 +29,10 @@ class Amenities(models.Model):
 
     def __str__(self):
         return self.feature
+
+class PropertyImage(models.Model):
+    property = models.ForeignKey(Advertisement, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField()
+
+    #def __str__(self):
+    #    return self.property.related_name
