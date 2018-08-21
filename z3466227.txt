@@ -19,4 +19,5 @@ Helped set up auth0.
 Completed a Django tutorial for understanding purposes.
 
 Week 5
-Worked on modeling the database
+Worked on modeling the database, specifically the Advertisement Class and everything related to posting an ad. 
+Set up admin page to play with database. 
