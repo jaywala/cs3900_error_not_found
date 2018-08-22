@@ -3,7 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 
-class User(models.Model):
+class User_Profile(models.Model):
 
     user_name = models.CharField(max_length=25)
     name = models.CharField(max_length=50)
@@ -16,7 +16,7 @@ class User(models.Model):
 
 class User_Review(models.Model):
 
-    user = models.ForeignKey(User, related_name='user_reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(User_Profile, related_name='user_reviews', on_delete=models.CASCADE)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
@@ -27,7 +27,7 @@ class User_Review(models.Model):
 
 class Advertisement(models.Model):
 
-    user = models.ForeignKey(User, related_name='advertisements', on_delete=models.CASCADE)
+    user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE)
     accommodation_name = models.CharField(max_length=50)
     accommodation_description = models.CharField(max_length=1000, default='')
 
