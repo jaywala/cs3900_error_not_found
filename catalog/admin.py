@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
-from .models import User, User_Review
+from .models import User_Profile, User_Review
 
 
 class AmenitiesInline(admin.TabularInline):
@@ -57,4 +57,4 @@ class AdvertisementAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Advertisement, AdvertisementAdmin)
-admin.site.register(User, UserAdmin)
+admin.site.register(User_Profile, UserAdmin)
