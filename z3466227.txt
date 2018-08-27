@@ -13,3 +13,11 @@ Week 3
 Participated in the team meeting on Wednesday. 
 Main achievements from the meeting: decided on project and epics.
 Wrote a draft of the proposal.  
+
+Week 4
+Helped set up auth0.
+Completed a Django tutorial for understanding purposes.
+
+Week 5
+Worked on modeling the database, specifically the Advertisement Class and everything related to posting an ad. 
+Set up admin page to play with database. 
