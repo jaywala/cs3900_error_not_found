@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_jwt',
-    'catalog',
-    'corsheaders'
+    #'catalog',
+    'corsheaders',
+    'catalog.apps.CatalogConfig',
 ]
 
 # rest frame work application definition
@@ -125,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Australia/Sydney'
 
 USE_I18N = True
 
