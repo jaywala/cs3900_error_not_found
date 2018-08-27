@@ -12,7 +12,7 @@ class User_Profile(models.Model):
 
     def __str__(self):
         return self.user_name
-'''
+
     def get_user_name(self):
         return self.user_name
 
@@ -22,11 +22,17 @@ class User_Profile(models.Model):
     def get_email(self):
         return self.email
 
-    def set_name(primary_key, new_name):
-        u = Catalog.objects.get(id=primary_key)
-        u.name = name
-        u.save(['name'])
-'''
+    #--------------------------------
+
+    def set_name(self, new_name):
+        u = User_Profile.objects.get(id=self.id)
+        u.name = new_name
+        u.save()
+
+    def set_email(self, new_email):
+        u = User_Profile.objects.get(id=self.id)
+        u.email = new_email
+        u.save()
 
 
 class User_Review(models.Model):
@@ -38,6 +44,35 @@ class User_Review(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_user(self):
+        return self.user
+
+    def get_rating(self):
+        return self.rating
+
+    def get_title(self):
+        return self.title
+
+    def get_message(self):
+        return self.message
+
+    #--------------------------------
+
+    def set_rating(self, new_rating):
+        u = User_Review.objects.get(id=self.id)
+        u.rating = new_rating
+        u.save()
+
+    def set_title(self, new_title):
+        u = User_Review.objects.get(id=self.id)
+        u.title = new_title
+        u.save()
+
+    def set_message(self, new_message):
+        u = User_Review.objects.get(id=self.id)
+        u.message = new_message
+        u.save()
 
 
 class Advertisement(models.Model):
@@ -62,6 +97,99 @@ class Advertisement(models.Model):
     def __str__(self):
         return self.accommodation_name
 
+    def get_user(self):
+        return self.user
+
+    def get_accommodation_name(self):
+        return self.accommodation_name
+
+    def get_accommodation_description(self):
+        return self.accommodation_description
+
+    def get_house_rules(self):
+        return self.house_rules
+
+    def get_booking_rules(self):
+        return self.booking_rules
+
+    def get_base_price(self):
+        return self.base_price
+
+    def get_num_guests(self):
+        return self.num_guests
+
+    def get_num_bedrooms(self):
+        return self.num_bedrooms
+
+    def get_num_bathrooms(self):
+        return self.num_bathrooms
+
+    def get_suburb(self):
+        return self.suburb
+
+    def get_state(self):
+        return self.state
+
+    def get_country(self):
+        return self.country
+
+    #--------------------------------
+
+    def set_accommodation_name(self, new_accommodation_name):
+        a = Advertisement.objects.get(id=self.id)
+        a.accommodation_name = new_accommodation_name
+        a.save()
+
+    def set_accommodation_description(self, new_accommodation_description):
+        a = Advertisement.objects.get(id=self.id)
+        a.accommodation_description = new_accommodation_description
+        a.save()
+
+    def set_house_rules(self, new_house_rules):
+        a = Advertisement.objects.get(id=self.id)
+        a.house_rules = new_house_rules
+        a.save()
+
+    def set_booking_rules(self, new_booking_rules):
+        a = Advertisement.objects.get(id=self.id)
+        a.booking_rules = new_booking_rules
+        a.save()
+
+    def set_base_price(self, new_base_price):
+        a = Advertisement.objects.get(id=self.id)
+        a.base_price = new_base_price
+        a.save()
+
+    def set_num_guests(self, new_num_guests):
+        a = Advertisement.objects.get(id=self.id)
+        a.num_guests = new_num_guests
+        a.save()
+
+    def set_num_bedrooms(self, new_num_bedrooms):
+        a = Advertisement.objects.get(id=self.id)
+        a.num_bedrooms = new_num_bedrooms
+        a.save()
+
+    def set_num_bathrooms(self, new_num_bathrooms):
+        a = Advertisement.objects.get(id=self.id)
+        a.num_bathrooms = new_num_bathrooms
+        a.save()
+
+    def set_suburb(self, new_suburb):
+        a = Advertisement.objects.get(id=self.id)
+        a.suburb = new_suburb
+        a.save()
+
+    def set_state(self, new_state):
+        a = Advertisement.objects.get(id=self.id)
+        a.state = new_state
+        a.save()
+
+    def set_country(self, new_country):
+        a = Advertisement.objects.get(id=self.id)
+        a.country = new_country
+        a.save()
+
 
 class Accomodation_Review(models.Model):
 
@@ -73,6 +201,35 @@ class Accomodation_Review(models.Model):
     def __str__(self):
         return self.title
 
+    def get_advertisement(self):
+        return self.advert
+
+    def get_rating(self):
+        return self.rating
+
+    def get_title(self):
+        return self.title
+
+    def get_message(self):
+        return self.message
+
+    #--------------------------------
+
+    def set_rating(self, new_rating):
+        u = Accomodation_Review.objects.get(id=self.id)
+        u.rating = new_rating
+        u.save()
+
+    def set_title(self, new_title):
+        u = Accomodation_Review.objects.get(id=self.id)
+        u.title = new_title
+        u.save()
+
+    def set_message(self, new_message):
+        u = Accomodation_Review.objects.get(id=self.id)
+        u.message = new_message
+        u.save()
+
 
 class Amenities(models.Model):
 
@@ -81,6 +238,19 @@ class Amenities(models.Model):
 
     def __str__(self):
         return self.feature
+
+    def get_advertisement(self):
+        return self.advert
+
+    def get_feature(self):
+        return self.feature
+
+    #--------------------------------
+
+    def set_feature(self, new_feature):
+        f = Amenties.objects.get(id=self.id)
+        f.feature = new_feature
+        f.save()
 
 
 class PropertyImage(models.Model):
@@ -146,3 +316,56 @@ class Event(models.Model):
                          ) + ' ' + str(event.booking_status))
                         #'There is an overlap with another event: ' + str(event.start_day) + ', ' + str(
                         #    event.start_day_start_time) + '-' + str(event.end_day) + ', ' + str(event.end_day_end_time))
+
+    def get_advertisement(self):
+        return self.advert
+
+    def get_start_day(self):
+        return self.start_day
+
+    def get_start_day_start_time(self):
+        return self.start_day_start_time
+
+    def get_end_day(self):
+        return self.end_day
+
+    def get_end_day_end_time(self):
+        return self.end_day_end_time
+
+    def get_booking_status(self):
+        return self.booking_status
+
+    def get_notes(self):
+        return self.notes
+
+    #--------------------------------
+#TODO need to get the validity when using these methods to change the date
+    def set_start_day(self, new_start_day):
+        e = Event.objects.get(id=self.id)
+        e.start_day = new_start_day
+        e.save()
+
+    def set_start_day_start_time(self, new_start_time):
+        e = Event.objects.get(id=self.id)
+        e.start_day_start_time = new_start_time
+        e.save()
+
+    def set_end_day(self, new_end_day):
+        e = Event.objects.get(id=self.id)
+        e.end_day = new_end_day
+        e.save()
+
+    def set_end_day_end_time(self, new_end_time):
+        e = Event.objects.get(id=self.id)
+        e.end_day_end_time = new_end_time
+        e.save()
+
+    def set_booking_status(self, new_booking_status):
+        e = Event.objects.get(id=self.id)
+        e.booking_status = new_booking_status
+        e.save()
+
+    def set_notes(self, new_notes):
+        e = Event.objects.get(id=self.id)
+        e.notes = new_notes
+        e.save()
