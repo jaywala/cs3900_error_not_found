@@ -7,12 +7,7 @@
       Log In
     </button>
 
-    <button
-      class="btn btn-primary btn-margin"
-      v-if="authenticated"
-      @click="privateMessage()">
-      Call Private
-    </button>
+
 
     <button
       class="btn btn-primary btn-margin"
@@ -20,15 +15,19 @@
       @click="logout()">
       Log Out
     </button>
-    {{message}}
+
+
+    <router-link to="/newbook" v-if = "authenticated">add room</router-link>
+    <router-view></router-view>
+
     <br>
   </div>
 </template>
-
 <script>
 import AuthService from './auth/AuthService'
 import axios from 'axios'
-
+import HelloWorld from './components/HelloWorld.vue'
+import newbook from '@/components/newbook.vue'
 const API_URL = 'http://localhost:8000'
 const auth = new AuthService()
 
@@ -46,24 +45,18 @@ export default {
       message: ''
     }
   },
-
+  components: {HelloWorld},
   methods: {
     // this method calls the AuthService login() method
     login () {
       auth.login()
+      //this.$router.push('helloworld')
     },
     handleAuthentication () {
       auth.handleAuthentication()
     },
     logout () {
       auth.logout()
-    },
-    privateMessage () {
-      const url = `${API_URL}/api/private/`
-      return axios.get(url, {headers: {Authorization: `Bearer ${AuthService.getAuthToken()}`}}).then((response) => {
-        console.log(response.data)
-        this.message = response.data || ''
-      })
     }
   }
 }
