@@ -5,7 +5,9 @@ import newbook from '@/components/newbook'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
+
     {
       path: '/newbook',
       component: newbook
