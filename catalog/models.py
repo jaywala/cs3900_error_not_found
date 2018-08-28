@@ -34,6 +34,17 @@ class User_Profile(models.Model):
         u.email = new_email
         u.save()
 
+    #--------------------------------
+
+    def create_me(self, user_name, name, email, profile_pic):
+        u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic)
+        u.save()
+
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
+
 
 class User_Review(models.Model):
 
@@ -73,6 +84,16 @@ class User_Review(models.Model):
         u = User_Review.objects.get(id=self.id)
         u.message = new_message
         u.save()
+
+    #--------------------------------
+    '''
+    def create_me():
+        u = User_Review()
+    '''
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
 
 
 class Advertisement(models.Model):
@@ -190,6 +211,10 @@ class Advertisement(models.Model):
         a.country = new_country
         a.save()
 
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
 
 class Accomodation_Review(models.Model):
 
@@ -230,6 +255,11 @@ class Accomodation_Review(models.Model):
         u.message = new_message
         u.save()
 
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
+
 
 class Amenities(models.Model):
 
@@ -252,12 +282,21 @@ class Amenities(models.Model):
         f.feature = new_feature
         f.save()
 
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
+
 
 class PropertyImage(models.Model):
 
     advert = models.ForeignKey(Advertisement, related_name='property_images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to = 'accommodation_pics/')
 
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
 
 class Event(models.Model):
 
@@ -317,6 +356,21 @@ class Event(models.Model):
                         #'There is an overlap with another event: ' + str(event.start_day) + ', ' + str(
                         #    event.start_day_start_time) + '-' + str(event.end_day) + ', ' + str(event.end_day_end_time))
 
+    def check_validity(self):
+        if self.start_day > self.end_day:
+            return False
+        if self.start_day == self.end_day and self.start_day_start_time >= self.end_day_end_time:
+            return False
+
+        events = Event.objects.all()
+        if events.exists():
+            for event in events:
+                if self.check_overlap(event.start_day, event.start_day_start_time, event.end_day, event.end_day_end_time,
+                                      self.start_day, self.start_day_start_time, self.end_day, self.end_day_end_time
+                                      ) and event.id != self.id:
+                    return False
+        return True
+
     def get_advertisement(self):
         return self.advert
 
@@ -339,11 +393,15 @@ class Event(models.Model):
         return self.notes
 
     #--------------------------------
-#TODO need to get the validity when using these methods to change the date
+#TODO need to check the validity when using these methods to modify the data
+# currently it trivaly either modifies db or doesn't
+# need to return some feed back to user.
+# above case is valid when creating the event. Just nothing for editing the event.
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
-        e.start_day = new_start_day
-        e.save()
+        if e.check_validity() == True: # this is not working the way I want
+            e.start_day = new_start_day
+            e.save()
 
     def set_start_day_start_time(self, new_start_time):
         e = Event.objects.get(id=self.id)
@@ -369,3 +427,8 @@ class Event(models.Model):
         e = Event.objects.get(id=self.id)
         e.notes = new_notes
         e.save()
+
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()
