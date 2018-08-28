@@ -35,11 +35,11 @@ class User_Profile(models.Model):
         u.save()
 
     #--------------------------------
-
+    '''
     def create_me(self, user_name, name, email, profile_pic):
         u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic)
         u.save()
-
+    '''
     #--------------------------------
 
     def delete_me(self):
