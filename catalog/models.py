@@ -45,6 +45,21 @@ class User_Profile(models.Model):
     def delete_me(self):
         self.delete()
 
+    #--------------------------------
+
+    def exists(username):
+        '''
+        Searches for the object by a field.
+        '''
+        user = User_Profile.objects.filter(user_name=username)
+        if user.exists() and len(user) == 1:
+            return user
+        else:
+            return None
+
+
+
+
 
 class User_Review(models.Model):
 
@@ -111,6 +126,7 @@ class Advertisement(models.Model):
     num_bedrooms = models.IntegerField(default=0)
     num_bathrooms = models.IntegerField(default=0)
 
+    # add location field
     suburb = models.CharField(max_length=100, default='')
     state = models.CharField(default='NSW', max_length=50)
     country = models.CharField(default='Australia', max_length=50)
