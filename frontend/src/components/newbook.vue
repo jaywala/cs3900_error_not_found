@@ -104,14 +104,7 @@
                   <div class="row">
                     <div class="col-md-5 mb-3">
                       <label for="country">City</label>
-                      <select v-model="city"class="custom-select d-block w-100" id="country" required>
-                        <option>Choose...</option>
-                        <option>Sydney</option>
-                        <option>Newcastle</option>
-                        <option>Wollongon</option>
-                        <option>Kiama</option>
-                        <option>Snowymountain</option>
-                      </select>
+                      <input v-model="city" type="text" class="form-control" id="city" placeholder="" required>
                       <div class="invalid-feedback">
                         Please select a valid city.
                       </div>
@@ -180,7 +173,7 @@
 
                   <div class="mb-3">
                     <label for="address">Amenities</label>
-                    <textarea v-model="amenities"class="form-control" rows="5" id="comment"></textarea>
+                    <textarea v-model="amenities" class="form-control" rows="5" id="comment"></textarea>
                   </div>
 
                   <div class="mb-3">
@@ -194,7 +187,7 @@
                   </div>
 
 
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Continue</button>
+                <button class="btn btn-primary btn-lg btn-block" >Continue</button>
                 </form>
               </div>
             </div>
