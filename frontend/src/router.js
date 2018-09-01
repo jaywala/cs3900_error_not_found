@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import landing from '@/components/landing.vue'
 import newbook from '@/components/newbook.vue'
 import callback from '@/components/Callback.vue'
-
+import test from '@/components/test.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -23,6 +23,11 @@ const router = new Router({
         path: '/callback',
         name:'callback',
         component: callback
+      },
+      {
+        path: '/test',
+        name: 'test',
+        component: test
       }
   ]
 })
@@ -32,6 +37,9 @@ router.beforeEach((to, from, next) => {
   if(to.name == 'callback') { // check if "to"-route is "callback" and allow access
     next()
   } else if(to.name == 'home'){
+    next()
+  }
+  else if(to.name == 'test'){
     next()
   }else if (router.app.$auth.isAuthenticated()) { // if authenticated allow access
     next()
