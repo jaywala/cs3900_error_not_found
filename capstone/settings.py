@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #'catalog',
     'corsheaders',
     'catalog.apps.CatalogConfig',
+    #'capstone'
 ]
 
 # rest frame work application definition
