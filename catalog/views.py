@@ -12,3 +12,6 @@ def public(request):
 @api_view(['GET'])
 def private(request):
     return HttpResponse("You should not see this message if not authenticated!")
+
+def index(request):
+    return HttpResponse("Home Page")
