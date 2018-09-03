@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^api/public/', views.public),
     url(r'^api/private/', views.private),
     url(r'index/', views.index),
+    url(r'^api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
 ]
