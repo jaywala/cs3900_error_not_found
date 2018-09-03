@@ -19,4 +19,7 @@ After setting up the development environment & ensuring you've activated the v-e
 2. cd frontend
 3. npm run dev &
 
+## Command for clearing Django DataBase
+python manage.py flush
+
 Navigate to http://localhost:8080/
