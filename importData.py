@@ -26,7 +26,11 @@ def importFromCSV():
     with open(abs_file_path) as csvfile:
         next(csvfile)
         readcsv = csv.reader(csvfile, delimiter=',')
+        count = 0
         for row in readcsv:
+            count += 1
+            if count > 100:
+                break
             # if row[4]  == "trainee":
             #     self._users.append(trainee(row[0],row[1],row[2],row[3]))
             # elif row[4] == "trainer":
@@ -45,5 +49,6 @@ def importFromCSV():
             '''
             #print(row[21])
             #break
-#if __name__ == '__main__':
-importFromCSV()
+
+if __name__ == '__main__':
+    importFromCSV()
