@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import os
 import csv
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from catalog.models import User_Profile, Advertisement
 
 
@@ -12,7 +11,8 @@ def deleteData():
 def importFromCSV():
     import os
     script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-    rel_path = "catalog/listings.csv"
+    #rel_path = "catalog/listings.csv"
+    rel_path = "listings.csv"
     abs_file_path = os.path.join(script_dir, rel_path)
     with open(abs_file_path) as csvfile:
         next(csvfile)
@@ -22,7 +22,8 @@ def importFromCSV():
             #     self._users.append(trainee(row[0],row[1],row[2],row[3]))
             # elif row[4] == "trainer":
             #     self._users.append(trainer(row[0],row[1],row[2],row[3]))
-            user = User.objects.create_user(username=row[21],email=(row[21]+"@example.com"),password="password")
+            #user = User.objects.create_user(username=row[21],email=(row[21]+"@example.com"),password="password")
+            '''
             user = User_Profile(user_name=row[21],name=row[21],email=(row[21]+"@example.com"))
             advertisement = Advertisement(User_Profile=user,
                 accommodation_name=row[4],
@@ -32,6 +33,8 @@ def importFromCSV():
                 num_bedrooms=row[56],
                 num_bathrooms=row[55],
                 suburb=row[42])
-
-if __name__ == '__main__':
-    importFromCSV()
+            '''
+            #print(row[21])
+            #break
+#if __name__ == '__main__':
+importFromCSV()
