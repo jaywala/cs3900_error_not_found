@@ -1,7 +1,17 @@
 import os
 import csv
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "capstone.settings")
+
+# First run django.setup()
+django.setup()
+
+# Import models
 #from django.contrib.auth.models import User
 from catalog.models import User_Profile, Advertisement
+
+
 
 
 def deleteData():
@@ -9,7 +19,6 @@ def deleteData():
 
 
 def importFromCSV():
-    import os
     script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
     #rel_path = "catalog/listings.csv"
     rel_path = "listings.csv"
