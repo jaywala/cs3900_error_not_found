@@ -1,11 +1,5 @@
 from rest_framework import serializers
 
-<<<<<<< HEAD
-from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
-from .models import User_Profile, User_Review
-
-class AdvertisementSerializer(serializers.serializer):
-=======
 import django
 django.setup()
 
@@ -13,7 +7,6 @@ from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage
 from .models import User_Profile, User_Review
 
 class AdvertisementSerializer(serializers.Serializer):
->>>>>>> jay
 
     id = serializers.IntegerField(read_only=True)
     # not sure if I need this as it's a ForeignKey
