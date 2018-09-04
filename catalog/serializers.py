@@ -14,6 +14,45 @@ class AdvertisementSerializer(serializers.ModelSerializer):
                   'house_rules', 'booking_rules', 'base_price', 'num_guests',
                   'num_bedrooms', 'num_bathrooms', 'suburb', 'state', 'country')
 
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User_Profile
+        field = ('user_name', 'name', 'email', 'profile_pic')
+
+class UserReviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User_Review
+        field = ('user', 'rating', 'title', 'message')
+
+class Accomodation_ReviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Accomodation_Review
+        field = ('advert', 'rating', 'title', 'message')
+
+class AmentitiesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Amenties
+        field = ('advert', 'feature')
+
+# Not sure if this works, need to implement the encading thing 64byte
+class PropertyImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PropertyImage
+        field = ('advert', 'image')
+
+class EventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        field = ('advert', 'start_day', 'start_day_start_time', 'end_day',
+                 'end_day_end_time', 'booking_status', 'notes')
+
+
 ''' code below is refactored to above code
 
 class AdvertisementSerializer(serializers.Serializer):
