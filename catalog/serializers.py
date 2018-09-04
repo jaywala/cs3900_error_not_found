@@ -1,9 +1,12 @@
 from rest_framework import serializers
 
+import django
+django.setup()
+
 from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
 from .models import User_Profile, User_Review
 
-class AdvertisementSerializer(serializers.serializer):
+class AdvertisementSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)
     # not sure if I need this as it's a ForeignKey
@@ -14,7 +17,7 @@ class AdvertisementSerializer(serializers.serializer):
     house_rules = serializers.CharField(required=False, allow_blank=True, max_length=1000)
     booking_rules = serializers.CharField(required=False, allow_blank=True, max_length=1000)
 
-    base_price = serializers.IntegerField(required=True, allow_blank=False, default=0)
+    base_price = serializers.IntegerField(required=True, default=0)
 
     num_guests = serializers.IntegerField(required=True, allow_blank=False, default=0)
     num_bedrooms = serializers.IntegerField(required=True, allow_blank=False, default=0)
@@ -34,20 +37,19 @@ class AdvertisementSerializer(serializers.serializer):
         """
         Update and return an existing 'Advertisement' instance, given the validated_data.
         """
-        '''
-        instance. = validated_data.get()
-        instance. = validated_data.get()
-        instance. = validated_data.get()
 
-        instance. = validated_data.get()
-        instance. = validated_data.get()
-        instance. = validated_data.get()
+        instance.accommodation_name = validated_data.get('accommodation_name', instance.accommodation_name)
+        instanceacc.accommodation_description = validated_data.get('accommodation_description', instance.accommodation_description)
 
-        instance. = validated_data.get()
-        instance. = validated_data.get()
-        instance. = validated_data.get()
+        instance.house_rules = validated_data.get('house_rules', instance.house_rules)
+        instance.booking_rules = validated_data.get('booking_rules', instance.booking_rules)
 
-        instance. = validated_data.get()
-        instance. = validated_data.get()
-        instance. = validated_data.get()
-        '''
+        instance.base_price = validated_data.get('base_price', instance.base_price)
+
+        instance.num_guests = validated_data.get('num_guests', instance.num_guests)
+        instance.num_bedrooms = validated_data.get('num_bedrooms', instance.num_bedrooms)
+        instance.num_bathrooms = validated_data.get('num_bathrooms', instance.num_bathrooms)
+
+        instance.suburb = validated_data.get('suburb', instance.suburb)
+        instance.state = validated_data.get('state', instance.state)
+        instance.country = validated_data.get('country', instance.country)
