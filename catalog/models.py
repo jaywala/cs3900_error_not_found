@@ -120,7 +120,7 @@ class Advertisement(models.Model):
     house_rules = models.CharField(max_length=1000, default='')
     booking_rules = models.CharField(max_length=1000, default='')
 
-    base_price = models.IntegerField(default=0)
+    base_price = models.FloatField(default=0)
 
     num_guests = models.IntegerField(default=0)
     num_bedrooms = models.IntegerField(default=0)

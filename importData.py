@@ -1,8 +1,8 @@
 import os
 import csv
 import django
-import locale
-locale.setlocale(locale.LC_ALL, 'en_US.UTF8')
+#import locale
+#locale.setlocale(locale.LC_ALL, 'en_US.UTF8') # couldn't pip install this
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "capstone.settings")
 
 # First run django.setup()
@@ -24,7 +24,7 @@ def importFromCSV():
     #rel_path = "catalog/listings.csv"
     rel_path = "listings.csv"
     abs_file_path = os.path.join(script_dir, rel_path)
-    with open(abs_file_path) as csvfile:
+    with open(abs_file_path, encoding = 'utf-8', mode = "r+") as csvfile:
         next(csvfile)
         readcsv = csv.reader(csvfile, delimiter=',')
         count = 0
@@ -45,7 +45,8 @@ def importFromCSV():
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],
-                base_price=int(locale.atof(row[60].strip("$"))),
+                #base_price=int(locale.atof(row[60].strip("$"))), # changed to FloatField in model.py
+                base_price=float((row[60].strip("$")).replace(",","")), # need to get rid of commas as some of the prices are like $1,045.00
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
