@@ -28,10 +28,13 @@ from django.contrib import admin
 
 from catalog import views
 
+
 urlpatterns = [
     url(r'^api/public/', views.public),
     url(r'^api/private/', views.private),
     url(r'index/', views.index),
     url(r'^api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
+    url(r'^advertisement/$', views.advertisement_list), # Can change the url pattern
+    url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
 ]

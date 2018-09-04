@@ -6,26 +6,36 @@ django.setup()
 from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
 from .models import User_Profile, User_Review
 
+class AdvertisementSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Advertisement
+        fields = ('user', 'accommodation_name', 'accommodation_description',
+                  'house_rules', 'booking_rules', 'base_price', 'num_guests',
+                  'num_bedrooms', 'num_bathrooms', 'suburb', 'state', 'country')
+
+''' code below is refactored to above code
+
 class AdvertisementSerializer(serializers.Serializer):
 
     id = serializers.IntegerField(read_only=True)
-    # not sure if I need this as it's a ForeignKey
-    # user = serializers.CharField(required=True, allow_blank=False, max_length=25)
+    # need to assign user to an instance of User_Profile
+    user = serializers.IntegerField(required=True)
     accommodation_name = serializers.CharField(required=True, allow_blank=False, max_length=50)
     accommodation_description = serializers.CharField(required=False, allow_blank=True, max_length=1000)
 
     house_rules = serializers.CharField(required=False, allow_blank=True, max_length=1000)
     booking_rules = serializers.CharField(required=False, allow_blank=True, max_length=1000)
 
-    base_price = serializers.IntegerField(required=True, default=0)
+    base_price = serializers.IntegerField(required=True)
 
-    num_guests = serializers.IntegerField(required=True, allow_blank=False, default=0)
-    num_bedrooms = serializers.IntegerField(required=True, allow_blank=False, default=0)
-    num_bathrooms = serializers.IntegerField(required=True, allow_blank=False, default=0)
+    num_guests = serializers.IntegerField(required=True)
+    num_bedrooms = serializers.IntegerField(required=True)
+    num_bathrooms = serializers.IntegerField(required=True)
 
-    suburb = serializers.CharField(required=True, allow_blank=False, max_length=100, default='')
-    state = serializers.CharField(required=True, allow_blank=False, default='NSW', max_length=50)
-    country = serializers.CharField(required=True, allow_blank=False, default='Australia', max_length=50)
+    suburb = serializers.CharField(required=True, max_length=100)
+    state = serializers.CharField(required=False, default='NSW', max_length=50)
+    country = serializers.CharField(required=False, default='Australia', max_length=50)
 
     def create(self, validated_data):
         """
@@ -53,3 +63,20 @@ class AdvertisementSerializer(serializers.Serializer):
         instance.suburb = validated_data.get('suburb', instance.suburb)
         instance.state = validated_data.get('state', instance.state)
         instance.country = validated_data.get('country', instance.country)
+
+        return instance
+'''
+
+'''
+To test in shell run the following commands:
+python manage.py shell
+from catalog.models import Advertisement
+from catalog.serializers import AdvertisementSerializer
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+import catalog.models as cat
+u = cat.User_Profile.objects.all()
+c = u[0]
+a = Advertisement(accommodation_name='accom', accommodation_description='house', base_price=20.1, num_guests = 2, num_bedrooms = 3, num_bathrooms=1, suburb = 'hornsby', user = c)
+a.save()
+'''
