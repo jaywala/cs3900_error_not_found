@@ -35,7 +35,7 @@ class Accomodation_ReviewSerializer(serializers.ModelSerializer):
 class AmentitiesSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Amenties
+        model = Amenities
         field = ('advert', 'feature')
 
 # Not sure if this works, need to implement the encading thing 64byte
