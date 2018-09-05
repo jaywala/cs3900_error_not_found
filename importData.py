@@ -50,6 +50,8 @@ def importFromCSV():
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
+                latitude=float(row[48]),
+                longitude=float(row[49]),
                 suburb=row[42])
             advertisement.save()
 

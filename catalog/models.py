@@ -122,6 +122,9 @@ class Advertisement(models.Model):
 
     base_price = models.FloatField(default=0)
 
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
+
     num_guests = models.IntegerField(default=0)
     num_bedrooms = models.IntegerField(default=0)
     num_bathrooms = models.IntegerField(default=0)
