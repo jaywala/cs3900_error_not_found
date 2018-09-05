@@ -52,7 +52,7 @@ def importFromCSV():
                 num_bathrooms=int(float(row[54])),
                 latitude=float(row[48]),
                 longitude=float(row[49]),
-                suburb=row[42])
+                suburb=row[41])
             advertisement.save()
 
 if __name__ == '__main__':
