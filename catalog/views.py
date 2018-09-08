@@ -13,6 +13,7 @@ from rest_framework.parsers import JSONParser
 from catalog.models import Advertisement
 from catalog.serializers import AdvertisementSerializer
 
+# Advertisement model
 @csrf_exempt
 def advertisement_list(request):
     """
@@ -62,6 +63,54 @@ def advertisement_detail(request, pk):
     elif request.method == 'DELETE':
         ad.delete()
         return HttpResponse(status=204)
+
+# User_Profile Model
+@csrf_exempt
+def user_profile_list(request):
+    """
+    List all User Profiles, or create a new User Profile.
+    """
+    if request.method == 'GET':
+        users = User_Profile.objects.all()
+        serializer = UserProfileSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserProfileSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def user_profile_detail(request, pk):
+    """
+    Retrieve, update or delete a User Profile.
+    """
+    try:
+        user = User_Profile.objects.get(pk=pk)
+    except ad.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(user)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = UserProfileSerializer(user, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+
+
+
 # ******END******
 
 def public(request):
