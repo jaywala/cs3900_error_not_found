@@ -9,3 +9,21 @@ Week 3
 - Researched technologies to use in developement.
 - Brainstorm project features and epics.
 - Worked on writing up the project proposal.
+
+Week 4
+- Populated Trello Board and set rough deadlines on initial sprint cards
+- Setup initial project codebase/architecture
+- Backbone setup for VueJS Front-end + Django Back-end
+- Integrated auth0 user authentication.
+
+Week 5
+- Researched UI/UX frameworks. (Bootstrap, Vue Material)
+- Designed the homepage, search and new property form webpages by hand.
+- Programmed initial design for homepage/search and propety form webpages in HTML/CSS
+
+Week 6
+- Refined form webpage using Vue Material JS using a seperated component.
+- Added google maps API for easy address-lookup.
+
+Week 7
+- Integrated component into main development application.
