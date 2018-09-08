@@ -33,4 +33,6 @@ Started seriealizers tutorial to create end points to connect with frontend
 , A.K.A REST API.
 
 Week 7
-Finished writing REST API.
+Worked on REST API.
+
+Week 8
