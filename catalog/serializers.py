@@ -20,6 +20,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User_Profile
         field = ('user_name', 'name', 'email', 'profile_pic')
+        exclude = ()
 
 class UserReviewSerializer(serializers.ModelSerializer):
 
@@ -27,7 +28,7 @@ class UserReviewSerializer(serializers.ModelSerializer):
         model = User_Review
         field = ('user', 'rating', 'title', 'message')
 
-class Accomodation_ReviewSerializer(serializers.ModelSerializer):
+class AccomodationReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Accomodation_Review

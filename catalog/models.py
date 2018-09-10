@@ -122,9 +122,6 @@ class Advertisement(models.Model):
 
     base_price = models.FloatField(default=0)
 
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
-
     num_guests = models.IntegerField(default=0)
     num_bedrooms = models.IntegerField(default=0)
     num_bathrooms = models.IntegerField(default=0)
@@ -132,6 +129,9 @@ class Advertisement(models.Model):
     suburb = models.CharField(max_length=100, default='')
     state = models.CharField(default='NSW', max_length=50)
     country = models.CharField(default='Australia', max_length=50)
+
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
 
     def __str__(self):
         return self.accommodation_name

@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
     url(r'^userprofile/$', views.user_profile_list),
     url(r'^userprofile/(?P<pk>[0-9]+)/$', views.user_profile_detail),
+    url(r'^userreview/$', views.user_review_list),
+    url(r'^userreview/(?P<pk>[0-9]+)/$', views.user_review_detail),
 ]

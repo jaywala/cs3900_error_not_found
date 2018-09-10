@@ -10,8 +10,11 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from catalog.models import Advertisement
-from catalog.serializers import AdvertisementSerializer
+from catalog.models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
+from catalog.models import User_Profile, User_Review
+from catalog.serializers import AdvertisementSerializer, AccomodationReviewSerializer
+from catalog.serializers import AmentitiesSerializer, PropertyImageSerializer, EventSerializer
+from catalog.serializers import UserProfileSerializer, UserReviewSerializer
 
 # Advertisement model
 @csrf_exempt
@@ -64,6 +67,7 @@ def advertisement_detail(request, pk):
         ad.delete()
         return HttpResponse(status=204)
 
+
 # User_Profile Model
 @csrf_exempt
 def user_profile_list(request):
@@ -90,7 +94,7 @@ def user_profile_detail(request, pk):
     """
     try:
         user = User_Profile.objects.get(pk=pk)
-    except ad.DoesNotExist:
+    except user.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
@@ -100,6 +104,52 @@ def user_profile_detail(request, pk):
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
         serializer = UserProfileSerializer(user, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+
+
+# User_Review Model
+@csrf_exempt
+def user_review_list(request):
+    """
+    List all User Reviews, or create a new User Review.
+    """
+    if request.method == 'GET':
+        rev = User_Review.objects.all()
+        serializer = UserReviewSerializer(rev, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def user_review_detail(request, pk):
+    """
+    Retrieve, update or delete a User Review.
+    """
+    try:
+        rev = User_Review.objects.get(pk=pk)
+    except rev.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(rev)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = UserProfileSerializer(rev, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
