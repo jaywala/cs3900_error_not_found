@@ -206,6 +206,142 @@ def accommodation_review_detail(request, pk):
         return HttpResponse(status=204)
 
 
+# Amenities Model
+@csrf_exempt
+def amenities_list(request):
+    """
+    List all Amenties, or create a new Amenity.
+    """
+    if request.method == 'GET':
+        am = Amenities.objects.all()
+        serializer = AmentitiesSerializer(am, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AmentitiesSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def amenities_detail(request, pk):
+    """
+    Retrieve, update or delete an Amenity.
+    """
+    try:
+        am = Amenities.objects.get(pk=pk)
+    except am.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AmentitiesSerializer(am)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = AmentitiesSerializer(am, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        am.delete()
+        return HttpResponse(status=204)
+
+
+# PropertyImage Model
+@csrf_exempt
+def property_image_list(request):
+    """
+    List all PropertyImage, or create a new PropertyImage.
+    """
+    if request.method == 'GET':
+        im = PropertyImage.objects.all()
+        serializer = PropertyImageSerializer(im, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = PropertyImageSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def property_image_detail(request, pk):
+    """
+    Retrieve, update or delete an PropertyImage.
+    """
+    try:
+        im = PropertyImage.objects.get(pk=pk)
+    except im.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = PropertyImageSerializer(im)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = PropertyImageSerializer(im, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        im.delete()
+        return HttpResponse(status=204)
+
+
+# Event Model
+@csrf_exempt
+def event_list(request):
+    """
+    List all Events, or create a new Event.
+    """
+    if request.method == 'GET':
+        event = Event.objects.all()
+        serializer = EventSerializer(event, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = EventSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def event_detail(request, pk):
+    """
+    Retrieve, update or delete an Event.
+    """
+    try:
+        event = Event.objects.get(pk=pk)
+    except event.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = EventSerializer(event)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = EventSerializer(event, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        event.delete()
+        return HttpResponse(status=204)
 
 # ******END******
 
