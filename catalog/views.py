@@ -10,9 +10,9 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from catalog.models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
+from catalog.models import Advertisement, Accommodation_Review, Amenities, PropertyImage, Event
 from catalog.models import User_Profile, User_Review
-from catalog.serializers import AdvertisementSerializer, AccomodationReviewSerializer
+from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
 from catalog.serializers import AmentitiesSerializer, PropertyImageSerializer, EventSerializer
 from catalog.serializers import UserProfileSerializer, UserReviewSerializer
 
@@ -110,7 +110,7 @@ def user_profile_detail(request, pk):
         return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        ad.delete()
+        user.delete()
         return HttpResponse(status=204)
 
 
@@ -144,19 +144,65 @@ def user_review_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = UserProfileSerializer(rev)
+        serializer = UserReviewSerializer(rev)
         return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
-        serializer = UserProfileSerializer(rev, data=data)
+        serializer = UserReviewSerializer(rev, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        ad.delete()
+        rev.delete()
+        return HttpResponse(status=204)
+
+
+# Accommodation_Review Model
+@csrf_exempt
+def accommodation_review_list(request):
+    """
+    List all Accommodation Review, or create a new Accommodation Review.
+    """
+    if request.method == 'GET':
+        rev = Accommodation_Review.objects.all()
+        serializer = AccommodationReviewSerializer(rev, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AccommodationReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def accommodation_review_detail(request, pk):
+    """
+    Retrieve, update or delete a Accommodation Review.
+    """
+    try:
+        rev = Accommodation_Review.objects.get(pk=pk)
+    except rev.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AccommodationReviewSerializer(rev)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = AccommodationReviewSerializer(rev, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        rev.delete()
         return HttpResponse(status=204)
 
 

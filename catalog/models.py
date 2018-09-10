@@ -234,9 +234,9 @@ class Advertisement(models.Model):
     def delete_me(self):
         self.delete()
 
-class Accomodation_Review(models.Model):
+class Accommodation_Review(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='accomodation_reviews', on_delete=models.CASCADE)
+    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
@@ -259,17 +259,17 @@ class Accomodation_Review(models.Model):
     #--------------------------------
 
     def set_rating(self, new_rating):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.rating = new_rating
         u.save()
 
     def set_title(self, new_title):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.title = new_title
         u.save()
 
     def set_message(self, new_message):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.message = new_message
         u.save()
 
