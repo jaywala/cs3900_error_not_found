@@ -30,7 +30,7 @@ def importFromCSV():
         count = 0
         for row in readcsv:
             count += 1
-            if count > 100:
+            if count > 101:
                 break
             # if row[4]  == "trainee":
             #     self._users.append(trainee(row[0],row[1],row[2],row[3]))
