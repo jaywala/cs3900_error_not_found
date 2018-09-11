@@ -8,7 +8,7 @@
       <input
         type="text"
         id="datepicker-trigger"
-        placeholder="Select dates"
+        :placeholder="{dataFormat}"
         :value="formatDates(dateOne, dateTwo)"
       >
 
