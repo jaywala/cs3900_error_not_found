@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'index/', views.index),
     url(r'^api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
+    # below
     url(r'^advertisement/$', views.advertisement_list),
     url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
     url(r'^userProfile/$', views.user_profile_list),
