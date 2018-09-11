@@ -21,6 +21,15 @@
         @date-one-selected="val => { dateOne = val }"
         @date-two-selected="val => { dateTwo = val }"
       />
+      <h3>guest</h3>
+
+      <md-button class="md-icon-button md-raised" v-on:click="guests -= 1" >
+        -
+      </md-button>
+      {{guests}}
+      <md-button class="md-icon-button md-raised" v-on:click="guests += 1" >
+        <md-icon>add</md-icon>
+      </md-button>
 
     </div>
     <div class="">
@@ -40,7 +49,8 @@ export default {
       dateFormat: 'D MMM',
       dateOne: '',
       dateTwo: '',
-      where: ''
+      where: '',
+      guests: 0
     }
   },
   methods: {
@@ -57,3 +67,4 @@ export default {
   }
 }
 </script>
+<style src="./icon.css"></style>
