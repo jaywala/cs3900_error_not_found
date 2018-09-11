@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Advertisement, Accomodation_Review, Amenities, PropertyImage, Event
+from .models import Advertisement, Accommodation_Review, Amenities, PropertyImage, Event
 from .models import User_Profile, User_Review
 
 
@@ -25,7 +25,7 @@ class UserReviewInline(admin.TabularInline):
     extra = 3
 
 class AccommodationReviewInline(admin.TabularInline):
-    model = Accomodation_Review
+    model = Accommodation_Review
     extra = 3
 
 class UserAdmin(admin.ModelAdmin):

@@ -122,9 +122,6 @@ class Advertisement(models.Model):
 
     base_price = models.FloatField(default=0)
 
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
-
     num_guests = models.IntegerField(default=0)
     num_bedrooms = models.IntegerField(default=0)
     num_bathrooms = models.IntegerField(default=0)
@@ -132,6 +129,9 @@ class Advertisement(models.Model):
     suburb = models.CharField(max_length=100, default='')
     state = models.CharField(default='NSW', max_length=50)
     country = models.CharField(default='Australia', max_length=50)
+
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
 
     def __str__(self):
         return self.accommodation_name
@@ -234,9 +234,9 @@ class Advertisement(models.Model):
     def delete_me(self):
         self.delete()
 
-class Accomodation_Review(models.Model):
+class Accommodation_Review(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='accomodation_reviews', on_delete=models.CASCADE)
+    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
@@ -259,17 +259,17 @@ class Accomodation_Review(models.Model):
     #--------------------------------
 
     def set_rating(self, new_rating):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.rating = new_rating
         u.save()
 
     def set_title(self, new_title):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.title = new_title
         u.save()
 
     def set_message(self, new_message):
-        u = Accomodation_Review.objects.get(id=self.id)
+        u = Accommodation_Review.objects.get(id=self.id)
         u.message = new_message
         u.save()
 
@@ -335,18 +335,19 @@ class Event(models.Model):
         verbose_name_plural = u'Scheduling'
 
     def check_overlap(self, fixed_start_day, fixed_start_day_start_time, fixed_end_day, fixed_end_day_end_time,
-                      new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time):
+                      new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time, event):
 
         overlap = False
-        if fixed_start_day == new_end_day or fixed_end_day == new_start_day:
-            if fixed_start_day_start_time <= new_end_day_end_time or fixed_end_day_end_time >= new_end_day_end_time:
+        if self.advert.pk == event.advert.pk:
+            if fixed_start_day == new_end_day or fixed_end_day == new_start_day:
+                if fixed_start_day_start_time <= new_end_day_end_time or fixed_end_day_end_time >= new_end_day_end_time:
+                    overlap = True
+            elif fixed_start_day == new_start_day or fixed_end_day == new_end_day:
                 overlap = True
-        elif fixed_start_day == new_start_day or fixed_end_day == new_end_day:
-            overlap = True
-        elif (fixed_start_day >= new_start_day and fixed_end_day <= new_end_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_end_day):
-            overlap = True
-        elif (fixed_start_day >= new_start_day and fixed_end_day <= new_start_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_start_day):
-            overlap = True
+            elif (fixed_start_day >= new_start_day and fixed_end_day <= new_end_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_end_day):
+                overlap = True
+            elif (fixed_start_day >= new_start_day and fixed_end_day <= new_start_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_start_day):
+                overlap = True
 
         return overlap
 
@@ -366,7 +367,7 @@ class Event(models.Model):
             for event in events:
                 if self.check_overlap(event.start_day, event.start_day_start_time, event.end_day, event.end_day_end_time,
                                       self.start_day, self.start_day_start_time, self.end_day, self.end_day_end_time
-                                      ) and event.id != self.id:
+                                      , event) and event.id != self.id:
                     raise ValidationError(
                          'There is an overlap with another event: ' + 'the new event --> self ' + str(self.notes
                          ) + ' ' + str(self.booking_status) + ', ' + 'old event --> event ' + str(event.notes
