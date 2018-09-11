@@ -67,15 +67,49 @@
           <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
           <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
         </div>
-      </footer>
-    </div>
+      </header>
+    <router-view></router-view>
+    <br>
+    <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+        </p>
+        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script>
+<<<<<<< HEAD
 import Vue from 'vue'
 import router from '@/router'
 export default {
   name: 'App',
+=======
+import AuthService from './auth/AuthService'
+import axios from 'axios'
+import newbook from '@/components/newbook.vue'
+import landing from '@/components/landing.vue'
+const API_URL = 'http://localhost:8000'
+const auth = new AuthService()
+export default {
+  name: 'app',
+  data () {
+    this.handleAuthentication()
+    this.authenticated = false
+
+    auth.authNotifier.on('authChange', authState => {
+      this.authenticated = authState.authenticated
+    })
+    return {
+      authenticated: false,
+      message: ''
+    }
+  },
+>>>>>>> master
   methods: {
     // this method calls the AuthService login() method
     login () {

@@ -166,4 +166,5 @@ export default {
 
 }
 </script>
+
 <style src="./album.css"></style>

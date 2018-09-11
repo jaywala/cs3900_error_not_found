@@ -52,6 +52,8 @@ class AdvertisementAdmin(admin.ModelAdmin):
         ('Location', {'fields': ['suburb']}),
         (None, {'fields': ['state']}),
         (None, {'fields': ['country']}),
+        (None, {'fields': ['latitude']}),
+        (None, {'fields': ['longitude']})
     ]
     inlines = [AmenitiesInline, PropertyImageInline, EventInline, AccommodationReviewInline]
 
