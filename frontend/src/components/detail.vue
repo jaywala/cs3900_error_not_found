@@ -25,14 +25,14 @@ export default {
         country: "Australia",
         latitude: -33.86916827,
         longitude: 151.2265622,
-        loading: true,
-        errored: false
-      }
+      },
+      errored: false,
+      landing: false
     }
   },
 
   mounted () {
-    /*axios
+    axios
       .get('http://localhost:8000/advertisement/1/')
       .then(response => {
         this.info = response.data
@@ -41,9 +41,7 @@ export default {
         console.log(error)
         this.errored = true
       })
-      .finally(() => this.loading = false)*/
-      axios.post('http://localhost:8000/advertisement/1/', this.info)
-
+      .finally(() => this.loading = false)
 
 
   }
