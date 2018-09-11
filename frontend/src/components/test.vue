@@ -1,48 +1,59 @@
 <template>
-  <div align="center">
+  <div>
+    <div class="datepicker-trigger">
+      <h2>Book unique homes and experiences.</h2>
+      <h3>where</h3>
+      <input type="text" placeholder="Any where" v-model="where">
+      <h3>check-in n check-out</h3>
+      <input
+        type="text"
+        id="datepicker-trigger"
+        placeholder="Select dates"
+        :value="formatDates(dateOne, dateTwo)"
+      >
 
-    <h1>Vue, File To Base64 Converter</h1>
-    <p>*) Try To Upload Some Image~</p>
+      <AirbnbStyleDatepicker
+        :trigger-element-id="'datepicker-trigger'"
+        :mode="'range'"
+        :fullscreen-mobile="true"
+        :date-one="dateOne"
+        :date-two="dateTwo"
+        @date-one-selected="val => { dateOne = val }"
+        @date-two-selected="val => { dateTwo = val }"
+      />
 
-    <file-base64 :multiple="true" :done="getFiles"></file-base64>
-
-    <div class="text-center">
-      <img src="" alt="" :src="img.base64" v-for="img in files">
     </div>
-
-    <div v-if="files.length != 0">
-      <h3 class="text-center mt-25">Callback Object</h3>
-      <div class="pre-container" align="left">
-        <pre>{{ files }}</pre>
-      </div>
+    <div class="">
+      {{dateFormat}}
+      {{dateOne}}
+      {{dateTwo}}
     </div>
-
   </div>
-
 </template>
 
 <script>
-  import fileBase64 from 'vue-file-base64';
-  export default {
-    data(){
-      return{
-        files: []
-      }
-    },
-    components: { fileBase64 },
-    methods: {
-      getFiles(files){
-        this.files = files
-      }
+import format from 'date-fns/format'
+//import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
+export default {
+  data() {
+    return {
+      dateFormat: 'D MMM',
+      dateOne: '',
+      dateTwo: '',
+      where: ''
     }
-  };
-</script>
-
-<style>
-img {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  width: 150px;
+  },
+  methods: {
+    formatDates(dateOne, dateTwo) {
+      let formattedDates = ''
+      if (dateOne) {
+        formattedDates = format(dateOne, this.dateFormat)
+      }
+      if (dateTwo) {
+        formattedDates += ' - ' + format(dateTwo, this.dateFormat)
+      }
+      return formattedDates
+    }
+  }
 }
-</style>
+</script>

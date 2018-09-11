@@ -130,12 +130,28 @@
 
       <md-snackbar :md-active.sync="userSaved">Property listing was saved with success!</md-snackbar>
     </form>
+
+
+    <file-base64 :multiple="true" :done="getFiles"></file-base64>
+
+    <div class="text-center">
+      <img src="" alt="" :src="img.base64" v-for="img in files">
+    </div>
+
+
+
+    <div v-if="files.length != 0">
+      <h3 class="text-center mt-25">Callback Object</h3>
+      <div class="pre-container" align="left">
+        <pre>{{ files }}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
-
+  import fileBase64 from 'vue-file-base64';
   import { validationMixin } from 'vuelidate'
   import {
     required,
@@ -144,12 +160,13 @@
   } from 'vuelidate/lib/validators'
 
   export default {
-    components: { VueGoogleAutocomplete },
+    components: { fileBase64, VueGoogleAutocomplete },
     mounted () {
     },
     name: 'FormValidation',
     mixins: [validationMixin],
     data: () => ({
+      files: [],
       form: {
         propertyType: 'apartment',
         address: null,
@@ -207,6 +224,9 @@
       }
     },
     methods: {
+      getFiles(files){
+        this.files = files
+      },
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
 
