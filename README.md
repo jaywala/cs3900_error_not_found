@@ -23,3 +23,10 @@ After setting up the development environment & ensuring you've activated the v-e
 python manage.py flush
 
 Navigate to http://localhost:8080/
+
+## To delete database and remake it
+
+1. python manage.py makemigrations 
+2. python manage.py migrate 
+3. python manage.py createsuperuser
+4. python importData.py

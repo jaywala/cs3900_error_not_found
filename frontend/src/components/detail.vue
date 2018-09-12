@@ -1,8 +1,7 @@
 <template >
   <div id="app">
-  <h1>{{this.info.errored}}</h1>
-  {{this.info.user}}
-  {{this.info.accommodation_name}}
+  <h1>{{this.errored}}</h1>
+
 </div>
 </template>
 
@@ -11,7 +10,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-        token:
+        /*token:*/
       info: {'username': 'admin', 'password': 'admin'},
       my_data:
       {
@@ -29,8 +28,8 @@ export default {
           "country": "Australia",
           "latitude": -33.86916827,
           "longitude": 151.2265622
-    }
-
+    },
+    errored: false
 
     }
   },
@@ -57,13 +56,13 @@ export default {
         .post('http://localhost:8000/login/', this.info)
         .catch(error => {
             console.log(error)
-            this.info.errored = 'post method has error'
+            this.errored = 'post method has error'
         })
     axios
         .post('http://localhost:8000/advertisement/1/', this.my_data)
         .catch(error => {
             console.log(error)
-            this.info.errored = 'post method has error'
+            this.errored = 'post method has error'
         })
 
 
