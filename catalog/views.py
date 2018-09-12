@@ -1,11 +1,11 @@
 from django.http import HttpResponse
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import Amenities, PropertyImage, Event
+from catalog.models import PropertyImage, Event
 from catalog.models import User_Profile, User_Review
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
-from catalog.serializers import AmentitiesSerializer, PropertyImageSerializer, EventSerializer
+from catalog.serializers import PropertyImageSerializer, EventSerializer
 from catalog.serializers import UserProfileSerializer, UserReviewSerializer
 
 from rest_framework.decorators import api_view

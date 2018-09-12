@@ -58,9 +58,6 @@ class User_Profile(models.Model):
             return None
 
 
-
-
-
 class User_Review(models.Model):
 
     user = models.ForeignKey(User_Profile, related_name='user_reviews', on_delete=models.CASCADE)
@@ -100,11 +97,6 @@ class User_Review(models.Model):
         u.message = new_message
         u.save()
 
-    #--------------------------------
-    '''
-    def create_me():
-        u = User_Review()
-    '''
     #--------------------------------
 
     def delete_me(self):

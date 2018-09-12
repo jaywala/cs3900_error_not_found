@@ -3,7 +3,7 @@ from rest_framework import serializers
 import django
 django.setup()
 
-from .models import Advertisement, Accomodation_Review, PropertyImage, Event
+from .models import Advertisement, Accommodation_Review, PropertyImage, Event
 from .models import User_Profile, User_Review
 
 class AdvertisementSerializer(serializers.ModelSerializer):
@@ -37,16 +37,6 @@ class AccommodationReviewSerializer(serializers.ModelSerializer):
         field = ('advert', 'rating', 'title', 'message')
         exclude = ()
 
-<<<<<<< HEAD
-class AmentitiesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Amenities
-        field = ('advert', 'feature')
-        exclude = ()
-
-=======
->>>>>>> jay
 # Not sure if this works, need to implement the encading thing 64byte
 class PropertyImageSerializer(serializers.ModelSerializer):
 
