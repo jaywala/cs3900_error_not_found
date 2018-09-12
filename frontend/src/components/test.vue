@@ -8,7 +8,7 @@
       <input
         type="text"
         id="datepicker-trigger"
-        :placeholder="{dataFormat}"
+        v-bind:placeholder="dateFormat"
         :value="formatDates(dateOne, dateTwo)"
       >
 
@@ -23,7 +23,7 @@
       />
       <h3>guest</h3>
 
-      <md-button class="md-icon-button md-raised" v-on:click="guests -= 1" >
+      <md-button class="md-icon-button md-raised" v-bind:disabled="guests <= 0? true:false" v-on:click="guests -= 1" >
         -
       </md-button>
       {{guests}}
