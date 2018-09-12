@@ -35,8 +35,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^advertisement/$', views.advertisement_list),
     url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
-    url(r'^login/', views.login_user),
-
 ]
 
 '''

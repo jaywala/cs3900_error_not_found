@@ -26,6 +26,11 @@ Navigate to http://localhost:8080/
 
 ## To delete database and remake it
 
+Delete the files:
+0001_initial.py (any files with '<number'>\_initial.py)
+db.sqlite3
+
+Then run:
 1. python manage.py makemigrations 
 2. python manage.py migrate 
 3. python manage.py createsuperuser
