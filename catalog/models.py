@@ -120,6 +120,8 @@ class Advertisement(models.Model):
     house_rules = models.CharField(max_length=1000, default='')
     booking_rules = models.CharField(max_length=1000, default='')
 
+    amenities=models.CharField(max_length=1000,default='')
+
     base_price = models.FloatField(default=0)
 
     latitude = models.FloatField(default=0)
@@ -272,33 +274,6 @@ class Accomodation_Review(models.Model):
         u = Accomodation_Review.objects.get(id=self.id)
         u.message = new_message
         u.save()
-
-    #--------------------------------
-
-    def delete_me(self):
-        self.delete()
-
-
-class Amenities(models.Model):
-
-    advert = models.ForeignKey(Advertisement, related_name='amenities', on_delete=models.CASCADE)
-    feature = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.feature
-
-    def get_advertisement(self):
-        return self.advert
-
-    def get_feature(self):
-        return self.feature
-
-    #--------------------------------
-
-    def set_feature(self, new_feature):
-        f = Amenties.objects.get(id=self.id)
-        f.feature = new_feature
-        f.save()
 
     #--------------------------------
 

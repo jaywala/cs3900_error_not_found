@@ -32,15 +32,15 @@ def importFromCSV():
             count += 1
             if count > 100:
                 break
-            # if row[4]  == "trainee":
-            #     self._users.append(trainee(row[0],row[1],row[2],row[3]))
-            # elif row[4] == "trainer":
-            #     self._users.append(trainer(row[0],row[1],row[2],row[3]))
-            #user = User.objects.create_user(username=row[21],email=(row[21]+"@example.com"),password="password")
 
             user1 = User_Profile(user_name=row[21],name=row[21],email=(row[21]+"@example.com"))
             user1.save()
             print(count)
+            amenitiestext = row[58]
+            amenitiestext = amenitiestext.strip("{")
+            amenitiestext = amenitiestext.strip("}")
+            amenitiestext = amenitiestext.strip()
+            amenitiestext = amenitiestext.replace('"', '')
             advertisement = Advertisement(user=user1,
                 accommodation_name=row[4],
                 accommodation_description=row[7],
@@ -52,7 +52,8 @@ def importFromCSV():
                 num_bathrooms=int(float(row[54])),
                 latitude=float(row[48]),
                 longitude=float(row[49]),
-                suburb=row[41])
+                suburb=row[41],
+                amenities=amenitiestext)
             advertisement.save()
 
 if __name__ == '__main__':
