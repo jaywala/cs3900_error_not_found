@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Advertisement, Accomodation_Review, PropertyImage, Event
+from .models import Advertisement, Accommodation_Review, PropertyImage, Event
 from .models import User_Profile, User_Review
 
 
