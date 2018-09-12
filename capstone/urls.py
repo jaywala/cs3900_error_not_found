@@ -32,10 +32,7 @@ from catalog import views
 urlpatterns = [
     url(r'^api/public/', views.public),
     url(r'^api/private/', views.private),
-    url(r'index/', views.index),
-    url(r'^api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
-    url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^advertisement/$', views.advertisement_list),
     url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
     url(r'^login/', views.login_user),

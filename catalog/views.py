@@ -79,10 +79,6 @@ def advertisement_detail(request, pk):
         ad.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-
-
-
 # ******END******
 
 def public(request):
@@ -92,6 +88,3 @@ def public(request):
 @api_view(['GET'])
 def private(request):
     return HttpResponse("You should not see this message if not authenticated!")
-
-def index(request):
-    return HttpResponse("Home Page")
