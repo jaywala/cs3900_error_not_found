@@ -1,54 +1,118 @@
 <template >
   <div id="app">
-  <h1>{{this.ad}}</h1>
+  <h1>{{this.info}}, {{this.thing}}</h1>
 
 </div>
 </template>
 
+
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import {APIService} from '../auth/APIService';
 /*import Loading from './Loading';*/
 const API_URL = 'http://localhost:8000';
 const apiService = new APIService();
 
 export default {
-    data () {
-        return {
-            "user": 1,
-            "accommodation_name": "An Oasis in the City",
-            "accommodation_description": "Very central ",
-            "house_rules": "Be considerate.   No showering after 2330h.",
-            "booking_rules": "no running",
-            "base_price": 65.0,
-            "num_guests": 1,
-            "num_bedrooms": 1,
-            "num_bathrooms": 0,
-            "suburb": "Potts Point",
-            "state": "NSW",
-            "country": "Australia",
-            "latitude": -33.86916827,
-            "longitude": 151.2265622
-        };
+  name: 'detail',
+  data() {
+    return {
+      selectedAdvertisement:null,
+      advertisements: [],
+      numberOfPages:0,
+      pages : [],
+      numberOfProducts:0,
+      /*loading: false,*/
+      nextPageURL:'',
+      previousPageURL:''
+    };
+  },
+  methods: {
+    getAdvertisements(){
+
+      /*this.loading = true;    */
+      apiService.getAdvertisements().then((page) => {
+        this.advertisements = page.data;
+        console.log(page);
+        console.log(page.nextlink);
+        this.numberOfProducts = page.count;
+        this.numberOfPages = page.numpages;
+        this.nextPageURL = page.nextlink;
+        this.previousPageURL = page.prevlink;
+        if(this.numberOfPages)
+        {
+          for(var i = 1 ; i <= this.numberOfPages ; i++)
+          {
+            const link = `/advertisement/?page=${i}`;
+            this.pages.push({pageNumber: i , link: link})
+          }
+        }
+        /*this.loading = false;*/
+      });
     },
-    methods: {
-        getAdvertisements(){
-            apiService.getAdvertisement().then((page) => {
-            });
-        },
-        mounted() {
-            axios
-              .get('http://localhost:8000/advertisement/1/')
-              .then(response => {
-                this.info = response.data
-              })
-              .catch(error => {
-                console.log(error)
-                this.info.errored = 'get method has error'
-              })
-              .finally(() => this.loading = false)
-        },
+    getPage(link){
+      this.loading = true;
+      apiService.getAdvertisementsByURL(link).then((page) => {
+        this.products = page.data;
+        this.nextPageURL = page.nextlink;
+        this.previousPageURL = page.prevlink;
+        /*this.loading = false;*/
+      });
+    },
+    getNextPage(){
+      console.log('next' + this.nextPageURL);
+      /*this.loading = true;*/
+      apiService.getAdvertisementsByURL(this.nextPageURL).then((page) => {
+        this.products = page.data;
+        this.nextPageURL = page.nextlink;
+        this.previousPageURL = page.prevlink;
+        /*this.loading = false;*/
+      });
+
+    },
+    getPreviousPage(){
+      /*this.loading = true;*/
+      apiService.getAdvertisementsByURL(this.previousPageURL).then((page) => {
+        this.products = page.data;
+        this.nextPageURL = page.nextlink;
+        this.previousPageURL = page.prevlink;
+        /*this.loading = false;*/
+      });
+
+    },
+    deleteProduct(advertisement){
+      console.log("deleting advertisement: " + JSON.stringify(advertisement))
+      apiService.deleteAdvertisement(advertisement).then((r)=>{
+        console.log(r);
+        if(r.status === 204)
+        {
+          alert("advertisement deleted");
+          this.$router.go()
+
+        }
+      })
+    },
+    selectProduct(advertisement){
+      this.selectedAdvertisement = advertisement;
     }
+  },
+  mounted() {
+
+    /*this.ad = this.getAdvertisements();*/
+    axios
+      .getAdvertisements()
+      .then(response => {
+        this.info = response.data
+      })
+      .catch(error => {
+        console.log(error)
+        this.errored = 'get method has error'
+      })
+
+      this.thing = 'hello'
+
+
+  },
 }
 
 
