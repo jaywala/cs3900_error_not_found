@@ -46,21 +46,6 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
 ]
 
-<<<<<<< HEAD
-# rest frame work application definition
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework.authentication.BasicAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    ),
-}
-
-=======
->>>>>>> ab9f9a379aa6317c5560a1b3f18995e9c11c748a
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

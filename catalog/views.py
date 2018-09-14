@@ -48,6 +48,7 @@ def advertisement_detail(request, pk):
     Retrieve, update or delete a code snippet.
     """
     print("***inside ad detail function")
+    print('here', request.GET.get("accommodation_name", ""))
     try:
         snippet = Advertisement.objects.get(pk=pk)
     except Snippet.DoesNotExist:
@@ -58,6 +59,7 @@ def advertisement_detail(request, pk):
         return JsonResponse(serializer.data)
 
     elif request.method == 'POST':
+        print('inside POST********************')
         data = JSONParser().parse(request)
         serializer = AdvertisementSerializer(snippet, data=data)
         if serializer.is_valid():
