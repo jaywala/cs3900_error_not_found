@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-_=knsg!kd4pilgo%7tufrbh^tc&*rb$jo!$b$*1b)_8)(%293'
+SECRET_KEY = '561xuCc2teMGENSJ9qwWTpHdDdq726yYshs-qBI45DCW3q1na6NlpH552stZaLGS'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,6 +46,21 @@ INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
 ]
 
+<<<<<<< HEAD
+# rest frame work application definition
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+}
+
+=======
+>>>>>>> ab9f9a379aa6317c5560a1b3f18995e9c11c748a
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -162,4 +177,5 @@ JWT_AUTH = {
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
+    'localhost:8000',
 )

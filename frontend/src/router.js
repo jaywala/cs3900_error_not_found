@@ -31,9 +31,17 @@ const router = new Router({
         component: test
       },
       {
-          path: '/detail',
+          path: '/detail/:id',
           component: detail,
+      },
+      {
+        path: '/detail/:id',
+        component: detail,
 
+      },
+      {
+        path: '/detail',
+        component: detail
       }
   ]
 })
@@ -45,7 +53,7 @@ router.beforeEach((to, from, next) => {
   } else if(to.name == 'home'){
     next()
   }
-  else if(to.name == 'detail'){
+  else if(to.name == 'detail/*'){
     next()
   }else if (router.app.$auth.isAuthenticated()) { // if authenticated allow access
     next()

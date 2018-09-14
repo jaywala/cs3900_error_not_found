@@ -10,7 +10,8 @@ let webAuth = new auth0.WebAuth({
   // we will use the api/v2/ to access the user information as payload
   audience: 'http://djangovuejs.digituz.com.br',
   responseType: 'token id_token',
-  scope: 'openid profile'
+  scope: 'openid profile',
+  apiUrl: 'http://localhost:8000/assignment'
 })
 
 let auth = new Vue({
@@ -80,6 +81,14 @@ let auth = new Vue({
 
         })
       })
+    },
+    getAuthToken(){
+      return localStorage.getItem('access_token');
+    },
+    getUserProfile (cb) {
+      const accessToken = localStorage.getItem('access_token')
+      if (accessToken) return this.auth0.client.userInfo(accessToken, cb)
+      else return null
     }
   }
 })
