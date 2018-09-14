@@ -33,6 +33,10 @@ const router = new Router({
       {
           path: '/detail/:id',
           component: detail,
+      },
+      {
+        path: '/detail/:id',
+        component: detail,
 
       },
       {

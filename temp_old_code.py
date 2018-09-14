@@ -325,6 +325,94 @@ def event_detail(request, pk):
     elif request.method == 'DELETE':
         event.delete()
         return HttpResponse(status=204)
+
+@api_view(['GET', 'POST'])
+def user_profile_list(request):
+    """
+    List all Advertisements, or create a new Advertisement.
+    """
+    if request.method == 'GET':
+        temp = Advertisement.objects.all() # change
+        serializer = AdvertisementSerializer(temp, many=True) #change
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = AdvertisementSerializer(data=request.data) #change
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'DELETE'])
+def advertisement_detail(request, pk):
+    """
+    Retrieve, update or delete an advertisement.
+    """
+    try:
+        ad = Advertisement.objects.get(pk=pk)
+    except ad.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = AdvertisementSerializer(ad)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = AdvertisementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+# Event Model
+@csrf_exempt
+def Event_list(request):
+    """
+    List all Events, or create a new Event.
+    """
+    if request.method == 'GET':
+        event = Event.objects.all()
+        serializer = EventSerializer(event, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = EventSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def Event_detail(request, pk):
+    """
+    Retrieve, update or delete an Event.
+    """
+    try:
+        event = Event.objects.get(pk=pk)
+    except event.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = EventSerializer(event)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = EventSerializer(event, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        event.delete()
+        return HttpResponse(status=204)
+
 '''
 
     '''

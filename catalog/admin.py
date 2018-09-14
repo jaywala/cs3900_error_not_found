@@ -1,12 +1,8 @@
 from django.contrib import admin
 
-from .models import Advertisement, Accommodation_Review, Amenities, PropertyImage, Event
+from .models import Advertisement, Accommodation_Review, PropertyImage, Event
 from .models import User_Profile, User_Review
 
-
-class AmenitiesInline(admin.TabularInline):
-    model = Amenities
-    extra = 3
 
 
 class PropertyImageInline(admin.TabularInline):
@@ -53,9 +49,10 @@ class AdvertisementAdmin(admin.ModelAdmin):
         (None, {'fields': ['state']}),
         (None, {'fields': ['country']}),
         (None, {'fields': ['latitude']}),
-        (None, {'fields': ['longitude']})
+        (None, {'fields': ['longitude']}),
+        (None, {'fields': ['amenities']})
     ]
-    inlines = [AmenitiesInline, PropertyImageInline, EventInline, AccommodationReviewInline]
+    inlines = [PropertyImageInline, EventInline, AccommodationReviewInline]
 
 
 admin.site.register(Advertisement, AdvertisementAdmin)

@@ -1,3 +1,4 @@
+
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
@@ -8,10 +9,9 @@ from catalog.serializers import AdvertisementSerializer, AccommodationReviewSeri
 from catalog.serializers import PropertyImageSerializer, EventSerializer
 from catalog.serializers import UserProfileSerializer, UserReviewSerializer
 
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import *
@@ -65,7 +65,6 @@ def advertisement_detail(request, pk):
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
-
 
 def public(request):
     return HttpResponse("You don't need to be authenticated to see this")
