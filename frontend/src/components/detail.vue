@@ -1,6 +1,6 @@
 <template >
   <div id="app">
-  <h1>{{this.message}}</h1>
+  <h1 v-if="authenticated()">{{token()}}</h1>
   <h2>hello</h2>
 </div>
 </template>
@@ -11,6 +11,22 @@ import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
 export default {
+  methods: {
+    // this method calls the AuthService login() method
+    login () {
+      router.app.$auth.login()
+      //this.$router.push('helloworld')
+    },
+    authenticated(){
+      return router.app.$auth.isAuthenticated()
+    },
+    logout(){
+      router.app.$auth.logout()
+    },
+    token(){
+      return router.app.$auth.getAuthToken()
+    }
+  },
   data () {
     return {
       message: {
@@ -34,8 +50,7 @@ export default {
     }
   },
   mounted () {
-    axios.post(`http://localhost:8000/advertisement/1/`, {headers: {Authorization: `Bearer ${router.app.$auth.getAuthToken()}`}},this.message)
-
+    axios.post("http://localhost:8000/api/public/",{body:this.message})
 
 
 

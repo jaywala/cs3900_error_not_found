@@ -43,10 +43,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_jwt',
     'corsheaders',
-    'catalog.apps.CatalogConfig',
+    'catalog',
 ]
 
-<<<<<<< HEAD
 # rest frame work application definition
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -59,17 +58,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-=======
->>>>>>> ab9f9a379aa6317c5560a1b3f18995e9c11c748a
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     #'django.middleware.common.CommonMiddleware'
 ]
 

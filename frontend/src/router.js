@@ -33,15 +33,12 @@ const router = new Router({
       {
           path: '/detail/:id',
           component: detail,
-      },
-      {
-        path: '/detail/:id',
-        component: detail,
 
       },
       {
         path: '/detail',
-        component: detail
+        component: detail,
+        name: detail
       }
   ]
 })
@@ -53,7 +50,10 @@ router.beforeEach((to, from, next) => {
   } else if(to.name == 'home'){
     next()
   }
-  else if(to.name == 'detail/*'){
+  else if(to.path == '/detail/*'){
+    next()
+  }
+  else if(to.path == '/detail'){
     next()
   }else if (router.app.$auth.isAuthenticated()) { // if authenticated allow access
     next()

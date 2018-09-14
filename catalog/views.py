@@ -18,7 +18,6 @@ from django.views.decorators.csrf import *
 
 # Advertisement model
 @csrf_exempt
-@requires_csrf_token
 def advertisement_list(request):
     """
     List all code snippets, or create a new snippet.
@@ -38,7 +37,6 @@ def advertisement_list(request):
 
 
 @csrf_exempt
-@requires_csrf_token
 def advertisement_detail(request, pk):
     """
     Retrieve, update or delete a code snippet.
@@ -67,6 +65,7 @@ def advertisement_detail(request, pk):
         return HttpResponse(status=404)
 
 def public(request):
+    print("hello+",request.body)
     return HttpResponse("You don't need to be authenticated to see this")
 
 def private(request):
