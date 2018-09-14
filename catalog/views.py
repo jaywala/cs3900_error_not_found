@@ -77,4 +77,5 @@ def public(request):
     return HttpResponse("You don't need to be authenticated to see this")
 
 def private(request):
+    print("hello+",request.body)
     return HttpResponse("You should not see this message if not authenticated!")

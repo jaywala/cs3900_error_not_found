@@ -36,7 +36,7 @@ export default {
     }
   },
   mounted () {
-    axios.post(`http://localhost:8000/advertisement/1/`, {headers: {Authorization: `Bearer ${router.app.$auth.getAuthToken()}`}},this.message)
+    axios.post(`http://localhost:8000/api/private/`, {body: this.message})
 
 
 
