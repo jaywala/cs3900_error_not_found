@@ -1,0 +1,35 @@
+API URLs
+
+How to read:
+- If something is wrapped in <> angle brackets, it means that part of the URL
+  chances.
+
+User Profile Data:
+    GET:
+        8000/get/user/<id> --> TODO add a field to User_Profile called id.
+                                  Set of ids will start at 1. It will then
+                                  increment by 1 for every new user. When a
+                                  new user needs to be created, the id in the
+                                  POST request will be zero. This id number is
+                                  reserved for creating new users.
+                           --> With this URL, the backend will give all the
+                               information related to the user profile (models:
+                               User_Profile, User_Review).
+
+
+
+    POST:
+        8000/post/user/<id> --> will change the data for the user id given, if id
+                             equals to zero, a new user will be created with
+                             given data.
+
+
+
+Advertisement Data:
+    GET:
+        8000/get/advertisement/user -->
+
+
+
+    POST:
+        8000/post/advertisement/user -->
