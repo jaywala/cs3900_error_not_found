@@ -1,6 +1,8 @@
 import os
 import csv
 import django
+import glob
+import base64
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "capstone.settings")
 
@@ -52,5 +54,17 @@ def importFromCSV():
                 amenities=amenitiestext)
             advertisement.save()
 
+def importImages():
+    # import images          
+    i = 1
+    for i in range (1,3):
+        filepath = 'accommodation_pics/' + str(i) + '/*.jpg'
+        for filename in glob.glob(filepath): #assuming gif
+            with open(filename,"rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                print(len(encoded_string))
+            print("\n\n")
+
 if __name__ == '__main__':
-    importFromCSV()
+    # importFromCSV()
+    importImages()
