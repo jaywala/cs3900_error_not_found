@@ -1,0 +1,22 @@
+TODO list
+
+1. write the API
+    - determine URL for each GET and POST
+    - don't forget to send back some message to backend
+      to tell them the backend actually saved the new data
+      from a POST request.
+    - Make system that will deal with cases such as
+        - the POST request did not give valid data
+        - the POST request is missing data
+        - the GET request could now find what frontend wanted
+        - etc.
+2. Make methods that will give the right JSON to frontend
+    - join advertisement with all it's amenities, property images,
+      accommodation reviews, events.
+    - join user profile with all it's user reviews.
+3. Make methods that will write the given JSON to database
+4. [Backend] write methods for searches for the search module
+5. [Backend] booking module: give frontend the dates and time for each event
+6. [Backend] booking request module: check the advertisement's events
+7. [Backend] allow user to decline, accept, cancel booking requests 
+8. [Backend] email communication between users
