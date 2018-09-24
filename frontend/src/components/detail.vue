@@ -50,6 +50,7 @@ export default {
     }
   },
   mounted () {
+    console.log(router.app.$auth.getUserProfile())
     axios.post("http://localhost:8000/api/public/",{body:this.message})
 
 
