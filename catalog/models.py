@@ -54,51 +54,6 @@ class User_Profile(models.Model):
     #--------------------------------
 
 
-class User_Review(models.Model):
-
-    user = models.ForeignKey(User_Profile, related_name='user_reviews', on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    title = models.CharField(max_length=50)
-    message = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return self.title
-
-    def get_user(self):
-        return self.user
-
-    def get_rating(self):
-        return self.rating
-
-    def get_title(self):
-        return self.title
-
-    def get_message(self):
-        return self.message
-
-    #--------------------------------
-
-    def set_rating(self, new_rating):
-        u = User_Review.objects.get(id=self.id)
-        u.rating = new_rating
-        u.save()
-
-    def set_title(self, new_title):
-        u = User_Review.objects.get(id=self.id)
-        u.title = new_title
-        u.save()
-
-    def set_message(self, new_message):
-        u = User_Review.objects.get(id=self.id)
-        u.message = new_message
-        u.save()
-
-    #--------------------------------
-
-    def delete_me(self):
-        self.delete()
-
-
 class Advertisement(models.Model):
 
     user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE)
@@ -224,6 +179,7 @@ class Advertisement(models.Model):
     def delete_me(self):
         self.delete()
 
+
 class Accommodation_Review(models.Model):
 
     advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
@@ -278,6 +234,7 @@ class PropertyImage(models.Model):
 
     def delete_me(self):
         self.delete()
+
 
 class Event(models.Model):
 

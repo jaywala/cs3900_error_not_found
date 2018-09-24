@@ -37,5 +37,13 @@ Worked on REST API.
 
 Week 8
 Trying to solve token issue.
+Realised it was not worth solving that issue.
+Took out token related code.
 
+Week 9
+Did not work on project.
 
+Week mid-sem break
+Group online meeting to rebase on what everyone is up to.
+Discussed and agreed on URL patterns.
+ 

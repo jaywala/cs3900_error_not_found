@@ -6,39 +6,47 @@ How to read:
 
 User Profile Data:
     GET:
-        8000/get/user/ --> With this URL, the backend will give all the
-                               information related to the user profile (models:
-                               User_Profile, User_Review).
-
-
+        8000/get/user/<user_email>
+        --> With this URL, the backend will give all the information related
+        to the user profile (models: User_Profile).
 
     POST:
-        8000/post/user/<user_nickname> --> will change the data for the user id given.
-                            --> will also check if this user is in database,
-                                by searching emails. if it does not exit ...
-                                (deal with this later)
+        8000/post/user/<user_email>
+        --> will change the data for the user email given.
 
-        8000/post/userLoggedIn/<user_nickname> --> check if it exists, give back information for
-                                   this user
-                              -->  if it doesn't exist, make new user.
-
-
-
-
+        8000/post/userLoggedIn/<user_email>
+        --> check if it exists.
+        --> if it doesn't exist, make new user with data given.
 
 
 
 Advertisement Data:
     GET:
-        8000/get/advertisement/<user_email> --> give all information for the
-                                        advertisement class, events this class
-                                        owns, advertisement reviews
-
-
+        8000/get/advertisement/<user_email>
+        --> give all ads that this user owns, with the information for the
+        advertisement class, events this advertisement owns, advertisement
+        reviews.
 
     POST:
-        8000/post/advertisement/<user_email>/update --> will change the data for
-                                                        the advertisement
-                                                        information.
+        8000/post/advertisement/<user_email>/<user_id>/update
+        --> will change the data for the advertisement information.
 
-        8000/post/advertisement/<user_email>/delete --> will delete this ad.
+        8000/post/advertisement/<user_email>/<user_id>/delete
+        --> will delete this ad.
+
+
+
+***Matching front and backend data***
+
+Note: LHS is backend = RHS is frontend
+
+{create user profile}
+User_Profile [unique ID = email]
+    user_name = nickname
+    name = given_name + family_name
+    email = email
+    profile_pic = picture
+
+
+{create new accommodation}
+Accommodation [unique ID = email & user ID of advertisement]

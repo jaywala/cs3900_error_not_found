@@ -2,35 +2,35 @@
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import PropertyImage, Event
-from catalog.models import User_Profile, User_Review
+from catalog.models import PropertyImage, Event, User_Profile
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
 from catalog.serializers import PropertyImageSerializer, EventSerializer
-from catalog.serializers import UserProfileSerializer, UserReviewSerializer
+from catalog.serializers import UserProfileSerializer
 
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import *
 
-@csrf_exempt
-def user_profile(request):
+
+def user_profile(request, first, second):
     """
     Give all the information related to the user profile model.
-    (models: User_Profile, User_Review).
+    (models: User_Profile).
     """
-    if request.method == 'GET':
-        snippets = Advertisement.objects.all()
-        serializer = AdvertisementSerializer(snippets, many=True)
-        print('inside get')
-        print(request.body)
-        return JsonResponse(serializer.data, safe=False)
+    print('inside GET user_profile', first, second)
+
+    snippets = Advertisement.objects.all()
+    serializer = AdvertisementSerializer(snippets, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+@csrf_exempt
+def user_profile_post(request, email):
+    print("hello+",request.body)
+    return HttpResponse("You don't need to be authenticated to see this")
 
 
 # Advertisement model

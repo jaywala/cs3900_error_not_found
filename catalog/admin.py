@@ -1,8 +1,7 @@
 from django.contrib import admin
 
-from .models import Advertisement, Accommodation_Review, PropertyImage, Event
-from .models import User_Profile, User_Review
-
+from .models import Advertisement, Accommodation_Review
+from .models import User_Profile, PropertyImage, Event
 
 
 class PropertyImageInline(admin.TabularInline):
@@ -13,12 +12,7 @@ class PropertyImageInline(admin.TabularInline):
 class EventInline(admin.TabularInline):
     model = Event
     extra = 3
-    #list_display = ['day', 'start_time', 'end_time', 'notes']
 
-
-class UserReviewInline(admin.TabularInline):
-    model = User_Review
-    extra = 3
 
 class AccommodationReviewInline(admin.TabularInline):
     model = Accommodation_Review
@@ -31,7 +25,6 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ['email']}),
         (None, {'fields': ['profile_pic']})
     ]
-    inlines = [UserReviewInline]
 
 
 class AdvertisementAdmin(admin.ModelAdmin):
