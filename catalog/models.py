@@ -56,27 +56,27 @@ class User_Profile(models.Model):
 
 class Advertisement(models.Model):
 
-    user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE)
-    accommodation_name = models.CharField(max_length=50)
-    accommodation_description = models.CharField(max_length=1000, default='')
+    user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE, null=True)
+    accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
+    accommodation_description = models.CharField(null=True, blank=True, max_length=1000)
 
-    house_rules = models.CharField(max_length=1000, default='')
-    booking_rules = models.CharField(max_length=1000, default='')
+    house_rules = models.CharField(null=True, blank=True, max_length=1000)
+    booking_rules = models.CharField(null=True, blank=True, max_length=1000)
 
-    amenities=models.CharField(max_length=1000,default='')
+    amenities=models.CharField(null=True, blank=True, max_length=1000)
 
-    base_price = models.FloatField(default=0)
+    base_price = models.FloatField(null=True, blank=True, max_length=1000)
 
-    num_guests = models.IntegerField(default=0)
-    num_bedrooms = models.IntegerField(default=0)
-    num_bathrooms = models.IntegerField(default=0)
+    num_guests = models.IntegerField(null=True, blank=True)
+    num_bedrooms = models.IntegerField(null=True, blank=True)
+    num_bathrooms = models.IntegerField(null=True, blank=True)
 
-    suburb = models.CharField(max_length=100, default='')
-    state = models.CharField(default='NSW', max_length=50)
-    country = models.CharField(default='Australia', max_length=50)
+    suburb = models.CharField(null=True, blank=True, max_length=1000)
+    state = models.CharField(null=True, blank=True, max_length=1000)
+    country = models.CharField(null=True, blank=True, max_length=1000)
 
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.accommodation_name

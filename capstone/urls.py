@@ -31,12 +31,12 @@ from catalog import views
 
 urlpatterns = [
     path('api/public/', views.public),
-    url(r'^api/private/', views.private),
+    path('api/private/', views.private),
 
     path('admin/', admin.site.urls),
 
-    path('get/user/<slug:first>/<slug:second>/', views.user_profile),
-    url(r'^api/post/user/(?P<email>[A-Za-z]+@[A-Za-z0-9.-])/(?P<pk>[0-9])/update/$', views.public),
+    path('get/user/<slug:first>/<slug:second>/', views.user_profile_get),
+    path('post/user/<slug:first>/<slug:second>/<int:user>/update/', views.user_profile_post),
 
     #url(r'^/get/advertisement/([0-9])+/$),
 

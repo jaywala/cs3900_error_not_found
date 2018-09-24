@@ -1,11 +1,6 @@
 <template >
   <div id="app">
-<<<<<<< HEAD
   <h1 v-if="authenticated()">{{this.message}}</h1>
-=======
-  <h1 v-if="authenticated()"> {{this.get()}} </h1>
->>>>>>> 0c7e367d460f59f8fbc49158324c12889ea02585
-  <h2>hello</h2>
 </div>
 </template>
 
@@ -36,13 +31,13 @@ export default {
   },
   data () {
     return {
+      id: {user: 3},
       message:
             {
-                user: 3,
                 accommodation_name: "Manly Harbour House",
                 accommodation_description: "Beautifully renovatedThe front lounge enjoys P&O",
                 house_rules: "Standard Terms and Conditions  owners in adv",
-                booking_rules: "no running",
+                booking_rules: "GLADYS",
                 base_price: 471,
                 num_guests: 6,
                 num_bedrooms: 3,
@@ -56,7 +51,7 @@ export default {
 
     }
   },
-
+  /*
   mounted () {
     axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
@@ -67,12 +62,19 @@ export default {
       this.errors.push(e)
     })
   }
-
-  /*
-  mounted () {
-    axios.post("http://localhost:8000/api/get/user/"+this.$auth.getUserProfile().email+"/"+this.message.user+"/", {body:this.message})
-  }
   */
+
+  mounted () {
+    axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+ this.id.user +"/update/", {body:this.message})
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.message = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+  }
+
 }
 
 </script>

@@ -11,12 +11,13 @@ from catalog.serializers import UserProfileSerializer
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import *
 
 
-def user_profile(request, first, second):
+def user_profile_get(request, first, second):
     """
     Give all the information related to the user profile model.
     (models: User_Profile).
@@ -27,34 +28,22 @@ def user_profile(request, first, second):
     serializer = AdvertisementSerializer(snippets, many=True)
     return JsonResponse(serializer.data, safe=False)
 
-@csrf_exempt
-def user_profile_post(request, email):
+
+def user_profile_post(request, first, second, user):
     print("hello+",request.body)
-    return HttpResponse("You don't need to be authenticated to see this")
+
+    data = JSONParser().parse(request)
+    serializer = AdvertisementSerializer(data=data)
+    print('info======' , serializer)
+    print('isSaved', serializer.is_valid())
+    if serializer.is_valid():
+        serializer.save()
+        print('SAVED')
+        return JsonResponse(serializer.data, status=201)
+    return HttpResponse("wrong data")
+    #return JsonResponse(serializer.errors, status=400)
 
 
-# Advertisement model
-@csrf_exempt
-def advertisement_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    print("***inside ad list function")
-    if request.method == 'GET':
-        snippets = Advertisement.objects.all()
-        serializer = AdvertisementSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = AdvertisementSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-
-
-@csrf_exempt
 def advertisement_detail(request, pk):
     """
     Retrieve, update or delete a code snippet.

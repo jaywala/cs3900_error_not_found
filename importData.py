@@ -42,7 +42,7 @@ def importFromCSV():
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],
-                base_price=float((row[60].strip("$")).replace(",","")), 
+                base_price=float((row[60].strip("$")).replace(",","")),
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
