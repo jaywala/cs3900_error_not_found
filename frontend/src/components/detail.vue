@@ -1,6 +1,10 @@
 <template >
   <div id="app">
+<<<<<<< HEAD
   <h1 v-if="authenticated()">{{this.message}}</h1>
+=======
+  <h1 v-if="authenticated()"> {{this.get()}} </h1>
+>>>>>>> 0c7e367d460f59f8fbc49158324c12889ea02585
   <h2>hello</h2>
 </div>
 </template>
@@ -25,6 +29,9 @@ export default {
     },
     token(){
       return router.app.$auth.getAuthToken()
+    },
+    get(){
+      return router.app.$auth.getUserProfile()
     }
   },
   data () {
