@@ -31,7 +31,7 @@ export default {
   data () {
     return {
       message: {
-    "user": 1,
+    "user": "this is my nickname",
     "accommodation_name": "shit",
     "accommodation_description": "s to walk to Circular  Quay ",
     "house_rules": "Be considerate.   No showering after 2330h.",
@@ -51,7 +51,7 @@ export default {
     }
   },
   mounted () {
-    axios.post("http://localhost:8000/api/public/",{body:this.message})
+    axios.get("http://localhost:8000/get/user/"+"shit",{body:this.message})
 
 
 

@@ -32,12 +32,20 @@ from catalog import views
 urlpatterns = [
     url(r'^api/public/', views.public),
     url(r'^api/private/', views.private),
+
     path('admin/', admin.site.urls),
-    url(r'^advertisement/$', views.advertisement_list),
-    url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
+
+    url(r'^get/user/', views.user_profile),
+    #url(r'^8000/post/user/([0-9])+/$),
+
+    #url(r'^8000/get/advertisement/([0-9])+/$),
+
 ]
 
+#(?P[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$
 '''
+url(r'^advertisement/$', views.advertisement_list),
+url(r'^advertisement/(?P<pk>[0-9]+)/$', views.advertisement_detail),
 url(r'^userProfile/$', views.user_profile_list),
 url(r'^userProfile/(?P<pk>[0-9]+)/$', views.user_profile_detail),
 url(r'^userReview/$', views.user_review_list),
