@@ -1,6 +1,7 @@
 <template >
   <div id="app">
   <h1 v-if="authenticated()">{{this.message}}</h1>
+  {{this.url}}
   <h2>hello</h2>
 </div>
 </template>
@@ -29,12 +30,20 @@ export default {
   },
   data () {
     return {
-      message: null
-
+      message: {
+        "given_name": "George",
+        "family_name": "Q",
+        "nickname": "georgeq.tsingdao",
+        "name": "George Q",
+        "picture": "https://lh3.googleusercontent.com/-GzqPoUtimaw/AAAAAAAAAAI/AAAAAAAAAAA/AAN31DUbjbINQTD0Hdh1Pu3wEnZwrujeBQ/mo/photo.jpg",
+        "email":"fuck@fuck.com",
+       },
+      url : null
     }
   },
   mounted () {
-    axios.get("http://localhost:8000/get/"+this.$auth.getUserProfile().nickname+"/")
+    this.url = "http://localhost:8000/get/user/"+this.$auth.getUserProfile().email+"/"
+    axios.get(this.url)
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data

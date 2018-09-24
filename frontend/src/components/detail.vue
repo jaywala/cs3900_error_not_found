@@ -1,6 +1,6 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">{{token()}}</h1>
+  <h1 v-if="authenticated()"> {{this.get()}} </h1>
   <h2>hello</h2>
 </div>
 </template>
@@ -26,16 +26,20 @@ export default {
     },
     token(){
       return router.app.$auth.getAuthToken()
+    },
+    get(){
+      return router.app.$auth.getUserProfile()
     }
   },
   data () {
     return {
       message: {
-    "user": 1,
-    "accommodation_name": "shit",
-    "accommodation_description": "s to walk to Circular  Quay ",
-    "house_rules": "Be considerate.   No showering after 2330h.",
-    "booking_rules": "no running",
+        "user":1,
+        "emal":"current users email",
+        "accommodation_name": "shit",
+        "accommodation_description": "s to walk to Circular  Quay ",
+        "house_rules": "Be considerate.   No showering after 2330h.",
+        "booking_rules": "",
     "base_price": 65.0,
     "num_guests": 1,
     "num_bedrooms": 1,
@@ -51,8 +55,7 @@ export default {
     }
   },
   mounted () {
-    console.log(router.app.$auth.getUserProfile())
-    axios.post("http://localhost:8000/api/public/",{body:this.message})
+    axios.get("http://localhost:8000/api/public/",{body:this.message})
 
 
 
