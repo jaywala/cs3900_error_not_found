@@ -2,27 +2,27 @@ API URLs
 
 How to read:
 - If something is wrapped in <> angle brackets, it means that part of the URL
-  chances.
+  changes.
 
 User Profile Data:
     GET:
-        8000/get/user/<id> --> TODO add a field to User_Profile called id.
-                                  Set of ids will start at 1. It will then
-                                  increment by 1 for every new user. When a
-                                  new user needs to be created, the id in the
-                                  POST request will be zero. This id number is
-                                  reserved for creating new users.
-                           --> With this URL, the backend will give all the
+        8000/get/user/ --> With this URL, the backend will give all the
                                information related to the user profile (models:
                                User_Profile, User_Review).
 
 
 
     POST:
-        8000/post/user/<id> --> will change the data for the user id given.
+        8000/post/user/<user_nickname> --> will change the data for the user id given.
                             --> will also check if this user is in database,
                                 by searching emails. if it does not exit ...
                                 (deal with this later)
+
+        8000/post/userLoggedIn/<user_nickname> --> check if it exists, give back information for
+                                   this user
+                              -->  if it doesn't exist, make new user.
+
+
 
 
 
@@ -30,14 +30,15 @@ User Profile Data:
 
 Advertisement Data:
     GET:
-        8000/get/advertisement/user --> give all information for the
+        8000/get/advertisement/<user_email> --> give all information for the
                                         advertisement class, events this class
                                         owns, advertisement reviews
 
 
 
     POST:
-        8000/post/advertisement/user/update --> will change the data for the advertisement
-                                         information.
+        8000/post/advertisement/<user_email>/update --> will change the data for
+                                                        the advertisement
+                                                        information.
 
-        8000/post/advertisement/user/delete --> will delete this ad.
+        8000/post/advertisement/<user_email>/delete --> will delete this ad.

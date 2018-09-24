@@ -34,12 +34,11 @@ export default {
   data () {
     return {
       message: {
-        "user":1,
-        "emal":"current users email",
-        "accommodation_name": "shit",
-        "accommodation_description": "s to walk to Circular  Quay ",
-        "house_rules": "Be considerate.   No showering after 2330h.",
-        "booking_rules": "",
+    "user": "1",
+    "accommodation_name": "shit",
+    "accommodation_description": "s to walk to Circular  Quay ",
+    "house_rules": "Be considerate.   No showering after 2330h.",
+    "booking_rules": "no running",
     "base_price": 65.0,
     "num_guests": 1,
     "num_bedrooms": 1,
