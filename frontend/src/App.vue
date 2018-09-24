@@ -51,6 +51,8 @@
 
                       <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">add room</router-link>
 
+                      <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
+
 
                   </b-dropdown>
               </div>

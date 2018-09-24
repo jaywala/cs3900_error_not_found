@@ -51,7 +51,8 @@ export default {
     }
   },
   mounted () {
-    axios.get("http://localhost:8000/get/user/"+"shit",{body:this.message})
+    console.log(router.app.$auth.getUserProfile())
+    axios.post("http://localhost:8000/api/public/",{body:this.message})
 
 
 
