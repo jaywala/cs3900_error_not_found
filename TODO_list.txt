@@ -2,13 +2,13 @@ TODO list
 
 1. write the API
     - determine URL for each GET and POST
-    - don't forget to send back some message to backend
+    - don't forget to send back some message to frontend
       to tell them the backend actually saved the new data
       from a POST request.
     - Make system that will deal with cases such as
         - the POST request did not give valid data
         - the POST request is missing data
-        - the GET request could now find what frontend wanted
+        - the GET request could not find what frontend wanted
         - etc.
 2. Make methods that will give the right JSON to frontend
     - join advertisement with all it's amenities, property images,

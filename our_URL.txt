@@ -19,17 +19,25 @@ User Profile Data:
 
 
     POST:
-        8000/post/user/<id> --> will change the data for the user id given, if id
-                             equals to zero, a new user will be created with
-                             given data.
+        8000/post/user/<id> --> will change the data for the user id given.
+                            --> will also check if this user is in database,
+                                by searching emails. if it does not exit ...
+                                (deal with this later)
+
+
 
 
 
 Advertisement Data:
     GET:
-        8000/get/advertisement/user -->
+        8000/get/advertisement/user --> give all information for the
+                                        advertisement class, events this class
+                                        owns, advertisement reviews
 
 
 
     POST:
-        8000/post/advertisement/user -->
+        8000/post/advertisement/user/update --> will change the data for the advertisement
+                                         information.
+
+        8000/post/advertisement/user/delete --> will delete this ad.
