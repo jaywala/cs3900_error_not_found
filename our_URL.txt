@@ -6,15 +6,15 @@ How to read:
 
 User Profile Data:
     GET:
-        8000/get/user/<user_email>
+        8000/get/user/<user_email>/
         --> With this URL, the backend will give all the information related
         to the user profile (models: User_Profile).
 
     POST:
-        8000/post/user/<user_email>
+        8000/post/user/<user_email>/update/
         --> will change the data for the user email given.
 
-        8000/post/userLoggedIn/<user_email>
+        8000/post/userLoggedIn/<user_email>/
         --> check if it exists.
         --> if it doesn't exist, make new user with data given.
 
@@ -22,16 +22,16 @@ User Profile Data:
 
 Advertisement Data:
     GET:
-        8000/get/advertisement/<user_email>
+        8000/get/advertisement/<user_email>/
         --> give all ads that this user owns, with the information for the
         advertisement class, events this advertisement owns, advertisement
         reviews.
 
     POST:
-        8000/post/advertisement/<user_email>/<user_id>/update
+        8000/post/advertisement/<user_email>/<user_id>/update/
         --> will change the data for the advertisement information.
 
-        8000/post/advertisement/<user_email>/<user_id>/delete
+        8000/post/advertisement/<user_email>/<user_id>/delete/
         --> will delete this ad.
 
 

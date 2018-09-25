@@ -80,6 +80,10 @@ def user_profile_post(request, first, second):
 
 
 def create_user(data):
+    """
+    Creates a new user profile.
+    """
+
     user_name = data['body']['user_name']
     name = data['body']['name']
     email = data['body']['email']
@@ -90,6 +94,9 @@ def create_user(data):
 
 
 def is_loggedIn(request, first, second):
+    """
+    Checks if this user is registered in the database. If not, it creates one.
+    """
 
     email = first + "@" + second + ".com"
 
@@ -111,7 +118,6 @@ def is_loggedIn(request, first, second):
         return HttpResponse(status=201)
 
     return HttpResponse(status=400)
-
 
 
 def advertisement_get(request, first, second):
@@ -146,6 +152,26 @@ def advertisement_post(request, first, second, user):
     return HttpResponse("invalid data")
     #return JsonResponse(serializer.errors, status=400)
 
+def advertisement_delete(requestt, first, second, id):
+    """
+    Deletes the ad with id number.
+    """
+
+    print('-----------> inside GET advertisement', email, '<-----------')
+
+    ad = Advertisement.objects.filter(pk=id)
+
+    print(ad)
+
+    if ad.exists() and len(ad) == 1:
+        ad.delete()
+        temp = "deleted" + str(id)
+        return HttpResponse(temp) #status=201)
+
+    return HttpResponse(status=400)
+
+
+#--------------------test views------------------------#
 
 def advertisement_detail(request, pk):
     try:
@@ -200,6 +226,7 @@ def user_detail(request, pk):
 def public(request):
     print("hello+",request.body)
     return HttpResponse("You don't need to be authenticated to see this")
+
 
 def private(request):
     print("hello+",request.body)

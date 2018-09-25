@@ -40,7 +40,8 @@ urlpatterns = [
     path('post/userLoggedIn/<slug:first>/<slug:second>/', views.is_loggedIn),
 
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
-    path('post/advertisement/<slug:first>/<slug:second>/<int:user>/update/', views.advertisement_post),
+    path('post/advertisement/<slug:first>/<slug:second>/<int:id>/update/', views.advertisement_post),
+    path('post/advertisement/<slug:first>/<slug:second>/<int:id>/delete/', views.advertisement_delete),
 
     #URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
