@@ -38,6 +38,10 @@ urlpatterns = [
     path('get/user/<slug:first>/<slug:second>/', views.user_profile_get),
     path('post/user/<slug:first>/<slug:second>/<int:user>/update/', views.user_profile_post),
 
-    #url(r'^/get/advertisement/([0-9])+/$),
+    path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
+    path('post/advertisement/<slug:first>/<slug:second>/<int:user>/update/', views.advertisement_post),
+
+    #URLs for testing
+    path('advertisement/<int:pk>/', views.advertisement_detail),
 
 ]

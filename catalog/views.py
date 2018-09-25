@@ -19,28 +19,56 @@ from django.views.decorators.csrf import *
 
 def user_profile_get(request, first, second):
     """
-    Give all the information related to the user profile model.
-    (models: User_Profile).
+    Give all the information related to the user profile based on email.
+    (model: User_Profile).
     """
-    print('inside GET user_profile', first, second)
 
-    snippets = Advertisement.objects.all()
-    serializer = AdvertisementSerializer(snippets, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET user_profile', email, '<-----------')
+
+    try:
+        user = User_Profile.objects.get(email=email)
+    except User_Profile.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = UserProfileSerializer(user)
+    print('-----------> data given to frontend ', serializer.data, '<-----------')
+    return JsonResponse(serializer.data)
 
 
 def user_profile_post(request, first, second, user):
+    return HttpResponse(status=204)
+
+
+def advertisement_get(request, first, second):
+    """
+    Give all the ads for this user.
+    (models: Advertisement).
+    """
+
+    print('-----------> inside GET advertisement', first, second, 'contrusted email: ', email, '<-----------')
+
+    snippets = Advertisement.objects.all()
+    serializer = AdvertisementSerializer(snippets, many=True)
+    print("data given back to frontend =========>", serializer.data)
+    return JsonResponse(serializer.data)
+
+
+def advertisement_post(request, first, second, user):
     print("hello+",request.body)
 
     data = JSONParser().parse(request)
     serializer = AdvertisementSerializer(data=data)
+
     print('info======' , serializer)
     print('isSaved', serializer.is_valid())
+
     if serializer.is_valid():
         serializer.save()
         print('SAVED')
-        return JsonResponse(serializer.data, status=201)
-    return HttpResponse("wrong data")
+        return HttpResponse("saved")#JsonResponse(serializer.data, status=201)
+    return HttpResponse("invalid data")
     #return JsonResponse(serializer.errors, status=400)
 
 

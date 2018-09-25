@@ -1,6 +1,7 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">{{this.message}}</h1>
+  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+  <h2>error message: {{this.error}}</h2>
 </div>
 </template>
 
@@ -31,27 +32,15 @@ export default {
   },
   data () {
     return {
-      id: {user: 3},
-      message:
-            {
-                accommodation_name: "Manly Harbour House",
-                accommodation_description: "Beautifully renovatedThe front lounge enjoys P&O",
-                house_rules: "Standard Terms and Conditions  owners in adv",
-                booking_rules: "GLADYS",
-                base_price: 471,
-                num_guests: 6,
-                num_bedrooms: 3,
-                num_bathrooms: 3,
-                suburb: "Balgowlah",
-                state: "NSW",
-                country: "Australia",
-                latitude: -33.80092903,
-                longitude: 151.2617222
-            }
+      id: {user: 1},
+      message: {
+                id: 1,
+                
+               }
 
     }
   },
-  /*
+
   mounted () {
     axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
@@ -62,18 +51,16 @@ export default {
       this.errors.push(e)
     })
   }
-  */
 
+/*
   mounted () {
-    axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+ this.id.user +"/update/", {body:this.message})
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+ this.id.user +"/update/", {body:this.info})
     .then(response => {
       // JSON responses are automatically parsed.
-      this.message = response.data
-    })
-    .catch(e => {
-      this.errors.push(e)
+      this.info = response.data
     })
   }
+*/
 
 }
 
