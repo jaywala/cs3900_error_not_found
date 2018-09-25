@@ -15,9 +15,11 @@ class User_Profile(models.Model):
         return self.user_name
 
     def get_user_name(self):
+        print('inside get user name')
         return self.user_name
 
     def get_name(self):
+        print('inside get name')
         return self.name
 
     def get_email(self):
@@ -26,8 +28,15 @@ class User_Profile(models.Model):
     #--------------------------------
 
     def set_user_name(self, new_name):
+        print('inside set user name')
         u = User_Profile.objects.get(id=self.id)
         u.user_name = new_name
+        u.save()
+
+    def set_name(self, new_name):
+        print('inside set name')
+        u = User_Profile.objects.get(id=self.id)
+        u.name = new_name
         u.save()
 
     def set_email(self, new_email):

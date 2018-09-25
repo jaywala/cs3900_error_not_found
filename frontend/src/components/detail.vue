@@ -50,9 +50,9 @@ export default {
                     longitude: 1
                }*/
                {
-                    user_name: "Pickachu",
-                    name: "Pickachu Bear",
-                    email: "Pickachu@example.com",
+                    user_name: "chrome",
+                    name: "safari",
+                    email: "gladyschanmail@gmail.com",
                     profile_pic: null
                }
     }

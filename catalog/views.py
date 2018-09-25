@@ -20,7 +20,7 @@ def user_profile_get(request, first, second):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside GET user_profile', email, '<-----------')
+    print('-----------> inside GET user_profile <-----------\n', email, '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
@@ -29,7 +29,7 @@ def user_profile_get(request, first, second):
 
     serializer = UserProfileSerializer(user)
 
-    print('-----------> data given to frontend ', serializer.data, '<-----------')
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data)
 
@@ -42,7 +42,7 @@ def user_profile_post(request, first, second):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside POST user_profile', email, '<-----------')
+    print('-----------> inside POST user_profile <-----------\n', email, '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
@@ -51,25 +51,33 @@ def user_profile_post(request, first, second):
 
     data = JSONParser().parse(request)
 
-    print('data', data)
-    print('***', data['body']['user_name'], '***')
+    print('-----------> data to POST <-----------\n', data, '\n------------------------')
 
     user.set_user_name(data['body']['user_name'])
-    current_name = user.get_user_name()
-    print(current_name)
-    if data['body']['user_name'] != current_name:
-        return HttpResponse("did not change user name")
+    current_user_name = user.get_user_name()
 
-    return HttpResponse("worked")
+    user.set_name(data['body']['name'])
+    current_name = user.get_name()
+
+    print('name: ', current_name, '-----', data['body']['name'])
+    print('user name: ', current_user_name, '-----', data['body']['user_name'])
+
+
+    if data['body']['user_name'] != current_user_name or data['body']['name'] != current_name:
+        print('MISTAKE')
+        return HttpResponse(status=400)
+
     '''
-    serializer = UserProfileSerializer(user, data=data)
-    if serializer.is_valid():
-        serializer.save()
-        print('SAVED')
-        return JsonResponse(serializer.data, status=201)
-    print('serializer', serializer)
-    return JsonResponse(serializer.errors)#, status=400)
+    # can't let users update email because if they do our system
+    # won't be able to find the same user.
+    user.set_email(data['body']['email'])
+    current_name = user.get_email()
+    if data['body']['email'] != current_name:
+        return HttpResponse(status=400)
     '''
+
+    return HttpResponse(status=201)
+
 
 def advertisement_get(request, first, second):
     """
