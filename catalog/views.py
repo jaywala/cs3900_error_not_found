@@ -216,6 +216,10 @@ def advertisement_delete(requestt, first, second, id):
 #--------------------test views------------------------#
 
 def advertisement_detail(request, pk):
+    """
+    Shows JSON in browser of a particular ad.
+    """
+
     try:
         ad = Advertisement.objects.get(pk=pk)
     except Advertisement.DoesNotExist:
@@ -241,6 +245,10 @@ def advertisement_detail(request, pk):
 
 
 def user_detail(request, pk):
+    """
+    Shows JSON in browser of a particular user.
+    """
+
     try:
         ad = User_Profile.objects.get(pk=pk)
     except User_Profile.DoesNotExist:
