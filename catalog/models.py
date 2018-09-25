@@ -8,7 +8,8 @@ class User_Profile(models.Model):
     user_name = models.CharField(max_length=25)
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
-    profile_pic = models.ImageField(upload_to = 'profile_pics/')
+    profile_pic = models.CharField(null=True, blank=True, max_length=1000)
+    #models.ImageField(upload_to = 'profile_pics/')
 
     def __str__(self):
         return self.user_name
@@ -24,9 +25,9 @@ class User_Profile(models.Model):
 
     #--------------------------------
 
-    def set_name(self, new_name):
+    def set_user_name(self, new_name):
         u = User_Profile.objects.get(id=self.id)
-        u.name = new_name
+        u.user_name = new_name
         u.save()
 
     def set_email(self, new_email):

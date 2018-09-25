@@ -8,19 +8,14 @@ from catalog.serializers import AdvertisementSerializer, AccommodationReviewSeri
 from catalog.serializers import PropertyImageSerializer, EventSerializer
 from catalog.serializers import UserProfileSerializer
 
-
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import *
 
 
 def user_profile_get(request, first, second):
     """
     Give all the information related to the user profile based on email.
-    (model: User_Profile).
+    (Model: User_Profile).
     """
 
     email = first + "@" + second + ".com"
@@ -33,13 +28,48 @@ def user_profile_get(request, first, second):
         return HttpResponse(status=404)
 
     serializer = UserProfileSerializer(user)
+
     print('-----------> data given to frontend ', serializer.data, '<-----------')
+
     return JsonResponse(serializer.data)
 
 
-def user_profile_post(request, first, second, user):
-    return HttpResponse(status=204)
+def user_profile_post(request, first, second):
+    """
+    Updates User Profile data for the given email.
+    (Model: User_Profile)
+    """
 
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside POST user_profile', email, '<-----------')
+
+    try:
+        user = User_Profile.objects.get(email=email)
+    except User_Profile.DoesNotExist:
+        return HttpResponse(status=404)
+
+    data = JSONParser().parse(request)
+
+    print('data', data)
+    print('***', data['body']['user_name'], '***')
+
+    user.set_user_name(data['body']['user_name'])
+    current_name = user.get_user_name()
+    print(current_name)
+    if data['body']['user_name'] != current_name:
+        return HttpResponse("did not change user name")
+
+    return HttpResponse("worked")
+    '''
+    serializer = UserProfileSerializer(user, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        print('SAVED')
+        return JsonResponse(serializer.data, status=201)
+    print('serializer', serializer)
+    return JsonResponse(serializer.errors)#, status=400)
+    '''
 
 def advertisement_get(request, first, second):
     """
@@ -47,11 +77,13 @@ def advertisement_get(request, first, second):
     (models: Advertisement).
     """
 
-    print('-----------> inside GET advertisement', first, second, 'contrusted email: ', email, '<-----------')
+    print('-----------> inside GET advertisement', email, '<-----------')
 
     snippets = Advertisement.objects.all()
     serializer = AdvertisementSerializer(snippets, many=True)
-    print("data given back to frontend =========>", serializer.data)
+
+    print('-----------> data given to frontend ', serializer.data, '<-----------')
+
     return JsonResponse(serializer.data)
 
 
@@ -73,34 +105,54 @@ def advertisement_post(request, first, second, user):
 
 
 def advertisement_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
-    print("***inside ad detail function")
-    print('here', request.GET.get("accommodation_name", ""))
     try:
-        snippet = Advertisement.objects.get(pk=pk)
-    except Snippet.DoesNotExist:
+        ad = Advertisement.objects.get(pk=pk)
+    except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = AdvertisementSerializer(snippet)
+        serializer = AdvertisementSerializer(ad)
         return JsonResponse(serializer.data)
 
     elif request.method == 'POST':
-        print('inside POST********************')
         data = JSONParser().parse(request)
-        serializer = AdvertisementSerializer(snippet, data=data)
+        serializer = AdvertisementSerializer(ad, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        snippet.delete()
+        ad.delete()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)
+
+
+def user_detail(request, pk):
+    try:
+        ad = User_Profile.objects.get(pk=pk)
+    except User_Profile.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(ad)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserProfileSerializer(ad, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
 
 def public(request):
     print("hello+",request.body)

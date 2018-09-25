@@ -32,15 +32,32 @@ export default {
   },
   data () {
     return {
-      id: {user: 1},
-      message: {
-                id: 1,
-                
+      message: /*{
+                    id: 2,
+                    accommodation_name: "ice bear's igloo",
+                    accommodation_description: "your food won't go off",
+                    house_rules: "no fires",
+                    booking_rules: "come chill brah",
+                    amenities: "wifi, towels",
+                    base_price: 10,
+                    num_guests: 1,
+                    num_bedrooms: 1,
+                    num_bathrooms: 1,
+                    suburb: "Maroubra",
+                    state: "New South Wales",
+                    country: "Australia",
+                    latitude: 1,
+                    longitude: 1
+               }*/
+               {
+                    user_name: "Pickachu",
+                    name: "Pickachu Bear",
+                    email: "Pickachu@example.com",
+                    profile_pic: null
                }
-
     }
   },
-
+/*
   mounted () {
     axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
@@ -51,16 +68,16 @@ export default {
       this.errors.push(e)
     })
   }
+*/
 
-/*
   mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+ this.id.user +"/update/", {body:this.info})
+    axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+"update/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
-      this.info = response.data
+      this.message = response.data
     })
   }
-*/
+
 
 }
 
