@@ -79,6 +79,41 @@ def user_profile_post(request, first, second):
     return HttpResponse(status=201)
 
 
+def create_user(data):
+    user_name = data['body']['user_name']
+    name = data['body']['name']
+    email = data['body']['email']
+    profile_pic = data['body']['profile_pic']
+    u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic)
+    u.save()
+    return True
+
+
+def is_loggedIn(request, first, second):
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside is_loggedIn <-----------\n', email, '\n------------------------')
+
+    data = JSONParser().parse(request)
+    email = data['body']['email']
+
+    if data['body']['email'] != email:
+        print('They should be the same as the person logged in should only \
+               be changing thier user profile')
+
+    user = User_Profile.objects.filter(email=email)
+
+    if user.exists() and len(user) == 1:
+        return HttpResponse(status=201)
+    else:
+        create_user(data)
+        return HttpResponse(status=201)
+
+    return HttpResponse(status=400)
+
+
+
 def advertisement_get(request, first, second):
     """
     Give all the ads for this user.

@@ -37,6 +37,7 @@ urlpatterns = [
 
     path('get/user/<slug:first>/<slug:second>/', views.user_profile_get),
     path('post/user/<slug:first>/<slug:second>/update/', views.user_profile_post),
+    path('post/userLoggedIn/<slug:first>/<slug:second>/', views.is_loggedIn),
 
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
     path('post/advertisement/<slug:first>/<slug:second>/<int:user>/update/', views.advertisement_post),
