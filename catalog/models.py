@@ -106,6 +106,9 @@ class Advertisement(models.Model):
     def get_booking_rules(self):
         return self.booking_rules
 
+    def get_amenities(self):
+        return amenities
+
     def get_base_price(self):
         return self.base_price
 
@@ -127,6 +130,12 @@ class Advertisement(models.Model):
     def get_country(self):
         return self.country
 
+    def get_latitude(self):
+        return self.latitude
+
+    def get_longitude(self):
+        return self.longitude
+
     #--------------------------------
 
     def set_accommodation_name(self, new_accommodation_name):
@@ -147,6 +156,11 @@ class Advertisement(models.Model):
     def set_booking_rules(self, new_booking_rules):
         a = Advertisement.objects.get(id=self.id)
         a.booking_rules = new_booking_rules
+        a.save()
+
+    def set_amenities(self, new_amenities):
+        a = Advertisement.objects.get(id=self.id)
+        a.amenities = new_amenities
         a.save()
 
     def set_base_price(self, new_base_price):
@@ -182,6 +196,16 @@ class Advertisement(models.Model):
     def set_country(self, new_country):
         a = Advertisement.objects.get(id=self.id)
         a.country = new_country
+        a.save()
+
+    def set_latitude(self, new_latitude):
+        a = Advertisement.objects.get(id=self.id)
+        a.latitude = new_latitude
+        a.save()
+
+    def set_longitude(self, new_longitude):
+        a = Advertisement.objects.get(id=self.id)
+        a.new_longitude= new_longitude
         a.save()
 
     #--------------------------------

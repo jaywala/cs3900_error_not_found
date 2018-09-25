@@ -128,29 +128,71 @@ def advertisement_get(request, first, second):
 
     print('-----------> inside GET advertisement', email, '<-----------')
 
-    snippets = Advertisement.objects.all()
-    serializer = AdvertisementSerializer(snippets, many=True)
+    ad = Advertisement.objects.all()
+    serializer = AdvertisementSerializer(ad, many=True)
 
     print('-----------> data given to frontend ', serializer.data, '<-----------')
 
     return JsonResponse(serializer.data)
 
 
-def advertisement_post(request, first, second, user):
-    print("hello+",request.body)
+def advertisement_post(request, first, second, id):
+    """
+    Updates Advertisement data for the given id.
+    (Model: Advertisement)
+    """
 
-    data = JSONParser().parse(request)
-    serializer = AdvertisementSerializer(data=data)
+    print('-----------> inside GET advertisement', email, '<-----------')
 
-    print('info======' , serializer)
-    print('isSaved', serializer.is_valid())
+    ad = Advertisement.objects.filter(pk=id)
 
-    if serializer.is_valid():
-        serializer.save()
-        print('SAVED')
-        return HttpResponse("saved")#JsonResponse(serializer.data, status=201)
-    return HttpResponse("invalid data")
-    #return JsonResponse(serializer.errors, status=400)
+    if ad.exists() and len(ad) == 1:
+        data = JSONParser().parse(request)
+        accommodation_name = data['body']['accommodation_name']
+        accommodation_description = data['body']['accommodation_description']
+        house_rules = data['body']['house_rules']
+        booking_rules = data['body']['booking_rules']
+        amenities = data['body']['amenities']
+        base_price = data['body']['base_price']
+        num_guests = data['body']['num_guests']
+        num_bedrooms = data['body']['num_bedrooms']
+        num_bathrooms = data['body']['num_bathrooms']
+        suburb = data['body']['suburb']
+        state = data['body']['state']
+        country = data['body']['country']
+        latitude = data['body']['latitude']
+        longitude = data['body']['longitude']
+
+        ad.set_accommodation_name(accommodation_name)
+        ad.set_accommodation_description(accommodation_description)
+        ad.set_house_rules(house_rules)
+        ad.set_booking_rules(booking_rules)
+        ad.set_amenities(amenities)
+        ad.set_base_price(base_price)
+        ad.set_num_guests(num_guests)
+        ad.set_num_bedrooms(num_bedrooms)
+        ad.set_num_bathrooms(num_bathrooms)
+        ad.set_suburb(suburb)
+        ad.set_state(state)
+        ad.set_country(country)
+        ad.set_latitude(latitude)
+        ad.set_longitude(longitude)
+
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=400)
+
+
+def advertisement_create(request, first, second, id):
+    """
+    If id does not exist, it will create a new advertisement for this user.
+    (Model: Advertisement)
+    """
+
+    print('-----------> inside GET advertisement', email, '<-----------')
+
+    return True
+
 
 def advertisement_delete(requestt, first, second, id):
     """

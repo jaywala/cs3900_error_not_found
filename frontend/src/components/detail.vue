@@ -51,9 +51,9 @@ export default {
                }
                /*
                {
-                    user_name: "bree",
+                    user_name: "crab",
                     name: "cheddar",
-                    email: "cheese@gmail.com",
+                    email: "gladyschanmail@gmail.com",
                     profile_pic: null
                }
                */
@@ -73,7 +73,7 @@ export default {
 */
 
   mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/"+this.message.id+"/delete/", {body:this.message})
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data

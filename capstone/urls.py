@@ -42,6 +42,7 @@ urlpatterns = [
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
     path('post/advertisement/<slug:first>/<slug:second>/<int:id>/update/', views.advertisement_post),
     path('post/advertisement/<slug:first>/<slug:second>/<int:id>/delete/', views.advertisement_delete),
+    path('post/advertisement/<slug:first>/<slug:second>/<int:id>/create/', views.advertisement_create),
 
     #URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
