@@ -10,13 +10,13 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Advertisement
-        '''
-        fields = ('user', 'accommodation_name', 'accommodation_description',
+
+        fields = ('poster', 'accommodation_name', 'accommodation_description',
                   'house_rules', 'booking_rules', 'base_price', 'num_guests',
                   'num_bedrooms', 'num_bathrooms', 'suburb', 'state', 'country',
                   'latitude', 'longitude')
-        '''
-        exclude = ('user',)
+
+        exclude = ()
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
@@ -30,21 +30,14 @@ class AccommodationReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Accommodation_Review
-        field = ('advert', 'rating', 'title', 'message')
+        field = ('accommodation_name','advert', 'rating', 'title', 'message')
         exclude = ()
 
-# Not sure if this works, need to implement the encoding thing 64byte
-class PropertyImageSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = PropertyImage
-        field = ('advert', 'image')
-        exclude = ()
 
 class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        field = ('advert', 'start_day', 'start_day_start_time', 'end_day',
+        field = ('accommodation_name', 'advert', 'start_day', 'start_day_start_time', 'end_day',
                  'end_day_end_time', 'booking_status', 'notes')
         exclude = ()

@@ -46,7 +46,7 @@ export default {
                     suburb: "Maroubra",
                     state: "New South Wales",
                     country: "Australia",
-                    latitude: 1,
+                    latitude: 1, 
                     longitude: 1
                }
                /*
@@ -59,9 +59,9 @@ export default {
                */
     }
   },
-/*
+
   mounted () {
-    axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+    axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
@@ -70,8 +70,8 @@ export default {
       this.errors.push(e)
     })
   }
-*/
 
+/*
   mounted () {
     axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
@@ -79,7 +79,7 @@ export default {
       this.message = response.data
     })
   }
-
+*/
 
 }
 

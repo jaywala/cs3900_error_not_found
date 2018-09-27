@@ -9,32 +9,30 @@ class User_Profile(models.Model):
     name = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     profile_pic = models.CharField(null=True, blank=True, max_length=1000)
-    #models.ImageField(upload_to = 'profile_pics/')
 
     def __str__(self):
         return self.user_name
 
     def get_user_name(self):
-        print('inside get user name')
         return self.user_name
 
     def get_name(self):
-        print('inside get name')
         return self.name
 
     def get_email(self):
         return self.email
 
+    def get_profile_pic(self):
+        return self.profile_pic
+
     #--------------------------------
 
     def set_user_name(self, new_name):
-        print('inside set user name')
         u = User_Profile.objects.get(id=self.id)
         u.user_name = new_name
         u.save()
 
     def set_name(self, new_name):
-        print('inside set name')
         u = User_Profile.objects.get(id=self.id)
         u.name = new_name
         u.save()
@@ -44,29 +42,20 @@ class User_Profile(models.Model):
         u.email = new_email
         u.save()
 
+    def set_profile_pic(self, new_pic):
+        u = User_Profile.objects.get(id=self.id)
+        u.profile_pic = new_pic
+        u.save()
+
     #--------------------------------
 
     def delete_me(self):
         self.delete()
 
-    #--------------------------------
-
-    def exists(username):
-        '''
-        Searches for the object by a field.
-        '''
-        user = User_Profile.objects.filter(user_name=username)
-        if user.exists() and len(user) == 1:
-            return user
-        else:
-            return None
-
-    #--------------------------------
-
 
 class Advertisement(models.Model):
 
-    user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE, null=True)
+    poster = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_description = models.CharField(null=True, blank=True, max_length=1000)
 
@@ -91,8 +80,8 @@ class Advertisement(models.Model):
     def __str__(self):
         return self.accommodation_name
 
-    def get_user(self):
-        return self.user
+    def get_poster(self):
+        return self.poster
 
     def get_accommodation_name(self):
         return self.accommodation_name
@@ -107,7 +96,7 @@ class Advertisement(models.Model):
         return self.booking_rules
 
     def get_amenities(self):
-        return amenities
+        return self.amenities
 
     def get_base_price(self):
         return self.base_price
@@ -140,8 +129,12 @@ class Advertisement(models.Model):
 
     def set_accommodation_name(self, new_accommodation_name):
         a = Advertisement.objects.get(id=self.id)
+        old_name = a.get_accommodation_name()
         a.accommodation_name = new_accommodation_name
         a.save()
+
+        r = Accommodation_Review.object.get(accommodation_name=old_name)
+        r.set
 
     def set_accommodation_description(self, new_accommodation_description):
         a = Advertisement.objects.get(id=self.id)
@@ -216,7 +209,7 @@ class Advertisement(models.Model):
 
 class Accommodation_Review(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
+    accommodation_name = models.CharField(max_length=1000)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
@@ -224,8 +217,8 @@ class Accommodation_Review(models.Model):
     def __str__(self):
         return self.title
 
-    def get_advertisement(self):
-        return self.advert
+    def get_accommodation_name(self):
+        return self.accommodation_name
 
     def get_rating(self):
         return self.rating
@@ -237,6 +230,11 @@ class Accommodation_Review(models.Model):
         return self.message
 
     #--------------------------------
+
+    def set_accommodation_name(self, new_name):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.accommodation_name = new_name
+        u.save()
 
     def set_rating(self, new_rating):
         u = Accommodation_Review.objects.get(id=self.id)
@@ -259,20 +257,9 @@ class Accommodation_Review(models.Model):
         self.delete()
 
 
-class PropertyImage(models.Model):
-
-    advert = models.ForeignKey(Advertisement, related_name='property_images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to = 'accommodation_pics/')
-
-    #--------------------------------
-
-    def delete_me(self):
-        self.delete()
-
-
 class Event(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
+    accommodation_name = models.CharField(max_length=1000)
 
     start_day = models.DateField(u'Start day of the rent', help_text=u'Start day of the rent')
     start_day_start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
@@ -344,8 +331,8 @@ class Event(models.Model):
                     return False
         return True
 
-    def get_advertisement(self):
-        return self.advert
+    def get_accommodation_name(self):
+        return self.accommodation_name
 
     def get_start_day(self):
         return self.start_day
@@ -366,6 +353,12 @@ class Event(models.Model):
         return self.notes
 
     #--------------------------------
+
+    def set_accommodation_name(self, new_name):
+        u = Event.objects.get(id=self.id)
+        u.accommodation_name = new_name
+        u.save()
+
 #TODO need to check the validity when using these methods to modify the data
 # currently it trivaly either modifies db or doesn't
 # need to return some feed back to user.

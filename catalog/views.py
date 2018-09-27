@@ -12,6 +12,9 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 
 
+#------------------------------User_Profile------------------------------#
+
+
 def user_profile_get(request, first, second):
     """
     Give all the information related to the user profile based on email.
@@ -120,18 +123,28 @@ def is_loggedIn(request, first, second):
     return HttpResponse(status=400)
 
 
+#------------------------------Advertisement------------------------------#
+
+
 def advertisement_get(request, first, second):
     """
     Give all the ads for this user.
     (models: Advertisement).
     """
 
-    print('-----------> inside GET advertisement', email, '<-----------')
+    email = first + "@" + second + ".com"
 
-    ad = Advertisement.objects.all()
-    serializer = AdvertisementSerializer(ad, many=True)
+    print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
-    print('-----------> data given to frontend ', serializer.data, '<-----------')
+    try:
+        ad = Advertisement.objects.all()
+        #ad = Advertisement.user_profile_set.filter(email=email)
+    except Advertisement.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = AdvertisementSerializer(ad)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data)
 
@@ -213,7 +226,7 @@ def advertisement_delete(requestt, first, second, id):
     return HttpResponse(status=400)
 
 
-#--------------------test views------------------------#
+#------------------------------Test Views------------------------------#
 
 def advertisement_detail(request, pk):
     """
