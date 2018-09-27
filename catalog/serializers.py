@@ -3,7 +3,7 @@ from rest_framework import serializers
 import django
 django.setup()
 
-from .models import Advertisement, Accommodation_Review, PropertyImage
+from .models import Advertisement, Accommodation_Review
 from .models import User_Profile, Event
 
 class AdvertisementSerializer(serializers.ModelSerializer):

@@ -2,11 +2,10 @@
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import PropertyImage, Event, User_Profile
+from catalog.models import Event, User_Profile
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
-from catalog.serializers import PropertyImageSerializer, EventSerializer
-from catalog.serializers import UserProfileSerializer
+from catalog.serializers import EventSerializer, UserProfileSerializer
 
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -137,7 +136,7 @@ def advertisement_get(request, first, second):
     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
     try:
-        ad = Advertisement.objects.all()
+        ad = Advertisement.objects.all(poster=email)
         #ad = Advertisement.user_profile_set.filter(email=email)
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
@@ -155,12 +154,15 @@ def advertisement_post(request, first, second, id):
     (Model: Advertisement)
     """
 
-    print('-----------> inside GET advertisement', email, '<-----------')
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside POST advertisement', email, '<-----------')
 
     ad = Advertisement.objects.filter(pk=id)
 
     if ad.exists() and len(ad) == 1:
         data = JSONParser().parse(request)
+        poster = email
         accommodation_name = data['body']['accommodation_name']
         accommodation_description = data['body']['accommodation_description']
         house_rules = data['body']['house_rules']
@@ -176,6 +178,7 @@ def advertisement_post(request, first, second, id):
         latitude = data['body']['latitude']
         longitude = data['body']['longitude']
 
+        ad.set_poster(email)
         ad.set_accommodation_name(accommodation_name)
         ad.set_accommodation_description(accommodation_description)
         ad.set_house_rules(house_rules)
@@ -196,15 +199,53 @@ def advertisement_post(request, first, second, id):
         return HttpResponse(status=400)
 
 
-def advertisement_create(request, first, second, id):
+def advertisement_create(request, first, second):
     """
-    If id does not exist, it will create a new advertisement for this user.
+    Create a new advertisement for this user.
     (Model: Advertisement)
     """
 
-    print('-----------> inside GET advertisement', email, '<-----------')
+    email = first + "@" + second + ".com"
 
-    return True
+    print('-----------> inside CREATE advertisement', email, '<-----------')
+
+    data = JSONParser().parse(request)
+    poster = email
+    accommodation_name = data['body']['accommodation_name']
+    accommodation_description = data['body']['accommodation_description']
+    house_rules = data['body']['house_rules']
+    booking_rules = data['body']['booking_rules']
+    amenities = data['body']['amenities']
+    base_price = data['body']['base_price']
+    num_guests = data['body']['num_guests']
+    num_bedrooms = data['body']['num_bedrooms']
+    num_bathrooms = data['body']['num_bathrooms']
+    suburb = data['body']['suburb']
+    state = data['body']['state']
+    country = data['body']['country']
+    latitude = data['body']['latitude']
+    longitude = data['body']['longitude']
+
+    ad = Advertisement(poster = poster,
+        accommodation_name = accommodation_name,
+        accommodation_description = accommodation_description,
+        house_rules = house_rules,
+        base_price = base_price,
+        num_guests = num_guests,
+        num_bedrooms = num_bedrooms,
+        num_bathrooms = num_bathrooms,
+        latitude = latitude,
+        longitude = longitude,
+        suburb = suburb,
+        amenities = amenities)
+    ad.save()
+
+    temp_ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
+
+    if temp_ad.exists() and len(temp_ad) == 1:
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=401)
 
 
 def advertisement_delete(requestt, first, second, id):
@@ -212,11 +253,11 @@ def advertisement_delete(requestt, first, second, id):
     Deletes the ad with id number.
     """
 
-    print('-----------> inside GET advertisement', email, '<-----------')
+    print('-----------> inside DELETE advertisement', email, '<-----------')
 
     ad = Advertisement.objects.filter(pk=id)
 
-    print(ad)
+    print('This is the ad',ad)
 
     if ad.exists() and len(ad) == 1:
         ad.delete()

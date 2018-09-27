@@ -1,12 +1,7 @@
 from django.contrib import admin
 
 from .models import Advertisement, Accommodation_Review
-from .models import User_Profile, PropertyImage, Event
-
-
-class PropertyImageInline(admin.TabularInline):
-    model = PropertyImage
-    extra = 3
+from .models import User_Profile, Event
 
 
 class EventInline(admin.TabularInline):
@@ -17,6 +12,7 @@ class EventInline(admin.TabularInline):
 class AccommodationReviewInline(admin.TabularInline):
     model = Accommodation_Review
     extra = 3
+
 
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -29,7 +25,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Owner', {'fields': ['user']}),
+        ('Owner', {'fields': ['poster']}),
         ('Accommodation Information',    {'fields': ['accommodation_name']}),
         (None, {'fields': ['accommodation_description']}),
         ('Rules', {'fields': ['house_rules']}),
@@ -45,7 +41,7 @@ class AdvertisementAdmin(admin.ModelAdmin):
         (None, {'fields': ['longitude']}),
         (None, {'fields': ['amenities']})
     ]
-    inlines = [PropertyImageInline, EventInline, AccommodationReviewInline]
+    inlines = [EventInline, AccommodationReviewInline]
 
 
 admin.site.register(Advertisement, AdvertisementAdmin)

@@ -127,6 +127,11 @@ class Advertisement(models.Model):
 
     #--------------------------------
 
+    def set_poster(self, new_poster):
+        a = Advertisement.objects.get(id=self.id)
+        a.poster = new_poster
+        a.save()
+
     def set_accommodation_name(self, new_accommodation_name):
         a = Advertisement.objects.get(id=self.id)
         old_name = a.get_accommodation_name()
@@ -209,6 +214,9 @@ class Advertisement(models.Model):
 
 class Accommodation_Review(models.Model):
 
+    #leaving here so I can display things better on admin page
+    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
+
     accommodation_name = models.CharField(max_length=1000)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
@@ -258,6 +266,8 @@ class Accommodation_Review(models.Model):
 
 
 class Event(models.Model):
+    #leaving here so I can display things better on admin page
+    advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
 
     accommodation_name = models.CharField(max_length=1000)
 

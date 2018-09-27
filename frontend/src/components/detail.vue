@@ -46,17 +46,17 @@ export default {
                     suburb: "Maroubra",
                     state: "New South Wales",
                     country: "Australia",
-                    latitude: 1, 
+                    latitude: 1,
                     longitude: 1
                }
-               /*
-               {
-                    user_name: "crab",
-                    name: "cheddar",
+
+               /*{
+                    user_name: "chedder",
+                    name: "cheese",
                     email: "gladyschanmail@gmail.com",
                     profile_pic: null
-               }
-               */
+               }*/
+
     }
   },
 
@@ -73,7 +73,7 @@ export default {
 
 /*
   mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
