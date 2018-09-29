@@ -217,6 +217,9 @@ class Accommodation_Review(models.Model):
     #leaving here so I can display things better on admin page
     advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
 
+    pk_id = models.IntegerField()
+    # when creating this instance, the code saves its primary key into this field
+
     accommodation_name = models.CharField(max_length=1000)
     rating = models.IntegerField()
     title = models.CharField(max_length=50)
@@ -224,6 +227,9 @@ class Accommodation_Review(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_pk_id(self):
+        return self.pk_id
 
     def get_accommodation_name(self):
         return self.accommodation_name
@@ -238,6 +244,11 @@ class Accommodation_Review(models.Model):
         return self.message
 
     #--------------------------------
+
+    def set_pk_id(self, new_id):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.pk_id = new_id
+        u.save()
 
     def set_accommodation_name(self, new_name):
         u = Accommodation_Review.objects.get(id=self.id)
@@ -268,6 +279,9 @@ class Accommodation_Review(models.Model):
 class Event(models.Model):
     #leaving here so I can display things better on admin page
     advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
+
+    pk_id = models.IntegerField()
+    # when creating this instance, the code saves its primary key into this field
 
     accommodation_name = models.CharField(max_length=1000)
 
@@ -341,6 +355,9 @@ class Event(models.Model):
                     return False
         return True
 
+    def get_pk_id(self):
+        return self.pk_id
+
     def get_accommodation_name(self):
         return self.accommodation_name
 
@@ -363,6 +380,11 @@ class Event(models.Model):
         return self.notes
 
     #--------------------------------
+
+    def set_pk_id(self, new_id):
+        u = Event.objects.get(id=self.id)
+        u.pk_id = new_id
+        u.save()
 
     def set_accommodation_name(self, new_name):
         u = Event.objects.get(id=self.id)

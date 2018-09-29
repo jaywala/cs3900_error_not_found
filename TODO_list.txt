@@ -10,11 +10,15 @@ TODO list
                          - the POST request is missing data
                          - the GET request could not find what frontend wanted
                          - etc.
+
 2. Make methods that will give the right JSON to frontend
-    - join advertisement with all it's amenities, property images,
-      accommodation reviews, events.
-    - join user profile with all it's user reviews.
-3. Make methods that will write the given JSON to database
+    (DONE - changed to getting them by GET & POST as joining the JSONs
+    caused serialization problems. the is_valid() kept returning False
+    and I don't know how to fix it.) - join advertisement with all it's
+    accommodation reviews, events.
+
+3. (DONE) Make methods that will write the given JSON to database
+
 4. [Backend] write methods for searches for the search module
 5. [Backend] booking module: give frontend the dates and time for each event
 6. [Backend] booking request module: check the advertisement's events

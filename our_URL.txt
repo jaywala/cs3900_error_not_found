@@ -24,18 +24,41 @@ Advertisement Data:
     GET:
         8000/get/advertisement/<user_email>/
         --> give all ads that this user owns, with the information for the
-        advertisement class, events this advertisement owns, advertisement
-        reviews.
+        advertisement class
+
+        8000/get/advertisementReviews/<user_email>/<accommodation_name>/
+        --> give reviews this advertisement owns
+
+        8000/get/advertisementEvents/<user_email>/<accommodation_name>/
+        --> give events this advertisement owns
 
     POST:
-        8000/post/advertisement/<user_email>/<accommodation_name>/update/
-        --> will change the data for the advertisement information.
-
         8000/post/advertisement/<user_email>/create/
         --> if advertisement doesn't exist, it makes one.
 
+        8000/post/advertisement/<user_email>/<accommodation_name>/update/
+        --> will change the data for the advertisement information.
+
         8000/post/advertisement/<user_email>/<accommodation_name>/delete/
         --> will delete this ad.
+-----------
+        8000/post/advertisementReviews/<user_email>/<accommodation_name>/create/
+        --> create a review for this advertisement
+
+        8000/post/advertisementReviews/<user_email>/<accommodation_name>/<pk_id>/update/
+        --> update a review for this advertisement
+
+        8000/post/advertisementReviews/<user_email>/<accommodation_name>/<pk_id>/delete/
+        --> delete a review for this advertisement
+-----------
+        8000/post/advertisementEvents/<user_email>/<accommodation_name>/create/
+        --> create event for this advertisement
+
+        8000/post/advertisementEvents/<user_email>/<accommodation_name>/<pk_id>/update/
+        --> update event for this advertisement
+
+        8000/post/advertisementEvents/<user_email>/<accommodation_name>/<pk_id>/delete/
+        --> delete event for this advertisement
 
 
 

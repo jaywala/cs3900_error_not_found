@@ -10,6 +10,8 @@ from catalog.serializers import EventSerializer, UserProfileSerializer
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 
+from django.db.models import Max
+
 
 #------------------------------User_Profile------------------------------#
 
@@ -37,7 +39,7 @@ def user_profile_get(request, first, second):
 
 
 
-def user_profile_post(request, first, second):
+def user_profile_update(request, first, second):
     """
     Updates User Profile data for the given email.
     (Model: User_Profile)
@@ -45,7 +47,7 @@ def user_profile_post(request, first, second):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside POST user_profile <-----------\n', email, '\n------------------------')
+    print('-----------> inside UPDATE user_profile <-----------\n', email, '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
@@ -67,7 +69,6 @@ def user_profile_post(request, first, second):
 
 
     if data['body']['user_name'] != current_user_name or data['body']['name'] != current_name:
-        print('MISTAKE')
         return HttpResponse(status=400)
 
     '''
@@ -148,7 +149,7 @@ def advertisement_get(request, first, second):
     return JsonResponse(serializer.data)
 
 
-def advertisement_post(request, first, second, accommodation_name):
+def advertisement_update(request, first, second, accommodation_name):
     """
     Updates Advertisement data for the given accommodation name.
     (Model: Advertisement)
@@ -156,7 +157,7 @@ def advertisement_post(request, first, second, accommodation_name):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside POST advertisement', email, '<-----------')
+    print('-----------> inside UPDATE advertisement', email, '<-----------')
 
     ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
 
@@ -260,6 +261,228 @@ def advertisement_delete(request, first, second, accommodation_name):
     if ad.exists() and len(ad) == 1:
         ad.delete()
         print('-----------> Deleted this ad ', ad, '<-----------')
+        return HttpResponse(status=201)
+
+    return HttpResponse(status=400)
+
+#------------------------------Advertisement Reviews ------------------------------#
+
+def advertisement_reviews_get(request, first, second, accommodation_name):
+    """
+    Give all reviews this advertisement owns, identified by accommodation_name.
+    (Model: Accommodation_Review).
+    """
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET Accommodation_Review <-----------\n', accommodation_name, '\n------------------------')
+
+    try:
+        accom = Accommodation_Review.objects.filter(accommodation_name=accommodation_name)
+    except User_Profile.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = AccommodationReviewSerializer(accom)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data)
+
+
+def advertisement_review_create(request, first, second, accommodation_name, pk_id):
+    """
+    Create a new review for this advertisement, identified by pk_id.
+    """
+    print('-----------> inside CREATE Review', pk_id, '<-----------')
+
+    data = JSONParser().parse(request)
+    pk_id = data['body']['pk_id'] # frontend will make this default zero
+    accommodation_name = data['body']['accommodation_name']
+    rating = data['body']['rating']
+    title = data['body']['title']
+    message = data['body']['message']
+
+    review = Accommodation_Review(
+            pk_id=pk_id,
+            accommodation_name=accommodation_name,
+            rating=rating,
+            title=title,
+            message=message,
+            )
+    review.save()
+
+    temp_review = Advertisement_Review.objects.filter(pk_id=pk_id)
+    if temp_review.exists() and len(temp_review) == 1:
+        max_id = Advertisement_Review.objects.all().aggregate(Max('pk_id'))
+        new_id = int(max_id['pk_id__max']) + 1
+        temp_review.set_pk_id(new_id)
+
+    if temp_review.exists() and len(temp_review) == 1 and temp_review.get_pk_id() == new_id:
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=401)
+
+
+def advertisement_review_update(request, first, second, accommodation_name, pk_id):
+    """
+    Updates Advertisement Review for the given pk_id.
+    (Model: Advertisement_Review)
+    """
+
+    print('-----------> inside UPDATE advertisement review', pk_id, '<-----------')
+
+    review = Advertisement_Review.objects.filter(pk_id=pk_id)
+
+    if review.exists() and len(review) == 1:
+        data = JSONParser().parse(request)
+        pk_id = data['body']['pk_id'] # Frontend needs to get the advertisement review then post the
+                                      # update as we need the pk_id.
+        accommodation_name = data['body']['accommodation_name']
+        rating = data['body']['rating']
+        title = data['body']['title']
+        message = data['body']['message']
+
+        review.set_pk_id(pk_id)
+        review.set_accommodation_name(accommodation_name)
+        review.set_rating(rating)
+        review.set_title(title)
+        review.set_message(message)
+
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=400)
+
+
+def advertisement_review_delete(request, first, second, accommodation_name, pk_id):
+    """
+    Deletes the advertisement review with id number.
+    """
+
+    print('-----------> inside DELETE advertisement review ', pk_id, '<-----------')
+
+    ad = Advertisement_Review.objects.filter(pk_id=pk_id)
+
+    if ad.exists() and len(ad) == 1:
+        ad.delete()
+        print('-----------> Deleted this ad review', ad, '<-----------')
+        return HttpResponse(status=201)
+
+    return HttpResponse(status=400)
+
+#------------------------------Advertisement Events ------------------------------#
+
+def advertisement_events_get(request, first, second, accommodation_name):
+    """
+    Give events this advertisement owns, identified by accommodation_name.
+    (Model: Event)
+    """
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET Event <-----------\n', accommodation_name, '\n------------------------')
+
+    try:
+        accom = Event.objects.filter(accommodation_name=accommodation_name)
+    except Event.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = EventSerializer(accom)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data)
+
+
+def advertisement_event_create(request, first, second, accommodation_name, pk_id):
+    """
+    Create a new event for this advertisement, identified by accommodation_name.
+    (Model: Event)
+    """
+
+    print('-----------> inside CREATE Event', accommodation_name, '<-----------')
+
+    data = JSONParser().parse(request)
+    pk_id = data['body']['pk_id'] # frontend will make this default zero
+    accommodation_name = data['body']['accommodation_name']
+    start_day = data['body']['start_day']
+    start_day_start_time = data['body']['start_day_start_time']
+    end_day = data['body']['end_day']
+    end_day_end_time = data['body']['end_day_end_time']
+    booking_status = data['body']['booking_status']
+    notes = data['body']['notes']
+
+    event = Event(
+            pk_id=pk_id,
+            accommodation_name=accommodation_name,
+            start_day=start_day,
+            start_day_start_time=start_day_start_time,
+            end_day=end_day,
+            end_day_end_time=end_day_end_time,
+            booking_status=booking_status,
+            notes=notes
+            )
+    event.save()
+
+
+    temp_event = Event.objects.filter(pk_id=pk_id)
+    if temp_event.exists() and len(temp_event) == 1:
+        max_id = Event.objects.all().aggregate(Max('pk_id'))
+        new_id = int(max_id['pk_id__max']) + 1
+        temp_event.set_pk_id(new_id)
+
+    if temp_event.exists() and len(temp_event) == 1 and temp_event.get_pk_id() == new_id:
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=401)
+
+
+def advertisement_event_update(request, first, second, accommodation_name, pk_id):
+    """
+    Updates Event for the given pk_id.
+    (Model: Advertisement_Event)
+    """
+
+    print('-----------> inside UPDATE event', pk_id, '<-----------')
+
+    event = Event.objects.filter(pk_id=pk_id)
+
+    if event.exists() and len(event) == 1:
+        data = JSONParser().parse(request)
+        pk_id = data['body']['pk_id'] # Frontend needs to get the advertisement review then post the
+                                      # update as we need the pk_id.
+        accommodation_name = data['body']['accommodation_name']
+        start_day = data['body']['start_day']
+        start_day_start_time = data['body']['start_day_start_time']
+        end_day = data['body']['end_day']
+        end_day_end_time = data['body']['end_day_end_time']
+        booking_status = data['body']['booking_status']
+        notes = data['body']['notes']
+
+        event.set_pk_id(pk_id)
+        event.set_accommodation_name(accommodation_name)
+        event.set_start_day(start_day)
+        event.set_start_day_start_time(start_day_start_time)
+        event.set_end_day(end_day)
+        event.set_end_day_end_time(end_day_end_time)
+        event.set_booking_status(booking_status)
+        event.set_notes(notes)
+
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=400)
+
+def advertisement_event_delete(request, first, second, accommodation_name, pk_id):
+    """
+    Deletes the event with id number.
+    """
+
+    print('-----------> inside DELETE event ', pk_id, '<-----------')
+
+    event = Event.objects.filter(pk_id=pk_id)
+
+    if event.exists() and len(event) == 1:
+        event.delete()
+        print('-----------> Deleted this event', event, '<-----------')
         return HttpResponse(status=201)
 
     return HttpResponse(status=400)
