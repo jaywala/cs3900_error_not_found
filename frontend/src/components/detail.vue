@@ -32,7 +32,7 @@ export default {
   },
   data () {
     return {
-      message: {
+      message: /*{
                     id: 99,
                     accommodation_name: "gc home",
                     accommodation_description: "your food won't go off",
@@ -48,15 +48,15 @@ export default {
                     country: "Australia",
                     latitude: 1,
                     longitude: 1
-               }
-               /*
+               }*/
+
                {
-                    user_name: "star",
+                    user_name: "boop",
                     name: "cheese",
                     email: "gladyschanmail@gmail.com",
                     profile_pic: null
                }
-               */
+
     }
   },
 
@@ -73,7 +73,7 @@ export default {
 
 /*
   mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
+    axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
