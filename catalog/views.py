@@ -36,6 +36,7 @@ def user_profile_get(request, first, second):
     return JsonResponse(serializer.data)
 
 
+
 def user_profile_post(request, first, second):
     """
     Updates User Profile data for the given email.
@@ -136,8 +137,7 @@ def advertisement_get(request, first, second):
     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
     try:
-        ad = Advertisement.objects.all(poster=email)
-        #ad = Advertisement.user_profile_set.filter(email=email)
+        ad = Advertisement.objects.filter(poster=email)
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -148,9 +148,9 @@ def advertisement_get(request, first, second):
     return JsonResponse(serializer.data)
 
 
-def advertisement_post(request, first, second, id):
+def advertisement_post(request, first, second, accommodation_name):
     """
-    Updates Advertisement data for the given id.
+    Updates Advertisement data for the given accommodation name.
     (Model: Advertisement)
     """
 
@@ -158,7 +158,7 @@ def advertisement_post(request, first, second, id):
 
     print('-----------> inside POST advertisement', email, '<-----------')
 
-    ad = Advertisement.objects.filter(pk=id)
+    ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
 
     if ad.exists() and len(ad) == 1:
         data = JSONParser().parse(request)
@@ -248,21 +248,19 @@ def advertisement_create(request, first, second):
         return HttpResponse(status=401)
 
 
-def advertisement_delete(requestt, first, second, id):
+def advertisement_delete(request, first, second, accommodation_name):
     """
     Deletes the ad with id number.
     """
 
-    print('-----------> inside DELETE advertisement', email, '<-----------')
+    print('-----------> inside DELETE advertisement ', email, '<-----------')
 
-    ad = Advertisement.objects.filter(pk=id)
-
-    print('This is the ad',ad)
+    ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
 
     if ad.exists() and len(ad) == 1:
         ad.delete()
-        temp = "deleted" + str(id)
-        return HttpResponse(temp) #status=201)
+        print('-----------> Deleted this ad ', ad, '<-----------')
+        return HttpResponse(status=201)
 
     return HttpResponse(status=400)
 

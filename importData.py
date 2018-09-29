@@ -38,7 +38,9 @@ def importFromCSV():
             amenitiestext = amenitiestext.strip("}")
             amenitiestext = amenitiestext.strip()
             amenitiestext = amenitiestext.replace('"', '')
-            advertisement = Advertisement(poster=(row[21]+"@example.com"),
+            advertisement = Advertisement(
+                owner =user1,
+                poster=(row[21]+"@example.com"),
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],

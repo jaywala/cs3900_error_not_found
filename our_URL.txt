@@ -28,13 +28,13 @@ Advertisement Data:
         reviews.
 
     POST:
-        8000/post/advertisement/<user_email>/<user_id>/update/
+        8000/post/advertisement/<user_email>/<accommodation_name>/update/
         --> will change the data for the advertisement information.
 
-        8000/post/advertisement/<user_email>/<user_id>/create/
+        8000/post/advertisement/<user_email>/create/
         --> if advertisement doesn't exist, it makes one.
 
-        8000/post/advertisement/<user_email>/<user_id>/delete/
+        8000/post/advertisement/<user_email>/<accommodation_name>/delete/
         --> will delete this ad.
 
 

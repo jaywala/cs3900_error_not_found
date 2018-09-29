@@ -19,10 +19,11 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         exclude = ()
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    ads = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = User_Profile
-        field = ('user_name', 'name', 'email', 'profile_pic')
+        field = ('user_name', 'name', 'email', 'profile_pic', 'ads')
         exclude = ()
 
 

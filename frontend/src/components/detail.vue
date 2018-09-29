@@ -49,19 +49,19 @@ export default {
                     latitude: 1,
                     longitude: 1
                }
-
-               /*{
-                    user_name: "chedder",
+               /*
+               {
+                    user_name: "star",
                     name: "cheese",
                     email: "gladyschanmail@gmail.com",
                     profile_pic: null
-               }*/
-
+               }
+               */
     }
   },
 
   mounted () {
-    axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+    axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
@@ -73,7 +73,7 @@ export default {
 
 /*
   mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/", {body:this.message})
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data

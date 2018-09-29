@@ -25,7 +25,8 @@ class UserAdmin(admin.ModelAdmin):
 
 class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Owner', {'fields': ['poster']}),
+        ('Owner', {'fields': ['owner']}),
+        (None, {'fields': ['poster']}),
         ('Accommodation Information',    {'fields': ['accommodation_name']}),
         (None, {'fields': ['accommodation_description']}),
         ('Rules', {'fields': ['house_rules']}),

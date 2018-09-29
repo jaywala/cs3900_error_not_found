@@ -55,6 +55,8 @@ class User_Profile(models.Model):
 
 class Advertisement(models.Model):
 
+    owner = models.ForeignKey(User_Profile, related_name='ads', on_delete=models.CASCADE)
+
     poster = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_description = models.CharField(null=True, blank=True, max_length=1000)

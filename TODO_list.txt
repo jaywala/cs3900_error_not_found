@@ -1,15 +1,15 @@
 TODO list
 
 1. write the API
-    - determine URL for each GET and POST
-    - don't forget to send back some message to frontend
-      to tell them the backend actually saved the new data
-      from a POST request.
-    - Make system that will deal with cases such as
-        - the POST request did not give valid data
-        - the POST request is missing data
-        - the GET request could not find what frontend wanted
-        - etc.
+    (DONE) - determine URL for each GET and POST
+    (DONE - error codes) - don't forget to send back some message to frontend
+                           to tell them the backend actually saved the new data
+                           from a POST request.
+    (DONE - error codes) - Make system that will deal with cases such as
+                         - the POST request did not give valid data
+                         - the POST request is missing data
+                         - the GET request could not find what frontend wanted
+                         - etc.
 2. Make methods that will give the right JSON to frontend
     - join advertisement with all it's amenities, property images,
       accommodation reviews, events.
