@@ -355,6 +355,8 @@ class Event(models.Model):
                     return False
         return True
 
+    #--------------------------------
+
     def get_pk_id(self):
         return self.pk_id
 

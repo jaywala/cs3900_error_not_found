@@ -51,15 +51,15 @@ export default {
                }*/
 
                {
-                    user_name: "boop",
-                    name: "cheese",
+                    user_name: "gladys",
+                    name: "chan",
                     email: "gladyschanmail@gmail.com",
                     profile_pic: null
                }
 
     }
   },
-
+/*
   mounted () {
     axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
@@ -70,8 +70,8 @@ export default {
       this.errors.push(e)
     })
   }
+*/
 
-/*
   mounted () {
     axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
@@ -79,7 +79,7 @@ export default {
       this.message = response.data
     })
   }
-*/
+
 
 }
 

@@ -20,7 +20,14 @@ TODO list
 3. (DONE) Make methods that will write the given JSON to database
 
 4. [Backend] write methods for searches for the search module
-5. [Backend] booking module: give frontend the dates and time for each event
-6. [Backend] booking request module: check the advertisement's events
+
+5. (DONE) - get events for an ad - [Backend] booking module: give frontend the
+    dates and time for each event
+
+6. (DONE) - the model method "check_overlap" should take care of this but probably
+    need to write a method to tell frontend part from a 401 message. -
+    [Backend] booking request module: check the advertisement's events
+
 7. [Backend] allow user to decline, accept, cancel booking requests
+
 8. [Backend] email communication between users
