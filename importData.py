@@ -80,5 +80,5 @@ def importImages():
                 
 
 if __name__ == '__main__':
-    # importFromCSV()
-    importImages()
+    importFromCSV()
+    # importImages()
