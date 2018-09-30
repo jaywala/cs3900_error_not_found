@@ -47,7 +47,7 @@ class User_Profile(models.Model):
 
     #--------------------------------
 
-    def exists(username):
+    def exists(self, username):
         '''
         Searches for the object by a field.
         '''
@@ -276,7 +276,8 @@ class Accommodation_Review(models.Model):
 class PropertyImage(models.Model):
 
     advert = models.ForeignKey(Advertisement, related_name='property_images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to = 'accommodation_pics/')
+    string = models.CharField(max_length=500000)
+    # image = models.ImageField(upload_to = 'accommodation_pics/')
 
     #--------------------------------
 

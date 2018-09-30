@@ -11,7 +11,7 @@ django.setup()
 
 # Import models
 #from django.contrib.auth.models import User
-from catalog.models import User_Profile, Advertisement
+from catalog.models import User_Profile, Advertisement, PropertyImage
 
 
 def deleteData():
@@ -54,16 +54,30 @@ def importFromCSV():
                 amenities=amenitiestext)
             advertisement.save()
 
+            if count <= 2:
+                filepath = 'accommodation_pics/' + str(count) + '/*.jpg'
+                for filename in glob.glob(filepath):
+                    with open(filename,"rb") as image_file:
+                        encoded_string = base64.b64encode(image_file.read())
+                    im = PropertyImage(advert=advertisement,string=encoded_string)
+                    im.save()
+
+
 def importImages():
     # import images          
     i = 1
+    count = 0
     for i in range (1,3):
         filepath = 'accommodation_pics/' + str(i) + '/*.jpg'
-        for filename in glob.glob(filepath): #assuming gif
+        for filename in glob.glob(filepath):
+            if count == 1:
+                break
+            count+=1
             with open(filename,"rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read())
-                print(len(encoded_string))
-            print("\n\n")
+            
+                    
+                
 
 if __name__ == '__main__':
     # importFromCSV()
