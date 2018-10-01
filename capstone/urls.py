@@ -45,8 +45,8 @@ urlpatterns = [
     path('get/advertisementEvents/<slug:first>/<slug:second>/<slug:accommodation_name>/', views.advertisement_events_get),
 
     path('post/advertisement/<slug:first>/<slug:second>/create/', views.advertisement_create),
-    path('post/advertisement/<slug:first>/<slug:second>/<slug:accommodation_name>/update/', views.advertisement_update),
-    path('post/advertisement/<slug:first>/<slug:second>/<slug:accommodation_name>/delete/', views.advertisement_delete),
+    path('post/advertisement/<slug:first>/<slug:second>/update/', views.advertisement_update),
+    path('post/advertisement/<slug:first>/<slug:second>/delete/', views.advertisement_delete),
 
     path('post/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/create/', views.advertisement_review_create),
     path('post/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/<slug:pk_id>/update/', views.advertisement_review_update),

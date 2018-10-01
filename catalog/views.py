@@ -92,7 +92,8 @@ def create_user(data):
     name = data['body']['name']
     email = data['body']['email']
     profile_pic = data['body']['profile_pic']
-    u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic)
+    list_of_ads = data['body']['list_of_ads']
+    u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic, list_of_ads=list_of_ads)
     u.save()
     return True
 
@@ -107,13 +108,8 @@ def is_loggedIn(request, first, second):
     print('-----------> inside is_loggedIn <-----------\n', email, '\n------------------------')
 
     data = JSONParser().parse(request)
-    email = data['body']['email']
 
-    if data['body']['email'] != email:
-        print('They should be the same as the person logged in should only \
-               be changing thier user profile')
-
-    user = User_Profile.objects.filter(email=email)
+    user = User_Profile.objects.get(email=email)
 
     if user.exists() and len(user) == 1:
         return HttpResponse(status=201)
@@ -126,7 +122,7 @@ def is_loggedIn(request, first, second):
 
 #------------------------------Advertisement------------------------------#
 
-from django.db import connection
+
 def advertisement_get(request, first, second):
     """
     Give all the ads for this user.
@@ -134,15 +130,12 @@ def advertisement_get(request, first, second):
     """
 
     email = first + "@" + second + ".com"
-    email = "Joe@example.com"
 
     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
     try:
-        print("so here\n")
-        #ad = Advertisement.objects.filter(poster=email)
+        #ad = Advertisement.objects.filter(poster=email) #write own filter function TODO
         ad = Advertisement.objects.get(poster=email)
-        print('query data:', connection.queries[-1])
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -153,20 +146,22 @@ def advertisement_get(request, first, second):
     return JsonResponse(serializer.data)
 
 
-def advertisement_update(request, first, second, accommodation_name):
+def advertisement_update(request, first, second):
     """
     Updates Advertisement data for the given accommodation name.
     (Model: Advertisement)
     """
 
     email = first + "@" + second + ".com"
-
     print('-----------> inside UPDATE advertisement', email, '<-----------')
 
-    ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
+    data = JSONParser().parse(request)
+    ad_id = data['body']['ad_id']
+
+    ad = Advertisement.objects.filter(ad_id=ad_id, poster=email)
 
     if ad.exists() and len(ad) == 1:
-        data = JSONParser().parse(request)
+        ad_id = data['body']['ad_id']
         poster = email
         accommodation_name = data['body']['accommodation_name']
         accommodation_description = data['body']['accommodation_description']
@@ -183,6 +178,7 @@ def advertisement_update(request, first, second, accommodation_name):
         latitude = data['body']['latitude']
         longitude = data['body']['longitude']
 
+        ad.set_ad_id(ad_id)
         ad.set_poster(email)
         ad.set_accommodation_name(accommodation_name)
         ad.set_accommodation_description(accommodation_description)
@@ -215,6 +211,23 @@ def advertisement_create(request, first, second):
     print('-----------> inside CREATE advertisement', email, '<-----------')
 
     data = JSONParser().parse(request)
+
+    u = User_Profile.objects.get(email=email)
+    str_of_id = u.get_list_of_ads()
+    if str_of_id != None:
+        temp = str_of_id.split(',')
+        temp_list = []
+        for i in temp:
+            if i =='':
+                continue
+            else:
+                temp_list.append(int(i))
+        max_id = max(temp_list)
+        new_id = max_id + 1
+        ad_id = new_id
+    else:
+        ad_id = 1 #this is the first ad this user is posting
+
     poster = email
     accommodation_name = data['body']['accommodation_name']
     accommodation_description = data['body']['accommodation_description']
@@ -231,10 +244,13 @@ def advertisement_create(request, first, second):
     latitude = data['body']['latitude']
     longitude = data['body']['longitude']
 
-    ad = Advertisement(poster = poster,
+    ad = Advertisement(
+        ad_id = ad_id,
+        poster = poster,
         accommodation_name = accommodation_name,
         accommodation_description = accommodation_description,
         house_rules = house_rules,
+        amenities = amenities,
         base_price = base_price,
         num_guests = num_guests,
         num_bedrooms = num_bedrooms,
@@ -242,18 +258,18 @@ def advertisement_create(request, first, second):
         latitude = latitude,
         longitude = longitude,
         suburb = suburb,
-        amenities = amenities)
+        )
     ad.save()
 
     temp_ad = Advertisement.objects.filter(accommodation_name=accommodation_name)
-
+    print(temp_ad)
     if temp_ad.exists() and len(temp_ad) == 1:
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=401)
 
 
-def advertisement_delete(request, first, second, accommodation_name):
+def advertisement_delete(request, first, second):
     """
     Deletes the ad with id number.
     """

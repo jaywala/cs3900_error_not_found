@@ -10,6 +10,8 @@ class User_Profile(models.Model):
     email = models.CharField(max_length=50)
     profile_pic = models.CharField(null=True, blank=True, max_length=1000)
 
+    list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
+
     def __str__(self):
         return self.user_name
 
@@ -24,6 +26,9 @@ class User_Profile(models.Model):
 
     def get_profile_pic(self):
         return self.profile_pic
+
+    def get_list_of_ads(self):
+        return self.list_of_ads
 
     #--------------------------------
 
@@ -47,6 +52,11 @@ class User_Profile(models.Model):
         u.profile_pic = new_pic
         u.save()
 
+    def set_list_of_ads(self, new_list_of_ads):
+        u = User_Profile.objects.get(id=self.id)
+        u.list_of_ads = new_list_of_ads
+        u.save()
+
     #--------------------------------
 
     def delete_me(self):
@@ -54,6 +64,8 @@ class User_Profile(models.Model):
 
 
 class Advertisement(models.Model):
+
+    ad_id = models.IntegerField()
 
     poster = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
@@ -79,6 +91,9 @@ class Advertisement(models.Model):
 
     def __str__(self):
         return self.accommodation_name
+
+    def get_ad_id(self):
+        return self.ad_id
 
     def get_poster(self):
         return self.poster
@@ -126,6 +141,11 @@ class Advertisement(models.Model):
         return self.longitude
 
     #--------------------------------
+
+    def set_ad_id(self, new_ad_id):
+        a = Advertisement.objects.get(id=self.id)
+        a.ad_id = new_ad_id
+        a.save()
 
     def set_poster(self, new_poster):
         a = Advertisement.objects.get(id=self.id)

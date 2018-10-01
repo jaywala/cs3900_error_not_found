@@ -1,7 +1,7 @@
 <template >
   <div id="app">
       <h2>{{this.url}}</h2>
-  <h1 v-if="authenticated()">backend response message: {{this.errors}}</h1>
+  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
 
 </div>
 </template>
@@ -34,11 +34,13 @@ export default {
   data () {
     return {
       message: {
+          ad_id: 1,
           poster: "gladyschanmail@gmail.com",
-          accommodation_name: "house",
-          accommodation_description: "big house",
-          house_rules: null,
+          accommodation_name: "mouse and phone",
+          accommodation_description: "cold",
+          house_rules: "no fires",
           booking_rules: null,
+          amenities: null,
           base_price: null,
           num_guests: null,
           num_bedrooms: null,
@@ -61,28 +63,25 @@ export default {
                */
     }
   },
-
+/*
   mounted () {
       this.url = "http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/"
     axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
       // JSON responses are automatically parsed.
-      this.errors = response.data
+      this.message = response.data
     })
     .catch(e => {
       this.errors.push(e)
     })
   }
-
-/*
-  mounted () {
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
-    .then(response => {
-      // JSON responses are automatically parsed.
-      this.message = response.data
-    })
-  }
 */
+
+  mounted () {
+    this.url = "http://localhost:8000/post/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/create/"
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] + "/create/", {body:this.message})
+  }
+
 
 }
 

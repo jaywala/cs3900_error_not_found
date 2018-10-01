@@ -19,17 +19,20 @@ class UserAdmin(admin.ModelAdmin):
         (None, {'fields': ['user_name']}),
         (None, {'fields': ['name']}),
         (None, {'fields': ['email']}),
-        (None, {'fields': ['profile_pic']})
+        (None, {'fields': ['profile_pic']}),
+        (None, {'fields': ['list_of_ads']})
     ]
 
 
 class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = [
+        ('ad_id', {'fields': ['ad_id']}),
         ('Owner', {'fields': ['poster']}),
         ('Accommodation Information',    {'fields': ['accommodation_name']}),
         (None, {'fields': ['accommodation_description']}),
         ('Rules', {'fields': ['house_rules']}),
         (None, {'fields': ['booking_rules']}),
+        ('Amenities', {'fields': ['amenities']}),
         ('Base Price', {'fields': ['base_price']}),
         ('Number of guests', {'fields': ['num_guests']}),
         ('Rooms', {'fields': ['num_bedrooms']}),
@@ -39,7 +42,6 @@ class AdvertisementAdmin(admin.ModelAdmin):
         (None, {'fields': ['country']}),
         (None, {'fields': ['latitude']}),
         (None, {'fields': ['longitude']}),
-        (None, {'fields': ['amenities']})
     ]
     inlines = [EventInline, AccommodationReviewInline]
 

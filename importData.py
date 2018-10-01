@@ -25,12 +25,13 @@ def importFromCSV():
         next(csvfile)
         readcsv = csv.reader(csvfile, delimiter=',')
         count = 0
+
         for row in readcsv:
             count += 1
             if count > 101:
                 break
 
-            user1 = User_Profile(user_name=row[21],name=row[21],email=(row[21]+"@example.com"))
+            user1 = User_Profile(user_name=row[21],name=row[21],email=(row[21]+"@example.com"),list_of_ads="1,")
             user1.save()
             print(count)
             amenitiestext = row[58]
@@ -39,6 +40,7 @@ def importFromCSV():
             amenitiestext = amenitiestext.strip()
             amenitiestext = amenitiestext.replace('"', '')
             advertisement = Advertisement(
+                ad_id=1,
                 poster=(row[21]+"@example.com"),
                 accommodation_name=row[4],
                 accommodation_description=row[7],
