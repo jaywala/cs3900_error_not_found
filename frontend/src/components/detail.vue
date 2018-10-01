@@ -36,9 +36,9 @@ export default {
       message: {
           ad_id: 1,
           poster: "gladyschanmail@gmail.com",
-          accommodation_name: "mouse and phone",
-          accommodation_description: "cold",
-          house_rules: "no fires",
+          accommodation_name: "league of legends",
+          accommodation_description: "salty",
+          house_rules: "poop",
           booking_rules: null,
           amenities: null,
           base_price: null,

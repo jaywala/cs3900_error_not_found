@@ -1,19 +1,23 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+
 
 class User_Profile(models.Model):
 
     user_name = models.CharField(max_length=25)
     name = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
+    email = models.CharField(max_length=50) # this is the unique identier
     profile_pic = models.CharField(null=True, blank=True, max_length=1000)
 
+    # contains the ad id's that this user owns
     list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
-        return self.user_name
+        return self.email
+
+    #--------------------------------
 
     def get_user_name(self):
         return self.user_name
@@ -32,9 +36,9 @@ class User_Profile(models.Model):
 
     #--------------------------------
 
-    def set_user_name(self, new_name):
+    def set_user_name(self, new_user_name):
         u = User_Profile.objects.get(id=self.id)
-        u.user_name = new_name
+        u.user_name = new_user_name
         u.save()
 
     def set_name(self, new_name):
@@ -65,9 +69,16 @@ class User_Profile(models.Model):
 
 class Advertisement(models.Model):
 
-    ad_id = models.IntegerField()
+    ad_id = models.IntegerField() # this is the unique identier
+
+    # contains the ad review id's that this ad owns
+    list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
+
+    #  contains the event id's that this ad owns
+    list_of_events = models.CharField(null=True, blank=True, max_length=1000)
 
     poster = models.CharField(null=True, blank=True, max_length=1000)
+
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
     accommodation_description = models.CharField(null=True, blank=True, max_length=1000)
 
@@ -90,10 +101,19 @@ class Advertisement(models.Model):
     longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return self.accommodation_name
+        temp = str(self.ad_id) + ', ' + str(self.poster) + ', ' + str(self.accommodation_name)
+        return temp
+
+    #--------------------------------
 
     def get_ad_id(self):
         return self.ad_id
+
+    def get_rev_ids(self):
+        return self.list_of_reviews
+
+    def get_event_ids(self):
+        return self.list_of_events
 
     def get_poster(self):
         return self.poster
@@ -147,6 +167,16 @@ class Advertisement(models.Model):
         a.ad_id = new_ad_id
         a.save()
 
+    def set_rev_ids(self, new_list_of_rev):
+        a = Advertisement.objects.get(id=self.id)
+        a.list_of_reviews = new_list_of_rev
+        a.save()
+
+    def set_event_ids(self, new_list_of_event):
+        a = Advertisement.objects.get(id=self.id)
+        a.list_of_events = new_list_of_event
+        a.save()
+
     def set_poster(self, new_poster):
         a = Advertisement.objects.get(id=self.id)
         a.poster = new_poster
@@ -154,12 +184,8 @@ class Advertisement(models.Model):
 
     def set_accommodation_name(self, new_accommodation_name):
         a = Advertisement.objects.get(id=self.id)
-        old_name = a.get_accommodation_name()
         a.accommodation_name = new_accommodation_name
         a.save()
-
-        r = Accommodation_Review.object.get(accommodation_name=old_name)
-        r.set
 
     def set_accommodation_description(self, new_accommodation_description):
         a = Advertisement.objects.get(id=self.id)
@@ -223,7 +249,7 @@ class Advertisement(models.Model):
 
     def set_longitude(self, new_longitude):
         a = Advertisement.objects.get(id=self.id)
-        a.new_longitude= new_longitude
+        a.longitude= new_longitude
         a.save()
 
     #--------------------------------
@@ -234,45 +260,39 @@ class Advertisement(models.Model):
 
 class Accommodation_Review(models.Model):
 
-    #leaving here so I can display things better on admin page
-    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
+    rev_id = models.IntegerField() # this is the unique identier
 
-    pk_id = models.IntegerField()
-    # when creating this instance, the code saves its primary key into this field
-
-    accommodation_name = models.CharField(max_length=1000)
     rating = models.IntegerField()
-    title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
 
+    ad_owner = models.CharField(max_length=100)
+    ad_id =  models.IntegerField()
+
     def __str__(self):
-        return self.title
+        return rev_id
 
-    def get_pk_id(self):
-        return self.pk_id
+    #--------------------------------
 
-    def get_accommodation_name(self):
-        return self.accommodation_name
+    def get_rev_id(self):
+        return self.rev_id
 
     def get_rating(self):
         return self.rating
 
-    def get_title(self):
-        return self.title
-
     def get_message(self):
         return self.message
 
+    def get_ad_owner(self):
+        return self.ad_owner
+
+    def get_ad_id(self):
+        return self.ad_id
+
     #--------------------------------
 
-    def set_pk_id(self, new_id):
+    def set_rev_id(self, new_id):
         u = Accommodation_Review.objects.get(id=self.id)
-        u.pk_id = new_id
-        u.save()
-
-    def set_accommodation_name(self, new_name):
-        u = Accommodation_Review.objects.get(id=self.id)
-        u.accommodation_name = new_name
+        u.rev_id = new_id
         u.save()
 
     def set_rating(self, new_rating):
@@ -280,14 +300,19 @@ class Accommodation_Review(models.Model):
         u.rating = new_rating
         u.save()
 
-    def set_title(self, new_title):
-        u = Accommodation_Review.objects.get(id=self.id)
-        u.title = new_title
-        u.save()
-
     def set_message(self, new_message):
         u = Accommodation_Review.objects.get(id=self.id)
         u.message = new_message
+        u.save()
+
+    def set_ad_owner(self, new_ad_owner):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.ad_owner = new_ad_owner
+        u.save()
+
+    def set_ad_id(self, new_ad_id):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.ad_id = new_ad_id
         u.save()
 
     #--------------------------------
@@ -297,23 +322,26 @@ class Accommodation_Review(models.Model):
 
 
 class Event(models.Model):
-    #leaving here so I can display things better on admin page
-    advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
 
-    pk_id = models.IntegerField()
-    # when creating this instance, the code saves its primary key into this field
-
-    accommodation_name = models.CharField(max_length=1000)
+    event_id = models.IntegerField()
+    ad_owner = models.CharField(max_length=100)
+    ad_id =  models.IntegerField()
 
     start_day = models.DateField(u'Start day of the rent', help_text=u'Start day of the rent')
     start_day_start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
 
     end_day = models.DateField(u'End day of the event', help_text=u'End day of the event')
-    end_day_end_time = models.TimeField(u'Final time', help_text=u'Final time')
+    end_day_end_time = models.TimeField(u'End time', help_text=u'End time')
 
     booking_status = 'booked'
 
-    notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
+    notes = models.TextField(u'Notes', help_text=u'Notes', blank=True, null=True)
+
+    def __str__(self):
+        temp = str(self.event_id) + ', ' + str(self.start_day)
+        return temp
+
+    #--------------------------------
 
     class Meta:
         verbose_name = u'Scheduling'
@@ -377,11 +405,8 @@ class Event(models.Model):
 
     #--------------------------------
 
-    def get_pk_id(self):
-        return self.pk_id
-
-    def get_accommodation_name(self):
-        return self.accommodation_name
+    def get_event_id(self):
+        return self.event_id
 
     def get_start_day(self):
         return self.start_day
@@ -401,22 +426,23 @@ class Event(models.Model):
     def get_notes(self):
         return self.notes
 
+    def get_ad_owner(self):
+        return self.ad_owner
+
+    def get_ad_id(self):
+        return self.ad_id
+
     #--------------------------------
 
-    def set_pk_id(self, new_id):
+    def set_event_id(self, new_id):
         u = Event.objects.get(id=self.id)
-        u.pk_id = new_id
-        u.save()
-
-    def set_accommodation_name(self, new_name):
-        u = Event.objects.get(id=self.id)
-        u.accommodation_name = new_name
+        u.event_id = new_id
         u.save()
 
 #TODO need to check the validity when using these methods to modify the data
-# currently it trivaly either modifies db or doesn't
+# currently it trivaly either modifies db or doesn't.
 # need to return some feed back to user.
-# above case is valid when creating the event. Just nothing for editing the event.
+# above case is valid when creating the event. Just not for editing the event.
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
         if e.check_validity() == True: # this is not working the way I want
@@ -447,6 +473,16 @@ class Event(models.Model):
         e = Event.objects.get(id=self.id)
         e.notes = new_notes
         e.save()
+
+    def set_ad_owner(self, new_ad_owner):
+        u = Event.objects.get(id=self.id)
+        u.ad_owner = new_ad_owner
+        u.save()
+
+    def set_ad_id(self, new_ad_id):
+        u = Event.objects.get(id=self.id)
+        u.ad_id = new_ad_id
+        u.save()
 
     #--------------------------------
 

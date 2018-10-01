@@ -28,36 +28,44 @@ from django.contrib import admin
 
 from catalog import views
 
+'''
+NOTE:
+    - first refers to the part of the email before the @ sign
+    - second refers to the part of the email after the @ sign
+'''
 
 urlpatterns = [
-    path('api/public/', views.public),
-    path('api/private/', views.private),
 
-    path('admin/', admin.site.urls),
-
+    # User Profile
     path('get/user/<slug:first>/<slug:second>/', views.user_profile_get),
+    path('post/user/update/', views.user_profile_update),
+    path('post/userLoggedIn/', views.is_loggedIn),
 
-    path('post/user/<slug:first>/<slug:second>/update/', views.user_profile_update),
-    path('post/userLoggedIn/<slug:first>/<slug:second>/', views.is_loggedIn),
-
+    # Advertisement
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
-    path('get/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/', views.advertisement_reviews_get),
-    path('get/advertisementEvents/<slug:first>/<slug:second>/<slug:accommodation_name>/', views.advertisement_events_get),
+    path('post/advertisement/create/', views.advertisement_create),
+    path('post/advertisement/update/', views.advertisement_update),
+    path('post/advertisement/delete/', views.advertisement_delete),
 
-    path('post/advertisement/<slug:first>/<slug:second>/create/', views.advertisement_create),
-    path('post/advertisement/<slug:first>/<slug:second>/update/', views.advertisement_update),
-    path('post/advertisement/<slug:first>/<slug:second>/delete/', views.advertisement_delete),
+    # Advertisement Review
+    path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get),
+    path('post/review/create/', views.review_create),
+    path('post/review/update/', views.review_update),
+    path('post/review/delete/', views.review_delete),
 
-    path('post/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/create/', views.advertisement_review_create),
-    path('post/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/<slug:pk_id>/update/', views.advertisement_review_update),
-    path('post/advertisementReviews/<slug:first>/<slug:second>/<slug:accommodation_name>/<slug:pk_id>/delete/', views.advertisement_review_delete),
+    # Advertisement Event
+    path('get/event/<slug:first>/<slug:second>/<slug:ad_id>/', views.event_get),
+    path('post/event/create/', views.event_create),
+    path('post/event/update/', views.event_update),
+    path('post/event/delete/', views.event_delete),
 
-    path('post/advertisementEvents/<slug:first>/<slug:second>/<slug:accommodation_name>/create/', views.advertisement_event_create),
-    path('post/advertisementEvents/<slug:first>/<slug:second>/<slug:accommodation_name>/<slug:pk_id>/update/', views.advertisement_event_update),
-    path('post/advertisementEvents/<slug:first>/<slug:second>/<slug:accommodation_name>/<slug:pk_id>/delete/', views.advertisement_event_delete),
 
     # URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
     path('user/<int:pk>/', views.user_detail),
 
+    path('api/public/', views.public),
+    path('api/private/', views.private),
+
+    path('admin/', admin.site.urls),
 ]

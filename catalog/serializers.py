@@ -14,9 +14,9 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         fields = ('ad_id', 'poster', 'accommodation_name', 'accommodation_description',
                   'house_rules', 'booking_rules', 'amenities', 'base_price', 'num_guests',
                   'num_bedrooms', 'num_bathrooms', 'suburb', 'state', 'country',
-                  'latitude', 'longitude')
-
+                  'latitude', 'longitude', 'list_of_reviews', 'list_of_events')
         exclude = ()
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
 
@@ -30,7 +30,7 @@ class AccommodationReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Accommodation_Review
-        field = ('accommodation_name','advert', 'rating', 'title', 'message')
+        field = ('rev_id', 'rating', 'message')
         exclude = ()
 
 
@@ -38,6 +38,6 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        field = ('accommodation_name', 'advert', 'start_day', 'start_day_start_time', 'end_day',
+        field = ('event_id', 'start_day', 'start_day_start_time', 'end_day',
                  'end_day_end_time', 'booking_status', 'notes')
         exclude = ()

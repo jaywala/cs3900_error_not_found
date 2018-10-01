@@ -3,76 +3,74 @@ API URLs
 How to read:
 - If something is wrapped in <> angle brackets, it means that part of the URL
   changes.
+- first refers to the part of the email before the @ sign
+- second refers to the part of the email after the @ sign
+    - e.g. bears@gmail.com
+    - first = bears
+    - second = gmail
+    - NOTE: whenever there are none alphabet letters it doesn't work
+    - the view methods will reconstruct the email:
+        - email = first + "@" + second + ".com"
+
 
 User Profile Data:
     GET:
-        8000/get/user/<user_email>/
-        --> With this URL, the backend will give all the information related
-        to the user profile (models: User_Profile).
+        8000/get/user/<first>/<second>/
+        --> The backend will give all the information related
+        to the user profile, using the email given in the URL.
 
     POST:
-        8000/post/user/<user_email>/update/
-        --> will change the data for the user email given.
+        8000/post/user/update/
+        --> will update the data for this user.
 
-        8000/post/userLoggedIn/<user_email>/
-        --> check if it exists.
-        --> if it doesn't exist, make new user with data given.
-
+        8000/post/userLoggedIn/
+        --> check if user exists.
+        --> if it doesn't exist, it will make new user with given data.
 
 
 Advertisement Data:
     GET:
-        8000/get/advertisement/<user_email>/
-        --> give all ads that this user owns, with the information for the
-        advertisement class
+        8000/get/advertisement/<first>/<second>/
+        --> give all ads that this user owns.
 
-        8000/get/advertisementReviews/<user_email>/<accommodation_name>/
+    POST:
+        8000/post/advertisement/create/
+        --> if advertisement doesn't exist, it makes one.
+
+        8000/post/advertisement/update/
+        --> will update the data for this advertisement.
+
+        8000/post/advertisement/delete/
+        --> will delete this advertisement.
+
+
+Advertisement Review:
+    GET:
+        8000/get/review/<first>/<second>/ad_id/
         --> give reviews this advertisement owns
 
-        8000/get/advertisementEvents/<user_email>/<accommodation_name>/
+    POST:
+        8000/post/review/<create/
+        --> create a review for this advertisement
+
+        8000/post/review/update/
+        --> update a review for this advertisement
+
+        8000/post/review/delete/
+        --> delete a review for this advertisement
+
+
+Advertisement Event:
+    GET:
+        8000/get/event/<first>/<second>/
         --> give events this advertisement owns
 
     POST:
-        8000/post/advertisement/<user_email>/create/
-        --> if advertisement doesn't exist, it makes one.
-
-        8000/post/advertisement/<user_email>/<accommodation_name>/update/
-        --> will change the data for the advertisement information.
-
-        8000/post/advertisement/<user_email>/<accommodation_name>/delete/
-        --> will delete this ad.
------------
-        8000/post/advertisementReviews/<user_email>/<accommodation_name>/create/
-        --> create a review for this advertisement
-
-        8000/post/advertisementReviews/<user_email>/<accommodation_name>/<pk_id>/update/
-        --> update a review for this advertisement
-
-        8000/post/advertisementReviews/<user_email>/<accommodation_name>/<pk_id>/delete/
-        --> delete a review for this advertisement
------------
-        8000/post/advertisementEvents/<user_email>/<accommodation_name>/create/
+        8000/post/event/create/
         --> create event for this advertisement
 
-        8000/post/advertisementEvents/<user_email>/<accommodation_name>/<pk_id>/update/
+        8000/post/event/update/
         --> update event for this advertisement
 
-        8000/post/advertisementEvents/<user_email>/<accommodation_name>/<pk_id>/delete/
+        8000/post/event/delete/
         --> delete event for this advertisement
-
-
-
-***Matching front and backend data***
-
-Note: LHS is backend = RHS is frontend
-
-{create user profile}
-User_Profile [unique ID = email]
-    user_name = nickname
-    name = given_name + family_name
-    email = email
-    profile_pic = picture
-
-
-{create new accommodation}
-Accommodation [unique ID = email & user ID of advertisement]
