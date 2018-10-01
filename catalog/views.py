@@ -126,7 +126,7 @@ def is_loggedIn(request, first, second):
 
 #------------------------------Advertisement------------------------------#
 
-
+from django.db import connection
 def advertisement_get(request, first, second):
     """
     Give all the ads for this user.
@@ -134,11 +134,15 @@ def advertisement_get(request, first, second):
     """
 
     email = first + "@" + second + ".com"
+    email = "Joe@example.com"
 
     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
     try:
-        ad = Advertisement.objects.filter(poster=email)
+        print("so here\n")
+        #ad = Advertisement.objects.filter(poster=email)
+        ad = Advertisement.objects.get(poster=email)
+        print('query data:', connection.queries[-1])
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 

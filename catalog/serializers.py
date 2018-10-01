@@ -12,7 +12,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         model = Advertisement
 
         fields = ('poster', 'accommodation_name', 'accommodation_description',
-                  'house_rules', 'booking_rules', 'base_price', 'num_guests',
+                  'house_rules', 'booking_rules', 'amenities', 'base_price', 'num_guests',
                   'num_bedrooms', 'num_bathrooms', 'suburb', 'state', 'country',
                   'latitude', 'longitude')
 

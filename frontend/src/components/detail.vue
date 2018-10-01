@@ -1,7 +1,8 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
-  <h2>error message: {{this.error}}</h2>
+      <h2>{{this.url}}</h2>
+  <h1 v-if="authenticated()">backend response message: {{this.errors}}</h1>
+
 </div>
 </template>
 
@@ -32,54 +33,56 @@ export default {
   },
   data () {
     return {
-      message: /*{
-                    id: 99,
-                    accommodation_name: "gc home",
-                    accommodation_description: "your food won't go off",
-                    house_rules: "no fires",
-                    booking_rules: "come chill brah",
-                    amenities: "wifi, towels",
-                    base_price: 10,
-                    num_guests: 1,
-                    num_bedrooms: 1,
-                    num_bathrooms: 1,
-                    suburb: "Maroubra",
-                    state: "New South Wales",
-                    country: "Australia",
-                    latitude: 1,
-                    longitude: 1
-               }*/
-
+      message: {
+          poster: "gladyschanmail@gmail.com",
+          accommodation_name: "house",
+          accommodation_description: "big house",
+          house_rules: null,
+          booking_rules: null,
+          base_price: null,
+          num_guests: null,
+          num_bedrooms: null,
+          num_bathrooms: null,
+          suburb: null,
+          state: null,
+          country: null,
+          latitude: null,
+          longitude: null
+     },
+    url: "String",
+    errors: String
+               /*
                {
                     user_name: "gladys",
                     name: "chan",
                     email: "gladyschanmail@gmail.com",
                     profile_pic: null
                }
-
+               */
     }
   },
-/*
+
   mounted () {
-    axios.get("http://localhost:8000/get/user/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+      this.url = "http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/"
+    axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
     .then(response => {
       // JSON responses are automatically parsed.
-      this.message = response.data
+      this.errors = response.data
     })
     .catch(e => {
       this.errors.push(e)
     })
   }
-*/
 
+/*
   mounted () {
-    axios.post("http://localhost:8000/post/user/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
+    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0]+"/update/", {body:this.message})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
     })
   }
-
+*/
 
 }
 
