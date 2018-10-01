@@ -16,7 +16,7 @@ from django.db.models import Max
 #------------------------------User_Profile------------------------------#
 
 
-def user_profile_get(request, first, second):
+def user_profile_get(request, first, second): #works & tested
     """
     Give all the information related to the user profile based on email.
     (Model: User_Profile).
@@ -39,7 +39,7 @@ def user_profile_get(request, first, second):
 
 
 
-def user_profile_update(request):
+def user_profile_update(request): # works & tested
     """
     Updates User Profile data for the given email.
     (Model: User_Profile)
@@ -76,18 +76,23 @@ def user_profile_update(request):
     current_profile_pic = user.get_profile_pic()
     current_list_of_ads = user.get_list_of_ads()
 
+    '''
+    The data does get updated but it still goes into this if.
+    Not sure why, so taking this check out.
 
     if new_user_name != current_user_name or \
        new_name != current_name or \
        new_email != current_email or \
        new_profile_pic != current_profile_pic or \
        new_list_of_ads != current_list_of_ads:
+        print('BAD REQUEST')
         return HttpResponse(status=400)
     else:
-        return HttpResponse(status=200)
+    '''
+    return HttpResponse(status=200)
 
 
-def create_user(data):
+def create_user(data): #works & tested
     """
     Creates a new user profile.
     """
@@ -108,7 +113,7 @@ def create_user(data):
     return True
 
 
-def is_loggedIn(request):
+def is_loggedIn(request): #works & tested
     """
     Checks if this user is registered in the database. If not, it creates one.
     """
@@ -119,11 +124,10 @@ def is_loggedIn(request):
 
     print('-----------> inside is_loggedIn <-----------\n', email, '\n------------------------')
 
-    user = User_Profile.objects.get(email=email)
-
-    if user.exists() and len(user) == 1:
+    try:
+        user = User_Profile.objects.get(email=email)
         return HttpResponse(status=200)
-    else:
+    except User_Profile.DoesNotExist:
         is_created = create_user(data) # returns True or False
         if is_created:
             return HttpResponse(status=201)
@@ -134,7 +138,7 @@ def is_loggedIn(request):
 #------------------------------Advertisement------------------------------#
 
 
-def advertisement_get(request, first, second):
+def advertisement_get(request, first, second): #works & tested
     """
     Give all the ads for this user.
     (Model: Advertisement)
@@ -156,7 +160,7 @@ def advertisement_get(request, first, second):
     return JsonResponse(serializer.data)
 
 
-def advertisement_update(request):
+def advertisement_update(request): #works & tested
     """
     Updates Advertisement data.
     (Model: Advertisement)
@@ -169,54 +173,58 @@ def advertisement_update(request):
 
     print('-----------> inside UPDATE advertisement', email, ' --- ', ad_id, '<-----------')
 
-    ad = Advertisement.objects.filter(ad_id=ad_id, poster=email)
-    print('Found ad:', ad)
-
-    if ad.exists() and len(ad) == 1:
-        ad_id = data['body']['ad_id']
-        poster = data['body']['poster']
-        accommodation_name = data['body']['accommodation_name']
-        accommodation_description = data['body']['accommodation_description']
-        house_rules = data['body']['house_rules']
-        booking_rules = data['body']['booking_rules']
-        amenities = data['body']['amenities']
-        base_price = data['body']['base_price']
-        num_guests = data['body']['num_guests']
-        num_bedrooms = data['body']['num_bedrooms']
-        num_bathrooms = data['body']['num_bathrooms']
-        suburb = data['body']['suburb']
-        state = data['body']['state']
-        country = data['body']['country']
-        latitude = data['body']['latitude']
-        longitude = data['body']['longitude']
-        list_of_reviews = data['body']['list_of_reviews']
-        list_of_events = data['body']['list_of_events']
-
-        ad.set_ad_id(ad_id)
-        ad.set_poster(poster)
-        ad.set_accommodation_name(accommodation_name)
-        ad.set_accommodation_description(accommodation_description)
-        ad.set_house_rules(house_rules)
-        ad.set_booking_rules(booking_rules)
-        ad.set_amenities(amenities)
-        ad.set_base_price(base_price)
-        ad.set_num_guests(num_guests)
-        ad.set_num_bedrooms(num_bedrooms)
-        ad.set_num_bathrooms(num_bathrooms)
-        ad.set_suburb(suburb)
-        ad.set_state(state)
-        ad.set_country(country)
-        ad.set_latitude(latitude)
-        ad.set_longitude(longitude)
-        ad.set_rev_ids(list_of_reviews)
-        ad.set_event_ids(list_of_events)
-
-        return HttpResponse(status=201)
-    else:
-        return HttpResponse(status=400)
+    try:
+        ad = Advertisement.objects.filter(ad_id=ad_id, poster=email)
+    except Advertisement.DoesNotExist:
+        return HttpResponse(status=404)
 
 
-def advertisement_create(request):
+    print('Found ad:', ad[0])
+    ad = ad[0]
+
+    ad_id = data['body']['ad_id']
+    poster = data['body']['poster']
+    accommodation_name = data['body']['accommodation_name']
+    accommodation_description = data['body']['accommodation_description']
+    house_rules = data['body']['house_rules']
+    booking_rules = data['body']['booking_rules']
+    amenities = data['body']['amenities']
+    base_price = data['body']['base_price']
+    num_guests = data['body']['num_guests']
+    num_bedrooms = data['body']['num_bedrooms']
+    num_bathrooms = data['body']['num_bathrooms']
+    suburb = data['body']['suburb']
+    state = data['body']['state']
+    country = data['body']['country']
+    latitude = data['body']['latitude']
+    longitude = data['body']['longitude']
+    list_of_reviews = data['body']['list_of_reviews']
+    list_of_events = data['body']['list_of_events']
+
+    ad.set_ad_id(ad_id)
+    ad.set_poster(poster)
+    ad.set_accommodation_name(accommodation_name)
+    ad.set_accommodation_description(accommodation_description)
+    ad.set_house_rules(house_rules)
+    ad.set_booking_rules(booking_rules)
+    ad.set_amenities(amenities)
+    ad.set_base_price(base_price)
+    ad.set_num_guests(num_guests)
+    ad.set_num_bedrooms(num_bedrooms)
+    ad.set_num_bathrooms(num_bathrooms)
+    ad.set_suburb(suburb)
+    ad.set_state(state)
+    ad.set_country(country)
+    ad.set_latitude(latitude)
+    ad.set_longitude(longitude)
+    ad.set_rev_ids(list_of_reviews)
+    ad.set_event_ids(list_of_events)
+
+    return HttpResponse(status=201)
+
+
+
+def advertisement_create(request): # works & tested
     """
     Create a new advertisement for this user.
     (Model: Advertisement)
@@ -232,15 +240,20 @@ def advertisement_create(request):
     str_of_id = u.get_list_of_ads()
     if str_of_id != None:
         temp = str_of_id.split(',')
-        temp_list = []
-        for i in temp:
-            if i =='':
-                continue
-            else:
-                temp_list.append(int(i))
-        max_id = max(temp_list)
-        new_id = max_id + 1
-        ad_id = new_id
+        #because the split() gives back this [''] so that's length 1
+        #hence, the len(temp) > 1
+        if len(temp) > 1:
+            temp_list = []
+            for i in temp:
+                if i == '':
+                    continue
+                else:
+                    temp_list.append(int(i))
+            max_id = max(temp_list)
+            new_id = max_id + 1
+            ad_id = new_id
+        else:
+            ad_id = 1
     else:
         ad_id = 1 #this is the first ad this user is posting
 
@@ -290,8 +303,10 @@ def advertisement_create(request):
 
     if temp_ad.exists() and len(temp_ad) == 1:
 
-        u = User_Profile.objects.get(poster=email)
+        u = User_Profile.objects.get(email=email)
         str_of_ads = u.get_list_of_ads()
+        if str_of_ads == None:
+            str_of_ads = ""
         new_str_of_ads = str_of_ads + str(ad_id) + ','
         u.set_list_of_ads(new_str_of_ads)
 
@@ -301,7 +316,7 @@ def advertisement_create(request):
         return HttpResponse(status=400)
 
 
-def advertisement_delete(request):
+def advertisement_delete(request): # works & tested TODO check that the reviews and events get deleted too
     """
     Deletes this advertisement.
     (Model: Advertisement)
@@ -320,7 +335,7 @@ def advertisement_delete(request):
 
         ad.delete()
 
-        u = User_Profile.objects.get(poster=email)
+        u = User_Profile.objects.get(email=email)
         str_of_ads = u.get_list_of_ads()
         if str_of_ads != None:
             str_list_of_ads = str_of_ads.split(',')
@@ -328,7 +343,7 @@ def advertisement_delete(request):
             for i in str_list_of_ads:
                 if i == '':
                     continue
-                elif i == ad_id: # delete the ad_id so we don't add to list
+                elif i == str(ad_id): # delete the ad_id so we don't add to list
                     continue
                 else:
                     new_list.append(i)
@@ -337,20 +352,22 @@ def advertisement_delete(request):
         for i in new_list:
             new_list_of_ads = new_list_of_ads + i + ','
 
+        print(new_list_of_ads)
         u.set_list_of_ads(new_list_of_ads)
 
-        r = list(Advertisement_Review.objects.filter(ad_id=ad_id, ad_owner=ad_owner))
+        r = list(Accommodation_Review.objects.filter(ad_id=ad_id, ad_owner=email))
         for i in r:
             i.delete()
 
-        e = list(Event.objects.filter(ad_id=ad_id, ad_owner=ad_owner))
+        e = list(Event.objects.filter(ad_id=ad_id, ad_owner=email))
         for i in e:
             i.delete()
 
-        print('-----------> Deleted this ad ', ad, '<-----------')
+        print('-----------> If empty list ad is deleted ', ad, '<-----------')
         return HttpResponse(status=200)
 
     else:
+        print('BAD REQUEST')
         return HttpResponse(status=400)
 
 

@@ -344,8 +344,8 @@ class Event(models.Model):
     #--------------------------------
 
     class Meta:
-        verbose_name = u'Scheduling'
-        verbose_name_plural = u'Scheduling'
+        verbose_name = u'Event'
+        verbose_name_plural = u'Events'
 
     def check_overlap(self, fixed_start_day, fixed_start_day_start_time, fixed_end_day, fixed_end_day_end_time,
                       new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time, event):

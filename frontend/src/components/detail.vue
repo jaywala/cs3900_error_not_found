@@ -1,6 +1,5 @@
 <template >
   <div id="app">
-      <h2>{{this.url}}</h2>
   <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
 
 </div>
@@ -12,75 +11,77 @@ import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
 export default {
-  methods: {
-    // this method calls the AuthService login() method
-    login () {
-      router.app.$auth.login()
-      //this.$router.push('helloworld')
+    methods: {
+        // this method calls the AuthService login() method
+        login () {
+            router.app.$auth.login()
+            //this.$router.push('helloworld')
+        },
+        authenticated(){
+            return router.app.$auth.isAuthenticated()
+        },
+        logout(){
+            router.app.$auth.logout()
+        },
+        token(){
+            return router.app.$auth.getAuthToken()
+        },
+        get(){
+            return router.app.$auth.getUserProfile()
+        }
     },
-    authenticated(){
-      return router.app.$auth.isAuthenticated()
+    data () {
+        return {
+            message:
+            {
+                ad_id : 1,
+                poster : "gladyschanmail@gmail.com",
+                accommodation_name : "circus",
+                accommodation_description : "very high in a tree",
+                house_rules : "don't jump out the window",
+                booking_rules : "tralalala",
+                amenities : "TV,Kitchen,Elevator, Garden or backyard",
+                base_price : 65,
+                num_guests : 1,
+                num_bedrooms : 1,
+                num_bathrooms : 0,
+                suburb : "Potts Point",
+                state : "NSW",
+                country : "Australia",
+                latitude : -33.86916827,
+                longitude : 151.2265622,
+                list_of_reviews : "",
+                list_of_events : "",
+            },
+            /*
+            {
+                id : 1,
+                user_name : "Gladys",
+                name : "Bip Boop",
+                email : "gladyschanmail@gmail.com",
+                profile_pic : null,
+                list_of_ads : "",
+            },
+            */
+
+        }
     },
-    logout(){
-      router.app.$auth.logout()
-    },
-    token(){
-      return router.app.$auth.getAuthToken()
-    },
-    get(){
-      return router.app.$auth.getUserProfile()
-    }
-  },
-  data () {
-    return {
-      message: {
-          ad_id: 1,
-          poster: "gladyschanmail@gmail.com",
-          accommodation_name: "league of legends",
-          accommodation_description: "salty",
-          house_rules: "poop",
-          booking_rules: null,
-          amenities: null,
-          base_price: null,
-          num_guests: null,
-          num_bedrooms: null,
-          num_bathrooms: null,
-          suburb: null,
-          state: null,
-          country: null,
-          latitude: null,
-          longitude: null
-     },
-    url: "String",
-    errors: String
-               /*
-               {
-                    user_name: "gladys",
-                    name: "chan",
-                    email: "gladyschanmail@gmail.com",
-                    profile_pic: null
-               }
-               */
-    }
-  },
 /*
-  mounted () {
-      this.url = "http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/"
-    axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
-    .then(response => {
-      // JSON responses are automatically parsed.
-      this.message = response.data
-    })
-    .catch(e => {
-      this.errors.push(e)
-    })
-  }
+    mounted () {
+        axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+        .then(response => {
+            // JSON responses are automatically parsed.
+            this.message = response.data
+        })
+        .catch(e => {
+            this.errors.push(e)
+        })
+    }
 */
 
-  mounted () {
-    this.url = "http://localhost:8000/post/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/create/"
-    axios.post("http://localhost:8000/post/advertisement/"+this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] + "/create/", {body:this.message})
-  }
+    mounted () {
+        axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
+    }
 
 
 }
