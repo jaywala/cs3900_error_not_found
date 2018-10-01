@@ -41,8 +41,8 @@ class AccommodationReviewAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['rev_id']}),
         (None, {'fields': ['ad_owner']}),
-        (None, {'fields': ['rev_id']}),
         (None, {'fields': ['ad_id']}),
+        (None, {'fields': ['rating']}),
         (None, {'fields': ['message']}),
     ]
 

@@ -47,7 +47,7 @@ def user_profile_update(request):
 
     data = JSONParser().parse(request)
 
-    email = data['body']['email'])
+    email = data['body']['email']
 
     print('-----------> inside UPDATE user_profile <-----------\n', email, '\n------------------------')
 
@@ -77,10 +77,10 @@ def user_profile_update(request):
     current_list_of_ads = user.get_list_of_ads()
 
 
-    if new_user_name != current_user_name or
-       new_name != current_name or
-       new_email != current_email or
-       new_profile_pic != current_profile_pic or
+    if new_user_name != current_user_name or \
+       new_name != current_name or \
+       new_email != current_email or \
+       new_profile_pic != current_profile_pic or \
        new_list_of_ads != current_list_of_ads:
         return HttpResponse(status=400)
     else:
@@ -517,7 +517,7 @@ def review_delete(request):
 #------------------------------Advertisement Events ------------------------------#
 
 
-def events_get(request, first, second, ad_id):
+def event_get(request, first, second, ad_id):
     """
     Give events this advertisement owns, identified by email and ad_id.
     (Model: Event)
