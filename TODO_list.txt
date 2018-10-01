@@ -33,8 +33,8 @@ TODO list
 8. [Backend] email communication between users
 
 TODO
-- when deleting an ad, need to delete it's reviews and events
-- update the list that tells us what that instance owns
+(DONE) - when deleting an ad, need to delete it's reviews and events
+(DONE) - update the list that tells us what that instance owns
     , when deleting, creating
-- validity check on events
-- when adding a id to a list we need to have a comma after the id 
+(DONE) - when adding a id to a list we need to have a comma after the id
+- validity check on events TODO

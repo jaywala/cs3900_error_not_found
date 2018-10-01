@@ -289,7 +289,14 @@ def advertisement_create(request):
     print('Created ad: ', temp_ad)
 
     if temp_ad.exists() and len(temp_ad) == 1:
+
+        u = User_Profile.objects.get(poster=email)
+        str_of_ads = u.get_list_of_ads()
+        new_str_of_ads = str_of_ads + str(ad_id) + ','
+        u.set_list_of_ads(new_str_of_ads)
+
         return HttpResponse(status=201)
+
     else:
         return HttpResponse(status=400)
 
@@ -310,9 +317,39 @@ def advertisement_delete(request):
     ad = Advertisement.objects.filter(poster=email, ad_id=ad_id)
 
     if ad.exists() and len(ad) == 1:
+
         ad.delete()
+
+        u = User_Profile.objects.get(poster=email)
+        str_of_ads = u.get_list_of_ads()
+        if str_of_ads != None:
+            str_list_of_ads = str_of_ads.split(',')
+            new_list = []
+            for i in str_list_of_ads:
+                if i == '':
+                    continue
+                elif i == ad_id: # delete the ad_id so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+        new_list_of_ads = '' #contruct the string again to put back into db
+        for i in new_list:
+            new_list_of_ads = new_list_of_ads + i + ','
+
+        u.set_list_of_ads(new_list_of_ads)
+
+        r = list(Advertisement_Review.objects.filter(ad_id=ad_id, ad_owner=ad_owner))
+        for i in r:
+            i.delete()
+
+        e = list(Event.objects.filter(ad_id=ad_id, ad_owner=ad_owner))
+        for i in e:
+            i.delete()
+
         print('-----------> Deleted this ad ', ad, '<-----------')
         return HttpResponse(status=200)
+
     else:
         return HttpResponse(status=400)
 
@@ -386,6 +423,12 @@ def review_create(request):
     temp_review = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if temp_review.exists() and len(temp_review) == 1:
+
+        a = Advertisement.objects.get(poster=ad_owner)
+        str_of_rev_ids = a.get_rev_ids()
+        new_str_of_rev = str_of_rev_ids + str(rev_id) + ','
+        a.set_rev_ids(new_str_of_rev)
+
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=400)
@@ -443,7 +486,28 @@ def review_delete(request):
     rev = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if rev.exists() and len(rev) == 1:
+
         ad.delete()
+
+        a = Advertisement.objects.get(poster=ad_owner)
+        str_of_rev = a.get_rev_ids()
+        if str_of_rev != None:
+            str_list_of_rev = str_of_rev.split(',')
+            new_list = []
+            for i in str_list_of_rev:
+                if i == '':
+                    continue
+                elif i == rev_id: # delete the rev_id so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+        new_list_of_rev = '' #contruct the string again to put back into db
+        for i in new_list:
+            new_list_of_rev = new_list_of_rev + i + ','
+
+        a.set_rev_ids(new_list_of_rev)
+
         print('-----------> Deleted this review', rev, '<-----------')
         return HttpResponse(status=200)
     else:
@@ -528,6 +592,12 @@ def event_create(request):
     temp_event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
 
     if temp_event.exists() and len(temp_event) == 1:
+
+        a = Advertisement.objects.get(poster=ad_owner)
+        str_of_event_ids = a.get_event_ids()
+        new_str_of_events = str_of_event_ids + str(event_id) + ','
+        a.set_event_ids(new_str_of_events)
+
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=400)
@@ -585,7 +655,28 @@ def event_delete(request):
     event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
 
     if event.exists() and len(event) == 1:
+
         event.delete()
+
+        a = Advertisement.objects.get(poster=ad_owner)
+        str_of_events = a.get_event_ids()
+        if str_of_events != None:
+            str_list_of_events = str_of_events.split(',')
+            new_list = []
+            for i in str_list_of_events:
+                if i == '':
+                    continue
+                elif i == event_id: # delete the event_id so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+        new_list_of_events = '' #contruct the string again to put back into db
+        for i in new_list:
+            new_list_of_events = new_list_of_events + i + ','
+
+        a.set_event_ids(new_list_of_events)
+
         print('-----------> Deleted this event', event, '<-----------')
         return HttpResponse(status=200)
     else:
