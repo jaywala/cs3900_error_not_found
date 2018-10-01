@@ -41,18 +41,24 @@ def importFromCSV():
             amenitiestext = amenitiestext.replace('"', '')
             advertisement = Advertisement(
                 ad_id=1,
+                list_of_reviews="",
+                list_of_events="",
                 poster=(row[21]+"@example.com"),
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],
+                booking_rules="",
+                amenities=amenitiestext,
                 base_price=float((row[60].strip("$")).replace(",","")),
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
+                suburb=row[41],
+                state="NSW",
+                country="Australia",
                 latitude=float(row[48]),
                 longitude=float(row[49]),
-                suburb=row[41],
-                amenities=amenitiestext)
+                )
             advertisement.save()
 
 if __name__ == '__main__':

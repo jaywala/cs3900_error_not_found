@@ -40,7 +40,9 @@ class AdvertisementAdmin(admin.ModelAdmin):
 class AccommodationReviewAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['rev_id']}),
-        (None, {'fields': ['rating']}),
+        (None, {'fields': ['ad_owner']}),
+        (None, {'fields': ['rev_id']}),
+        (None, {'fields': ['ad_id']}),
         (None, {'fields': ['message']}),
     ]
 
@@ -48,6 +50,8 @@ class AccommodationReviewAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['event_id']}),
+        (None, {'fields': ['ad_owner']}),
+        (None, {'fields': ['rev_id']}),
         ('Rental Period', {'fields': ['start_day']}),
         (None, {'fields': ['start_day_start_time']}),
         (None, {'fields': ['end_day']}),

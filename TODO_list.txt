@@ -37,3 +37,4 @@ TODO
 - update the list that tells us what that instance owns
     , when deleting, creating
 - validity check on events
+- when adding a id to a list we need to have a comma after the id 
