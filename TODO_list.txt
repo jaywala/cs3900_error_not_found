@@ -38,3 +38,5 @@ TODO
     , when deleting, creating
 (DONE) - when adding a id to a list we need to have a comma after the id
 - validity check on events TODO
+- add image list field to advertisement model
+(DONE) - check if the get views can return multiple querysets 
