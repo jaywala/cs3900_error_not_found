@@ -33,7 +33,7 @@ export default {
     data () {
         return {
             message:
-            {
+            /*{
                 ad_id : 1,
                 poster : "gladyschanmail@gmail.com",
                 accommodation_name : "circus",
@@ -52,7 +52,7 @@ export default {
                 longitude : 151.2265622,
                 list_of_reviews : "",
                 list_of_events : "",
-            },
+            },*/
             /*
             {
                 id : 1,
@@ -63,12 +63,20 @@ export default {
                 list_of_ads : "",
             },
             */
+            {
+                "id": 1,
+                "rev_id": 1,
+                "rating": 10,
+                "message": "hi there good",
+                "ad_owner": "gladyschanmail@gmail.com",
+                "ad_id": 1
+            }
 
         }
     },
-/*
+
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -77,12 +85,12 @@ export default {
             this.errors.push(e)
         })
     }
-*/
 
+/*
     mounted () {
-        axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
+        axios.post("http://localhost:8000/post/advertisement/create/", {body:this.message})
     }
-
+*/
 
 }
 

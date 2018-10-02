@@ -760,6 +760,35 @@ def user_detail(request, pk):
         return HttpResponse(status=404)
 
 
+def review_detail(request, pk):
+    """
+    Shows JSON in browser of a particular ad.
+    """
+
+    try:
+        ad = Accommodation_Review.objects.get(pk=pk)
+    except Accommodation_Review.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AccommodationReviewSerializer(ad)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AccommodationReviewSerializer(ad, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+
 def public(request):
     print("hello+",request.body)
     return HttpResponse("You don't need to be authenticated to see this")

@@ -269,7 +269,7 @@ class Accommodation_Review(models.Model):
     ad_id =  models.IntegerField()
 
     def __str__(self):
-        return rev_id
+        return str(self.rev_id) + ", " + self.ad_owner
 
     #--------------------------------
 
