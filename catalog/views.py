@@ -149,15 +149,15 @@ def advertisement_get(request, first, second): #works & tested
     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
 
     try:
-        ad = Advertisement.objects.get(poster=email)
+        ad = Advertisement.objects.filter(poster=email)
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
-    serializer = AdvertisementSerializer(ad)
+    serializer = AdvertisementSerializer(ad, many=True)
 
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
-    return JsonResponse(serializer.data)
+    return JsonResponse(serializer.data, safe=False)
 
 
 def advertisement_update(request): #works & tested
@@ -374,7 +374,7 @@ def advertisement_delete(request): # works & tested TODO check that the reviews 
 #------------------------------Advertisement Reviews ------------------------------#
 
 
-def review_get(request, first, second, ad_id):
+def review_get(request, first, second, ad_id): # works & tested
     """
     Give all reviews this advertisement owns, identified by email and ad_id.
     (Model: Accommodation_Review)
@@ -389,14 +389,14 @@ def review_get(request, first, second, ad_id):
     except Accommodation_Review.DoesNotExist:
         return HttpResponse(status=404)
 
-    serializer = AccommodationReviewSerializer(rev)
+    serializer = AccommodationReviewSerializer(rev, many=True)
 
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
-    return JsonResponse(serializer.data)
+    return JsonResponse(serializer.data, safe=False)
 
 
-def review_create(request):
+def review_create(request): # works and tested
     """
     Create a new review for this advertisement, identified by ad_id and ad_owner.
     (Model: Advertisement_Review)
@@ -410,7 +410,7 @@ def review_create(request):
 
     u = Advertisement.objects.filter(ad_id=ad_id, poster=ad_owner)
 
-    str_of_id = u.get_rev_ids()
+    str_of_id = u[0].get_rev_ids()
     if str_of_id != None:
         temp = str_of_id.split(',')
         temp_list = []
@@ -437,13 +437,16 @@ def review_create(request):
             )
     review.save()
 
-    temp_review = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    temp_review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if temp_review.exists() and len(temp_review) == 1:
 
         a = Advertisement.objects.get(poster=ad_owner)
         str_of_rev_ids = a.get_rev_ids()
-        new_str_of_rev = str_of_rev_ids + str(rev_id) + ','
+        if str_of_rev_ids == None:
+            new_str_of_rev = str(rev_id) + ',' # first review for this ad
+        else:
+            new_str_of_rev = str_of_rev_ids + str(rev_id) + ','
         a.set_rev_ids(new_str_of_rev)
 
         return HttpResponse(status=201)
@@ -451,7 +454,7 @@ def review_create(request):
         return HttpResponse(status=400)
 
 
-def review_update(request):
+def review_update(request): # works & tested
     """
     Updates Advertisement Review for the given rev_id, ad_id and ad_owner.
     (Model: Advertisement_Review)
@@ -465,25 +468,28 @@ def review_update(request):
 
     print('-----------> inside UPDATE review ', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '<-----------')
 
-    review = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    review = review[0]
 
-    if review.exists() and len(review) == 1:
+    #if review.exists() and len(review) == 1:
+    #NOTE: not sure why sometimes .exists() works for model instances and sometimes it doesn't
+    #TODO look into this later
 
-        rev_id = data['body']['rev_id']
-        rating = data['body']['rating']
-        message = data['body']['message']
-        ad_owner = data['body']['ad_owner']
-        ad_id = data['body']['ad_id']
+    rev_id = data['body']['rev_id']
+    rating = data['body']['rating']
+    message = data['body']['message']
+    ad_owner = data['body']['ad_owner']
+    ad_id = data['body']['ad_id']
 
-        review.set_rev_id(rev_id)
-        review.set_rating(rating)
-        review.set_message(message)
-        review.set_ad_owner(ad_owner)
-        review.set_ad_id(ad_id)
+    review.set_rev_id(rev_id)
+    review.set_rating(rating)
+    review.set_message(message)
+    review.set_ad_owner(ad_owner)
+    review.set_ad_id(ad_id)
 
-        return HttpResponse(status=201)
-    else:
-        return HttpResponse(status=400)
+    return HttpResponse(status=201)
+    #else:
+    #    return HttpResponse(status=400)
 
 
 def review_delete(request):
@@ -500,11 +506,11 @@ def review_delete(request):
 
     print('-----------> inside DELETE review ', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '<-----------')
 
-    rev = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    rev = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if rev.exists() and len(rev) == 1:
 
-        ad.delete()
+        rev.delete()
 
         a = Advertisement.objects.get(poster=ad_owner)
         str_of_rev = a.get_rev_ids()
@@ -549,11 +555,11 @@ def event_get(request, first, second, ad_id):
     except Event.DoesNotExist:
         return HttpResponse(status=404)
 
-    serializer = EventSerializer(event)
+    serializer = EventSerializer(event, many=True)
 
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
-    return JsonResponse(serializer.data)
+    return JsonResponse(serializer.data, safe=False)
 
 
 def event_create(request):
@@ -748,6 +754,35 @@ def user_detail(request, pk):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = UserProfileSerializer(ad, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+
+def review_detail(request, pk):
+    """
+    Shows JSON in browser of a particular ad.
+    """
+
+    try:
+        ad = Accommodation_Review.objects.get(pk=pk)
+    except Accommodation_Review.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AccommodationReviewSerializer(ad)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AccommodationReviewSerializer(ad, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)

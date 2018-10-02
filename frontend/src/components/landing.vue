@@ -13,27 +13,24 @@
         </div>
       </section>
 
+      <!-- Listings -->
       <div class="album py-5 bg-light">
         <div class="container">
-
           <div class="row">
-            <li v-for="current in total">
-            <div class="col-md-4">
+            <!-- Each Listing -->
+            <div v-for="n in 10" class="col-md-4">
               <div class="card mb-4 box-shadow">
-                <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
+                <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <p class="card-text">&lt;Property Type&gt; · &lt;Location&gt;</p>
+                  <h4 class="card-text">&lt;Listing Title&gt;</h4>
+                  <p class="card-text">$&lt;Cost&gt; AUD per night</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <router-link :to="'detail/' + current" tag = "button">detail</router-link>
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                    </div>
-                    <small class="text-muted">9 mins</small>
+                    <small class="text-muted">&lt;Rating&gt; &lt;# of Reviews&gt;</small>
                   </div>
                 </div>
               </div>
             </div>
-            </li>
           </div>
         </div>
       </div>
