@@ -36,8 +36,8 @@ export default {
             /*{
                 ad_id : 1,
                 poster : "gladyschanmail@gmail.com",
-                accommodation_name : "circus",
-                accommodation_description : "very high in a tree",
+                accommodation_name : "Water Park",
+                accommodation_description : "lots of water",
                 house_rules : "don't jump out the window",
                 booking_rules : "tralalala",
                 amenities : "TV,Kitchen,Elevator, Garden or backyard",
@@ -64,17 +64,19 @@ export default {
             },
             */
             {
-                "id": 1,
-                "rev_id": 1,
-                "rating": 10,
-                "message": "hi there good",
+                "id": 6,
+                "rev_id": 2,
+                "rating": 5,
+                "message": "update second review",
                 "ad_owner": "gladyschanmail@gmail.com",
                 "ad_id": 1
             }
 
+
+
         }
     },
-
+/*
     mounted () {
         axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
         .then(response => {
@@ -85,12 +87,12 @@ export default {
             this.errors.push(e)
         })
     }
-
-/*
-    mounted () {
-        axios.post("http://localhost:8000/post/advertisement/create/", {body:this.message})
-    }
 */
+
+    mounted () {
+        axios.post("http://localhost:8000/post/review/update/", {body:this.message})
+    }
+
 
 }
 

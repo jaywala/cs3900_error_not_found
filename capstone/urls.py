@@ -63,7 +63,7 @@ urlpatterns = [
     # URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
     path('user/<int:pk>/', views.user_detail),
-    path('review/<int:pk>', views.review_detail),
+    path('review/<int:pk>/', views.review_detail),
 
     path('api/public/', views.public),
     path('api/private/', views.private),
