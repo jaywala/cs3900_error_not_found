@@ -9,7 +9,6 @@ class PropertyImageInline(admin.TabularInline):
     model = PropertyImage
     extra = 3
 
-
 class EventInline(admin.TabularInline):
     model = Event
     extra = 3

@@ -49,7 +49,9 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.common.CommonMiddleware'
+    'django.contrib.sessions.middleware.SessionMiddleware', # need this for django admin page
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # need this for django admin page
+    'django.contrib.messages.middleware.MessageMiddleware', # need this for django admin page
 ]
 
 ROOT_URLCONF = 'capstone.urls'
@@ -123,9 +125,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-         'rest_framework.permissions.IsAuthenticated',
     ),
 }
 

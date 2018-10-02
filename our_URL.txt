@@ -1,0 +1,76 @@
+API URLs
+
+How to read:
+- If something is wrapped in <> angle brackets, it means that part of the URL
+  changes.
+- first refers to the part of the email before the @ sign
+- second refers to the part of the email after the @ sign
+    - e.g. bears@gmail.com
+    - first = bears
+    - second = gmail
+    - NOTE: whenever there are none alphabet letters it doesn't work
+    - the view methods will reconstruct the email:
+        - email = first + "@" + second + ".com"
+
+
+User Profile Data:
+    GET:
+        8000/get/user/<first>/<second>/
+        --> The backend will give all the information related
+        to the user profile, using the email given in the URL.
+
+    POST:
+        8000/post/user/update/
+        --> will update the data for this user.
+
+        8000/post/userLoggedIn/
+        --> check if user exists.
+        --> if it doesn't exist, it will make new user with given data.
+
+
+Advertisement Data:
+    GET:
+        8000/get/advertisement/<first>/<second>/
+        --> give all ads that this user owns.
+
+    POST:
+        8000/post/advertisement/create/
+        --> if advertisement doesn't exist, it makes one.
+
+        8000/post/advertisement/update/
+        --> will update the data for this advertisement.
+
+        8000/post/advertisement/delete/
+        --> will delete this advertisement.
+
+
+Advertisement Review:
+    GET:
+        8000/get/review/<first>/<second>/ad_id/
+        --> give reviews this advertisement owns
+
+    POST:
+        8000/post/review/<create/
+        --> create a review for this advertisement
+
+        8000/post/review/update/
+        --> update a review for this advertisement
+
+        8000/post/review/delete/
+        --> delete a review for this advertisement
+
+
+Advertisement Event:
+    GET:
+        8000/get/event/<first>/<second>/
+        --> give events this advertisement owns
+
+    POST:
+        8000/post/event/create/
+        --> create event for this advertisement
+
+        8000/post/event/update/
+        --> update event for this advertisement
+
+        8000/post/event/delete/
+        --> delete event for this advertisement

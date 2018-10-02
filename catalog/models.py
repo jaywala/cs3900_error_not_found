@@ -1,17 +1,23 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+
 
 class User_Profile(models.Model):
 
     user_name = models.CharField(max_length=25)
     name = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    profile_pic = models.ImageField(upload_to = 'profile_pics/')
+    email = models.CharField(max_length=50) # this is the unique identier
+    profile_pic = models.CharField(null=True, blank=True, max_length=1000)
+
+    # contains the ad id's that this user owns
+    list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
-        return self.user_name
+        return self.email
+
+    #--------------------------------
 
     def get_user_name(self):
         return self.user_name
@@ -22,7 +28,18 @@ class User_Profile(models.Model):
     def get_email(self):
         return self.email
 
+    def get_profile_pic(self):
+        return self.profile_pic
+
+    def get_list_of_ads(self):
+        return self.list_of_ads
+
     #--------------------------------
+
+    def set_user_name(self, new_user_name):
+        u = User_Profile.objects.get(id=self.id)
+        u.user_name = new_user_name
+        u.save()
 
     def set_name(self, new_name):
         u = User_Profile.objects.get(id=self.id)
@@ -34,67 +51,14 @@ class User_Profile(models.Model):
         u.email = new_email
         u.save()
 
-    #--------------------------------
-    '''
-    def create_me(self, user_name, name, email, profile_pic):
-        u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic)
-        u.save()
-    '''
-    #--------------------------------
-
-    def delete_me(self):
-        self.delete()
-
-    #--------------------------------
-
-    def exists(self, username):
-        '''
-        Searches for the object by a field.
-        '''
-        user = User_Profile.objects.filter(user_name=username)
-        if user.exists() and len(user) == 1:
-            return user
-        else:
-            return None
-
-
-class User_Review(models.Model):
-
-    user = models.ForeignKey(User_Profile, related_name='user_reviews', on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    title = models.CharField(max_length=50)
-    message = models.CharField(max_length=1000)
-
-    def __str__(self):
-        return self.title
-
-    def get_user(self):
-        return self.user
-
-    def get_rating(self):
-        return self.rating
-
-    def get_title(self):
-        return self.title
-
-    def get_message(self):
-        return self.message
-
-    #--------------------------------
-
-    def set_rating(self, new_rating):
-        u = User_Review.objects.get(id=self.id)
-        u.rating = new_rating
+    def set_profile_pic(self, new_pic):
+        u = User_Profile.objects.get(id=self.id)
+        u.profile_pic = new_pic
         u.save()
 
-    def set_title(self, new_title):
-        u = User_Review.objects.get(id=self.id)
-        u.title = new_title
-        u.save()
-
-    def set_message(self, new_message):
-        u = User_Review.objects.get(id=self.id)
-        u.message = new_message
+    def set_list_of_ads(self, new_list_of_ads):
+        u = User_Profile.objects.get(id=self.id)
+        u.list_of_ads = new_list_of_ads
         u.save()
 
     #--------------------------------
@@ -105,33 +69,54 @@ class User_Review(models.Model):
 
 class Advertisement(models.Model):
 
-    user = models.ForeignKey(User_Profile, related_name='advertisements', on_delete=models.CASCADE)
-    accommodation_name = models.CharField(max_length=50)
-    accommodation_description = models.CharField(max_length=1000, default='')
+    ad_id = models.IntegerField() # this is the unique identier
 
-    house_rules = models.CharField(max_length=1000, default='')
-    booking_rules = models.CharField(max_length=1000, default='')
+    # contains the ad review id's that this ad owns
+    list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
-    amenities=models.CharField(max_length=1000,default='')
+    #  contains the event id's that this ad owns
+    list_of_events = models.CharField(null=True, blank=True, max_length=1000)
 
-    base_price = models.FloatField(default=0)
+    poster = models.CharField(null=True, blank=True, max_length=1000)
 
-    num_guests = models.IntegerField(default=0)
-    num_bedrooms = models.IntegerField(default=0)
-    num_bathrooms = models.IntegerField(default=0)
+    accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
+    accommodation_description = models.CharField(null=True, blank=True, max_length=1000)
 
-    suburb = models.CharField(max_length=100, default='')
-    state = models.CharField(default='NSW', max_length=50)
-    country = models.CharField(default='Australia', max_length=50)
+    house_rules = models.CharField(null=True, blank=True, max_length=1000)
+    booking_rules = models.CharField(null=True, blank=True, max_length=1000)
 
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    amenities=models.CharField(null=True, blank=True, max_length=1000)
+
+    base_price = models.FloatField(null=True, blank=True, max_length=1000)
+
+    num_guests = models.IntegerField(null=True, blank=True)
+    num_bedrooms = models.IntegerField(null=True, blank=True)
+    num_bathrooms = models.IntegerField(null=True, blank=True)
+
+    suburb = models.CharField(null=True, blank=True, max_length=1000)
+    state = models.CharField(null=True, blank=True, max_length=1000)
+    country = models.CharField(null=True, blank=True, max_length=1000)
+
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return self.accommodation_name
+        temp = str(self.ad_id) + ', ' + str(self.poster) + ', ' + str(self.accommodation_name)
+        return temp
 
-    def get_user(self):
-        return self.user
+    #--------------------------------
+
+    def get_ad_id(self):
+        return self.ad_id
+
+    def get_rev_ids(self):
+        return self.list_of_reviews
+
+    def get_event_ids(self):
+        return self.list_of_events
+
+    def get_poster(self):
+        return self.poster
 
     def get_accommodation_name(self):
         return self.accommodation_name
@@ -144,6 +129,9 @@ class Advertisement(models.Model):
 
     def get_booking_rules(self):
         return self.booking_rules
+
+    def get_amenities(self):
+        return self.amenities
 
     def get_base_price(self):
         return self.base_price
@@ -166,7 +154,33 @@ class Advertisement(models.Model):
     def get_country(self):
         return self.country
 
+    def get_latitude(self):
+        return self.latitude
+
+    def get_longitude(self):
+        return self.longitude
+
     #--------------------------------
+
+    def set_ad_id(self, new_ad_id):
+        a = Advertisement.objects.get(id=self.id)
+        a.ad_id = new_ad_id
+        a.save()
+
+    def set_rev_ids(self, new_list_of_rev):
+        a = Advertisement.objects.get(id=self.id)
+        a.list_of_reviews = new_list_of_rev
+        a.save()
+
+    def set_event_ids(self, new_list_of_event):
+        a = Advertisement.objects.get(id=self.id)
+        a.list_of_events = new_list_of_event
+        a.save()
+
+    def set_poster(self, new_poster):
+        a = Advertisement.objects.get(id=self.id)
+        a.poster = new_poster
+        a.save()
 
     def set_accommodation_name(self, new_accommodation_name):
         a = Advertisement.objects.get(id=self.id)
@@ -186,6 +200,11 @@ class Advertisement(models.Model):
     def set_booking_rules(self, new_booking_rules):
         a = Advertisement.objects.get(id=self.id)
         a.booking_rules = new_booking_rules
+        a.save()
+
+    def set_amenities(self, new_amenities):
+        a = Advertisement.objects.get(id=self.id)
+        a.amenities = new_amenities
         a.save()
 
     def set_base_price(self, new_base_price):
@@ -223,43 +242,62 @@ class Advertisement(models.Model):
         a.country = new_country
         a.save()
 
+    def set_latitude(self, new_latitude):
+        a = Advertisement.objects.get(id=self.id)
+        a.latitude = new_latitude
+        a.save()
+
+    def set_longitude(self, new_longitude):
+        a = Advertisement.objects.get(id=self.id)
+        a.longitude= new_longitude
+        a.save()
+
     #--------------------------------
 
     def delete_me(self):
         self.delete()
 
+
 class Accommodation_Review(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='accommodation_reviews', on_delete=models.CASCADE)
+    rev_id = models.IntegerField() # this is the unique identier
+
     rating = models.IntegerField()
-    title = models.CharField(max_length=50)
     message = models.CharField(max_length=1000)
 
-    def __str__(self):
-        return self.title
+    ad_owner = models.CharField(max_length=100)
+    ad_id =  models.IntegerField()
 
-    def get_advertisement(self):
-        return self.advert
+    def __str__(self):
+        return rev_id
+
+    #--------------------------------
+
+    def get_rev_id(self):
+        return self.rev_id
 
     def get_rating(self):
         return self.rating
 
-    def get_title(self):
-        return self.title
-
     def get_message(self):
         return self.message
 
+    def get_ad_owner(self):
+        return self.ad_owner
+
+    def get_ad_id(self):
+        return self.ad_id
+
     #--------------------------------
+
+    def set_rev_id(self, new_id):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.rev_id = new_id
+        u.save()
 
     def set_rating(self, new_rating):
         u = Accommodation_Review.objects.get(id=self.id)
         u.rating = new_rating
-        u.save()
-
-    def set_title(self, new_title):
-        u = Accommodation_Review.objects.get(id=self.id)
-        u.title = new_title
         u.save()
 
     def set_message(self, new_message):
@@ -267,40 +305,47 @@ class Accommodation_Review(models.Model):
         u.message = new_message
         u.save()
 
-    #--------------------------------
+    def set_ad_owner(self, new_ad_owner):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.ad_owner = new_ad_owner
+        u.save()
 
-    def delete_me(self):
-        self.delete()
-
-
-class PropertyImage(models.Model):
-
-    advert = models.ForeignKey(Advertisement, related_name='property_images', on_delete=models.CASCADE)
-    string = models.CharField(max_length=500000)
-    # image = models.ImageField(upload_to = 'accommodation_pics/')
+    def set_ad_id(self, new_ad_id):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.ad_id = new_ad_id
+        u.save()
 
     #--------------------------------
 
     def delete_me(self):
         self.delete()
+
 
 class Event(models.Model):
 
-    advert = models.ForeignKey(Advertisement, related_name='events', on_delete=models.CASCADE)
+    event_id = models.IntegerField()
+    ad_owner = models.CharField(max_length=100)
+    ad_id =  models.IntegerField()
 
     start_day = models.DateField(u'Start day of the rent', help_text=u'Start day of the rent')
     start_day_start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
 
     end_day = models.DateField(u'End day of the event', help_text=u'End day of the event')
-    end_day_end_time = models.TimeField(u'Final time', help_text=u'Final time')
+    end_day_end_time = models.TimeField(u'End time', help_text=u'End time')
 
     booking_status = 'booked'
 
-    notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
+    notes = models.TextField(u'Notes', help_text=u'Notes', blank=True, null=True)
+
+    def __str__(self):
+        temp = str(self.event_id) + ', ' + str(self.start_day)
+        return temp
+
+    #--------------------------------
 
     class Meta:
-        verbose_name = u'Scheduling'
-        verbose_name_plural = u'Scheduling'
+        verbose_name = u'Event'
+        verbose_name_plural = u'Events'
 
     def check_overlap(self, fixed_start_day, fixed_start_day_start_time, fixed_end_day, fixed_end_day_end_time,
                       new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time, event):
@@ -358,8 +403,10 @@ class Event(models.Model):
                     return False
         return True
 
-    def get_advertisement(self):
-        return self.advert
+    #--------------------------------
+
+    def get_event_id(self):
+        return self.event_id
 
     def get_start_day(self):
         return self.start_day
@@ -379,11 +426,23 @@ class Event(models.Model):
     def get_notes(self):
         return self.notes
 
+    def get_ad_owner(self):
+        return self.ad_owner
+
+    def get_ad_id(self):
+        return self.ad_id
+
     #--------------------------------
+
+    def set_event_id(self, new_id):
+        u = Event.objects.get(id=self.id)
+        u.event_id = new_id
+        u.save()
+
 #TODO need to check the validity when using these methods to modify the data
-# currently it trivaly either modifies db or doesn't
+# currently it trivaly either modifies db or doesn't.
 # need to return some feed back to user.
-# above case is valid when creating the event. Just nothing for editing the event.
+# above case is valid when creating the event. Just not for editing the event.
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
         if e.check_validity() == True: # this is not working the way I want
@@ -414,6 +473,16 @@ class Event(models.Model):
         e = Event.objects.get(id=self.id)
         e.notes = new_notes
         e.save()
+
+    def set_ad_owner(self, new_ad_owner):
+        u = Event.objects.get(id=self.id)
+        u.ad_owner = new_ad_owner
+        u.save()
+
+    def set_ad_id(self, new_ad_id):
+        u = Event.objects.get(id=self.id)
+        u.ad_id = new_ad_id
+        u.save()
 
     #--------------------------------
 
