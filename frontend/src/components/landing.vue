@@ -48,8 +48,21 @@ export default {
   data() {
     return {
       total: 10,
-      current: Number
+      current: Number,
+      errors: String,
+      ads: null,
+      parameters: ""
     }
+  },
+  mounted () {
+      axios.get("http://localhost:8000/get/advertisement/" + this.parameters)
+      .then(response => {
+          // JSON responses are automatically parsed.
+          this.ads = response.data
+      })
+      .catch(e => {
+          this.errors.push(e)
+      })
   }
 }
 </script>
