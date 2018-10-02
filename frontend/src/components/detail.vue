@@ -80,7 +80,7 @@ export default {
 */
 
     mounted () {
-        axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
+        axios.post("http://localhost:8000/post/advertisement/create/", {body:this.message})
     }
 
 

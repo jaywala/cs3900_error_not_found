@@ -12,6 +12,9 @@ How to read:
     - the view methods will reconstruct the email:
         - email = first + "@" + second + ".com"
 
+TODO
+8000/get/advertisement/ --> give all ads 
+
 
 User Profile Data:
     GET:
