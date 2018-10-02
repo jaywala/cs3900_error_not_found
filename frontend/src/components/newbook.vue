@@ -207,8 +207,13 @@
 
 <script>
 
+import PropertyForm from './PropertyForm.vue'
+
 export default {
   name: 'newbook',
+  components: {
+    PropertyForm,
+  },
   props: {
       property_type: String,
       address: String,

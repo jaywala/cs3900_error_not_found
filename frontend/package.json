@@ -14,9 +14,19 @@
     "auth0-js": "^9.7.3",
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.11",
+    "date-fns": "^1.29.0",
     "eventemitter3": "^3.1.0",
+    "jade": "^1.11.0",
+    "jquery": "^3.3.1",
+    "node-sass": "^4.9.3",
+    "sass-loader": "^7.1.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-airbnb-style-datepicker": "^1.11.4",
+    "vue-file-base64": "^1.0.2",
+    "vue-google-autocomplete": "^1.1.0",
+    "vue-material": "^1.0.0-beta-10.2",
+    "vue-router": "^3.0.1",
+    "vuelidate": "^0.7.4"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

@@ -7,17 +7,43 @@ Expanded on other member's ideas.
 Drafted epics for some project ideas so we can compare,
  which project idea is best.
 Raised concern for project ideas, to ensure we choose a viable project.
-Researched on blockchains to see if one of our ideas are viable.   
+Researched on blockchains to see if one of our ideas are viable.
 
 Week 3
-Participated in the team meeting on Wednesday. 
+Participated in the team meeting on Wednesday.
 Main achievements from the meeting: decided on project and epics.
-Wrote a draft of the proposal.  
+Wrote a draft of the proposal.
 
 Week 4
 Helped set up auth0.
 Completed a Django tutorial for understanding purposes.
 
 Week 5
-Worked on modeling the database, specifically the Advertisement Class and everything related to posting an ad. 
-Set up admin page to play with database. 
+Worked on modeling the database, specifically the Advertisement Class and
+everything related to posting an ad.
+Set up admin page to play with database.
+Looked into Auth0 user handling integration with our app.
+Bug fixes in Event Class.
+Looked into/started writing methods to access and modify database.
+
+Week 6
+Finished writing getters and setters for models.
+Helped with the importData code to populate database with dummy data.
+Started seriealizers tutorial to create end points to connect with frontend
+, A.K.A REST API.
+
+Week 7
+Worked on REST API.
+
+Week 8
+Trying to solve token issue.
+Realised it was not worth solving that issue.
+Took out token related code.
+
+Week 9
+Did not work on project.
+
+Week mid-sem break
+Group online meeting to rebase on what everyone is up to.
+Discussed and agreed on URL patterns.
+ 

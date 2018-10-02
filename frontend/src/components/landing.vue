@@ -31,7 +31,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -40,8 +39,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import router from '../router'
 export default {
-
+  data() {
+    return {
+      total: 10,
+      current: Number
+    }
+  }
 }
 </script>
 <style src="./album.css"></style>
