@@ -117,7 +117,7 @@
           <md-field :class="getValidationClass('amenities')">
             <label for="amenities">Write a list of major amenities provided</label>
             <md-textarea required name="amenities" id="amenities" autocomplete="amenities" v-model="form.amenities" :disabled="sending" />
-            <span class="md-error" v-if="!$v.form.amenities.required">A list of available amenities is provided</span>
+            <span class="md-error" v-if="!$v.form.amenities.required">A list of available amenities must be provided</span>
           </md-field>
         </md-card-content>
 
