@@ -47,6 +47,8 @@ urlpatterns = [
     path('post/advertisement/update/', views.advertisement_update),
     path('post/advertisement/delete/', views.advertisement_delete),
 
+    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
+
     # Advertisement Review
     path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get),
     path('post/review/create/', views.review_create),
@@ -60,7 +62,7 @@ urlpatterns = [
     path('post/event/delete/', views.event_delete),
 
     # Search module views
-    path('get/advertisement/', views.get_all_ads), 
+    path('get/advertisement/', views.get_all_ads),
 
 
     # URLs for testing

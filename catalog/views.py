@@ -138,6 +138,26 @@ def is_loggedIn(request): #works & tested
 #------------------------------Advertisement------------------------------#
 
 
+def get_single_ad(request, first, second, ad_id):
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET single advertisement <-----------\n', email, '\n------------------------')
+
+    try:
+        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+    except Advertisement.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = AdvertisementSerializer(ad)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data)
+
+
+
+
 def advertisement_get(request, first, second): #works & tested
     """
     Give all the ads for this user.

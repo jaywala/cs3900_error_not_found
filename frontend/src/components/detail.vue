@@ -1,10 +1,10 @@
 <template >
   <div id="app">
     <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
-  
+
     <div class="container" style="">
       <div class="row">
-        
+
       </div>
       <div class="row">
         <div class="col-8">
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 </template>
 
@@ -113,9 +113,10 @@ export default {
 
         }
     },
-/*
+
     mounted () {
-        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
+        axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
+        /*axios.get("http://localhost:8000/get/advertisement/")*/
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -124,12 +125,12 @@ export default {
             this.errors.push(e)
         })
     }
-*/
+/*
 
     mounted () {
         axios.post("http://localhost:8000/post/review/create/", {body:this.message})
     }
-
+*/
 
 }
 
