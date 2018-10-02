@@ -706,6 +706,23 @@ def event_delete(request):
         return HttpResponse(status=400)
 
 
+#------------------------------Search Module Views------------------------------#
+
+def get_all_ads(request):
+
+    try:
+        a = Advertisement.objects.all()
+    except Advertisement.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = AdvertisementSerializer(a, many=True)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+
 #------------------------------Test Views------------------------------#
 
 def advertisement_detail(request, pk):

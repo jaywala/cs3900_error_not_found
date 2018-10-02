@@ -76,9 +76,11 @@ export default {
 
         }
     },
-/*
+
     mounted () {
-        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
+        /*axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
+        */
+        axios.get("http://localhost:8000/get/advertisement/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -87,12 +89,12 @@ export default {
             this.errors.push(e)
         })
     }
-*/
 
+/*
     mounted () {
         axios.post("http://localhost:8000/post/review/delete/", {body:this.message})
     }
-
+*/
 
 }
 

@@ -59,6 +59,9 @@ urlpatterns = [
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
+    # Search module views
+    path('get/advertisement/', views.get_all_ads), 
+
 
     # URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
