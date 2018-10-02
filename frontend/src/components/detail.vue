@@ -48,6 +48,9 @@ import auth from '../auth'
 import PropertyBookingForm from './PropertyBookingForm.vue'
 
 export default {
+    components: {
+        PropertyBookingForm,
+    },
     methods: {
         // this method calls the AuthService login() method
         login () {
