@@ -39,4 +39,7 @@ TODO list
 (DONE) - when adding a id to a list we need to have a comma after the id
 (DONE) - check if the get views can return multiple querysets
 - validity check on events TODO
-- add image list field to advertisement model TODO 
+- add image list field to advertisement model TODO
+
+TODO 1. user profile needs a list_of_rentals (ad_id, poster, event_id) —> the places you are renting, have rented
+TODO 2. user profile need a list of posted_reviews (ad_id, poster) —> the reviews that you wrote for a rented place
