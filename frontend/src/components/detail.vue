@@ -1,8 +1,42 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+    <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+  
+    <div class="container" style="">
+      <div class="row">
+        
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <small>&lt;Property Type&gt;</small>
 
-</div>
+          <div class="row">
+            <div class="col-9">
+              <h1>&lt;Property Title&gt;</h1>
+              <small>&lt;Property Location&gt;</small>
+              <div style="">
+                <div style="margin-right: 16px;">2 guests</div>
+                <div style="margin-right: 16px;">1 bed</div>
+                <div style="margin-right: 16px;">1 bath</div>
+              </div>
+              <br>
+              <p>&lt;Property Description&gt;</p>
+              <p>&lt;Amenities Details&gt;</p>
+
+            </div>
+            <div class="col-3">
+              <p>&lt;Profile image&gt;</p>
+              <small>&lt;host name&gt;</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <PropertyBookingForm></PropertyBookingForm>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </template>
 
 <script>
@@ -10,6 +44,9 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
+
+import PropertyBookingForm from './PropertyBookingForm.vue'
+
 export default {
     methods: {
         // this method calls the AuthService login() method
