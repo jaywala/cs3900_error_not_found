@@ -23,7 +23,7 @@
                   <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
                 <div class="card-body">
                   <p class="card-text">&lt;Property Type&gt; · &lt;Location&gt;</p>
-                   <router-link :to="{ name: 'detailpage', params: { id:ad.id, poster:ad.email }}" > <h4 class="card-text">&lt;Listing Title&gt;</h4></router-link>
+                   <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, poster:ad.poster }}" > <h4 class="card-text">&lt;Listing Title&gt;</h4></router-link>
                   <p class="card-text">$&lt;Cost&gt; AUD per night</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">&lt;Rating&gt; &lt;# of Reviews&gt;</small>
@@ -41,6 +41,7 @@
 <script>
 import Vue from 'vue'
 import router from '../router'
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -67,6 +68,7 @@ export default {
       .catch(e => {
           this.errors.push(e)
       })
+      console.log(this.ads)
   }
 }
 </script>
