@@ -506,11 +506,11 @@ def review_delete(request):
 
     print('-----------> inside DELETE review ', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '<-----------')
 
-    rev = Advertisement_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    rev = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if rev.exists() and len(rev) == 1:
 
-        ad.delete()
+        rev.delete()
 
         a = Advertisement.objects.get(poster=ad_owner)
         str_of_rev = a.get_rev_ids()
