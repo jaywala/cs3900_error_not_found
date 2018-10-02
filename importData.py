@@ -64,11 +64,14 @@ def importFromCSV():
             advertisement.save()
 
             if count <= 2:
+                im_number = 0
                 filepath = 'accommodation_pics/' + str(count) + '/*.jpg'
                 for filename in glob.glob(filepath):
+                    im_number += 1
                     with open(filename,"rb") as image_file:
                         encoded_string = base64.b64encode(image_file.read())
-                    im = PropertyImage(advert=advertisement,string=encoded_string)
+                        string = "data:image/jpeg;base64," + encoded_string.decode('UTF-8')
+                    im = PropertyImage(image_id=im_number,ad_owner=(row[21]+"@example.com"),ad_id=1,pic=string)
                     im.save()
 
 
@@ -84,6 +87,9 @@ def importImages():
             count+=1
             with open(filename,"rb") as image_file:
                 encoded_string = base64.b64encode(image_file.read())
+                strin = encoded_string.decode('UTF-8')
+                print(type(strin))
+                print(len(strin))
             
                     
                 

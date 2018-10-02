@@ -490,7 +490,7 @@ class Event(models.Model):
         self.delete()
 
 
-def images(models.Model):
+class PropertyImage(models.Model):
 
     image_id = models.IntegerField()
     ad_owner = models.CharField(max_length=100)
