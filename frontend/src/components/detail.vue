@@ -69,17 +69,13 @@ export default {
     },
     data () {
         return {
-            message:null
-
-
-
-
-
+            message:
+            {"ad_id": 1, "poster": "gladyschanmail@gmail.com", "accommodation_name": "tree house", "accommodation_description": "in tall tree", "house_rules": null, "booking_rules": null, "amenities": null, "base_price": null, "num_guests": null, "num_bedrooms": null, "num_bathrooms": null, "suburb": null, "state": null, "country": null, "latitude": null, "longitude": null, "list_of_reviews": "2,", "list_of_events": "2,3,"}
         }
     },
-
+/*
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement/"+this.$router.currentRoute.path+"/")
+        axios.get("http://localhost:8000/get/event/" + this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] + "/1/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -89,8 +85,10 @@ export default {
         })
         console.log(this.message)
     }
-
-
+*/
+    mounted() {
+        axios.post("http://localhost:8000/post/advertisement/delete/",{body:this.message})
+    }
 
 }
 

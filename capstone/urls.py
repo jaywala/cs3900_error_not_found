@@ -41,13 +41,13 @@ urlpatterns = [
     path('post/user/update/', views.user_profile_update),
     path('post/userLoggedIn/', views.is_loggedIn),
 
+    #---------------- Poster Views ----------------#
+
     # Advertisement
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
     path('post/advertisement/create/', views.advertisement_create),
     path('post/advertisement/update/', views.advertisement_update),
     path('post/advertisement/delete/', views.advertisement_delete),
-
-    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
 
     # Advertisement Review
     path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get),
@@ -61,14 +61,21 @@ urlpatterns = [
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
-    # Search module views
+    #---------------- Accommodation Seeker Views ----------------#
+
+    
+    #---------------- General Views ----------------#
     path('get/advertisement/', views.get_all_ads),
+    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
+
+    #---------------- Search module views ----------------#
 
 
     # URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
     path('user/<int:pk>/', views.user_detail),
     path('review/<int:pk>/', views.review_detail),
+    path('event/<int:pk>/', views.event_detail),
 
     path('api/public/', views.public),
     path('api/private/', views.private),

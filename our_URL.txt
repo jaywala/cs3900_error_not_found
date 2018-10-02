@@ -12,8 +12,14 @@ How to read:
     - the view methods will reconstruct the email:
         - email = first + "@" + second + ".com"
 
-TODO
-8000/get/advertisement/ --> give all ads 
+
+General Views:
+    GET:
+        8000/get/advertisement/
+        --> give all ads
+
+        8000/get/advertisement/<first>/<second>/<ad_id>/
+        --> give a single ad for that ad id
 
 
 User Profile Data:
@@ -49,7 +55,7 @@ Advertisement Data:
 
 Advertisement Review:
     GET:
-        8000/get/review/<first>/<second>/ad_id/
+        8000/get/review/<first>/<second>/<ad_id>/
         --> give reviews this advertisement owns
 
     POST:
@@ -65,7 +71,7 @@ Advertisement Review:
 
 Advertisement Event:
     GET:
-        8000/get/event/<first>/<second>/
+        8000/get/event/<first>/<second>/<ad_id>/
         --> give events this advertisement owns
 
     POST:

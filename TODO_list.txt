@@ -19,7 +19,7 @@ TODO list
 
 3. (DONE) Make methods that will write the given JSON to database
 
-4. [Backend] write methods for searches for the search module
+4. [Backend] write methods for searches for the search module TODO
 
 5. (DONE) - get events for an ad - [Backend] booking module: give frontend the
     dates and time for each event
@@ -28,15 +28,15 @@ TODO list
     need to write a method to tell frontend part from a 401 message. -
     [Backend] booking request module: check the advertisement's events
 
-7. [Backend] allow user to decline, accept, cancel booking requests
+7. [Backend] allow user to decline, accept, cancel booking requests TODO (need functions to support this)
 
-8. [Backend] email communication between users
+8. [Backend] email communication between users TODO
 
-TODO
+
 (DONE) - when deleting an ad, need to delete it's reviews and events
 (DONE) - update the list that tells us what that instance owns
     , when deleting, creating
 (DONE) - when adding a id to a list we need to have a comma after the id
+(DONE) - check if the get views can return multiple querysets
 - validity check on events TODO
-- add image list field to advertisement model
-(DONE) - check if the get views can return multiple querysets 
+- add image list field to advertisement model TODO 

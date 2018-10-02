@@ -333,7 +333,7 @@ class Event(models.Model):
     end_day = models.DateField(u'End day of the event', help_text=u'End day of the event')
     end_day_end_time = models.TimeField(u'End time', help_text=u'End time')
 
-    booking_status = 'booked'
+    booking_status = models.CharField(null=True, blank=True, max_length=100)
 
     notes = models.TextField(u'Notes', help_text=u'Notes', blank=True, null=True)
 
@@ -351,7 +351,7 @@ class Event(models.Model):
                       new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time, event):
 
         overlap = False
-        if self.advert.pk == event.advert.pk:
+        if self.event_id != event.event_id and self.ad_id != event.ad_id and self.ad_owner != event.ad_owner:
             if fixed_start_day == new_end_day or fixed_end_day == new_start_day:
                 if fixed_start_day_start_time <= new_end_day_end_time or fixed_end_day_end_time >= new_end_day_end_time:
                     overlap = True
@@ -383,8 +383,7 @@ class Event(models.Model):
                                       , event) and event.id != self.id:
                     raise ValidationError(
                          'There is an overlap with another event: ' + 'the new event --> self ' + str(self.notes
-                         ) + ' ' + str(self.booking_status) + ', ' + 'old event --> event ' + str(event.notes
-                         ) + ' ' + str(event.booking_status))
+                         ) + ', ' + 'old event --> event ' + str(event.notes) )
                         #'There is an overlap with another event: ' + str(event.start_day) + ', ' + str(
                         #    event.start_day_start_time) + '-' + str(event.end_day) + ', ' + str(event.end_day_end_time))
 
@@ -399,7 +398,7 @@ class Event(models.Model):
             for event in events:
                 if self.check_overlap(event.start_day, event.start_day_start_time, event.end_day, event.end_day_end_time,
                                       self.start_day, self.start_day_start_time, self.end_day, self.end_day_end_time
-                                      ) and event.id != self.id:
+                                      , event) and event.id != self.id:
                     return False
         return True
 
@@ -439,10 +438,10 @@ class Event(models.Model):
         u.event_id = new_id
         u.save()
 
-#TODO need to check the validity when using these methods to modify the data
-# currently it trivaly either modifies db or doesn't.
-# need to return some feed back to user.
-# above case is valid when creating the event. Just not for editing the event.
+    #TODO need to check the validity when using these methods to modify the data
+    # currently it trivaly either modifies db or doesn't.
+    # need to return some feed back to user.
+    # above case is valid when creating the event. Just not for editing the event.
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
         if e.check_validity() == True: # this is not working the way I want
