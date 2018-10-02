@@ -771,12 +771,12 @@ def review_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = AdvertisementSerializer(ad)
+        serializer = AccommodationReviewSerializer(ad)
         return JsonResponse(serializer.data)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = AdvertisementSerializer(ad, data=data)
+        serializer = AccommodationReviewSerializer(ad, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
