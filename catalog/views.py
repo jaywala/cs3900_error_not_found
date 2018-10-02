@@ -512,7 +512,7 @@ def review_delete(request):
 
         rev.delete()
 
-        a = Advertisement.objects.get(poster=ad_owner)
+        a = Advertisement.objects.filter(poster=ad_owner)
         str_of_rev = a.get_rev_ids()
         if str_of_rev != None:
             str_list_of_rev = str_of_rev.split(',')
@@ -534,6 +534,7 @@ def review_delete(request):
         print('-----------> Deleted this review', rev, '<-----------')
         return HttpResponse(status=200)
     else:
+        print('BAD REQUEST')
         return HttpResponse(status=400)
 
 

@@ -64,10 +64,10 @@ export default {
             },
             */
             {
-                "id": 6,
-                "rev_id": 2,
+                "id": 1,
+                "rev_id": 1,
                 "rating": 5,
-                "message": "update second review",
+                "message": "first review",
                 "ad_owner": "gladyschanmail@gmail.com",
                 "ad_id": 1
             }
@@ -76,11 +76,9 @@ export default {
 
         }
     },
-
+/*
     mounted () {
-        /*axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
-        */
-        axios.get("http://localhost:8000/get/advertisement/")
+        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -89,12 +87,12 @@ export default {
             this.errors.push(e)
         })
     }
-
-/*
-    mounted () {
-        axios.post("http://localhost:8000/post/review/delete/", {body:this.message})
-    }
 */
+
+    mounted () {
+        axios.post("http://localhost:8000/post/review/create/", {body:this.message})
+    }
+
 
 }
 
