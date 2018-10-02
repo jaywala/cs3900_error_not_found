@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Advertisement, Accommodation_Review
+from .models import Advertisement, Accommodation_Review, PropertyImage
 from .models import User_Profile, Event
 
 
@@ -60,8 +60,17 @@ class EventAdmin(admin.ModelAdmin):
         ('notes', {'fields': ['notes']}),
     ]
 
+class PropertyImageAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['image_id']}),
+        (None, {'fields': ['ad_owner']}),
+        (None, {'fields': ['ad_id']}),
+        (None, {'fields': ['pic']}),
+    ]
+
 
 admin.site.register(User_Profile, UserAdmin)
 admin.site.register(Advertisement, AdvertisementAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Accommodation_Review, AccommodationReviewAdmin)
+admin.site.register(PropertyImage, PropertyImageAdmin)

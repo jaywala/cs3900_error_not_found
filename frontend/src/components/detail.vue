@@ -1,8 +1,42 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+    <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+  
+    <div class="container" style="">
+      <div class="row">
+        
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <small>&lt;Property Type&gt;</small>
 
-</div>
+          <div class="row">
+            <div class="col-9">
+              <h1>&lt;Property Title&gt;</h1>
+              <small>&lt;Property Location&gt;</small>
+              <div style="">
+                <div style="margin-right: 16px;">2 guests</div>
+                <div style="margin-right: 16px;">1 bed</div>
+                <div style="margin-right: 16px;">1 bath</div>
+              </div>
+              <br>
+              <p>&lt;Property Description&gt;</p>
+              <p>&lt;Amenities Details&gt;</p>
+
+            </div>
+            <div class="col-3">
+              <p>&lt;Profile image&gt;</p>
+              <small>&lt;host name&gt;</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <PropertyBookingForm></PropertyBookingForm>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 </template>
 
 <script>
@@ -10,6 +44,9 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
+
+import PropertyBookingForm from './PropertyBookingForm.vue'
+
 export default {
     methods: {
         // this method calls the AuthService login() method
@@ -33,7 +70,7 @@ export default {
     data () {
         return {
             message:
-            {
+            /*{
                 ad_id : 1,
                 poster : "gladyschanmail@gmail.com",
                 accommodation_name : "circus",
@@ -52,7 +89,7 @@ export default {
                 longitude : 151.2265622,
                 list_of_reviews : "",
                 list_of_events : "",
-            },
+            },*/
             /*
             {
                 id : 1,
@@ -63,12 +100,20 @@ export default {
                 list_of_ads : "",
             },
             */
+            {
+                "id": 1,
+                "rev_id": 1,
+                "rating": 10,
+                "message": "hi there good",
+                "ad_owner": "gladyschanmail@gmail.com",
+                "ad_id": 1
+            }
 
         }
     },
-/*
+
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/")
+        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -77,12 +122,12 @@ export default {
             this.errors.push(e)
         })
     }
-*/
 
+/*
     mounted () {
-        axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
+        axios.post("http://localhost:8000/post/advertisement/create/", {body:this.message})
     }
-
+*/
 
 }
 

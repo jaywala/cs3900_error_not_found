@@ -269,7 +269,7 @@ class Accommodation_Review(models.Model):
     ad_id =  models.IntegerField()
 
     def __str__(self):
-        return rev_id
+        return str(self.rev_id) + ", " + self.ad_owner
 
     #--------------------------------
 
@@ -488,3 +488,15 @@ class Event(models.Model):
 
     def delete_me(self):
         self.delete()
+
+
+class PropertyImage(models.Model):
+
+    image_id = models.IntegerField()
+    ad_owner = models.CharField(max_length=100)
+    ad_id = models.IntegerField()
+
+    pic = models.CharField(max_length=500000)
+
+    def __str__(self):
+        return str(self.image_id) + ", " + self.ad_owner

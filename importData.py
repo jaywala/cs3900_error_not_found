@@ -1,6 +1,8 @@
 import os
 import csv
 import django
+import glob
+import base64
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "capstone.settings")
 
@@ -9,7 +11,7 @@ django.setup()
 
 # Import models
 #from django.contrib.auth.models import User
-from catalog.models import User_Profile, Advertisement
+from catalog.models import User_Profile, Advertisement, PropertyImage
 
 
 def deleteData():
@@ -61,5 +63,37 @@ def importFromCSV():
                 )
             advertisement.save()
 
+            if count <= 2:
+                im_number = 0
+                filepath = 'accommodation_pics/' + str(count) + '/*.jpg'
+                for filename in glob.glob(filepath):
+                    im_number += 1
+                    with open(filename,"rb") as image_file:
+                        encoded_string = base64.b64encode(image_file.read())
+                        string = "data:image/jpeg;base64," + encoded_string.decode('UTF-8')
+                    im = PropertyImage(image_id=im_number,ad_owner=(row[21]+"@example.com"),ad_id=1,pic=string)
+                    im.save()
+
+
+def importImages():
+    # import images          
+    i = 1
+    count = 0
+    for i in range (1,3):
+        filepath = 'accommodation_pics/' + str(i) + '/*.jpg'
+        for filename in glob.glob(filepath):
+            if count == 1:
+                break
+            count+=1
+            with open(filename,"rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                strin = encoded_string.decode('UTF-8')
+                print(type(strin))
+                print(len(strin))
+            
+                    
+                
+
 if __name__ == '__main__':
     importFromCSV()
+    # importImages()

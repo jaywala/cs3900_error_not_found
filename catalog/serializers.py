@@ -43,3 +43,11 @@ class EventSerializer(serializers.ModelSerializer):
         field = ('event_id', 'ad_owner', 'ad_id', 'start_day', 'start_day_start_time'
                 , 'end_day', 'end_day_end_time', 'booking_status', 'notes')
         exclude = ()
+
+
+class PropertyImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        field = ('image_id', 'ad_owner', 'ad_id', 'pic')
+        exclude = ()
