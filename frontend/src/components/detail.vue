@@ -79,7 +79,7 @@ export default {
     },
 
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement/"+this.$router.currentRoute.path+"/")
+        axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path.split('@')[0] + "/" + this.$router.currentRoute.path.split('@')[1].split('.')[0] +"/1/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data

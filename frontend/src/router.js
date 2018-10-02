@@ -34,15 +34,10 @@ const router = new Router({
         component: test
       },
       {
-          path: '/detail/:poster/:id',
+          path: '/:poster/:id',
           component: detail,
           name: 'detailpage'
 
-      },
-      {
-        path: '/detail',
-        component: detail,
-        name: detail
       },
       {
         path: '/search',

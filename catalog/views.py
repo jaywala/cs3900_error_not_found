@@ -138,7 +138,7 @@ def is_loggedIn(request): #works & tested
 #------------------------------Advertisement------------------------------#
 
 
-def get_single_ad(request, first, second, ad_id):
+def get_single_ad(request,first, second, ad_id):
 
     email = first + "@" + second + ".com"
 
