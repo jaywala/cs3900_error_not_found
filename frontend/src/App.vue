@@ -25,68 +25,37 @@
               </div>
             </div>
           </div>
-<<<<<<< Updated upstream
+          
           <div class="navbar navbar-dark bg-dark box-shadow">
             <div class="container d-flex justify-content-between">
               <a href="#" class="navbar-brand d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                <strong>Album</strong>
+                <strong>NotAirbnb</strong>
               </a>
 
-              <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-              </div>
+              <form class="m-md-2 navbar-form navbar-left" role="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search">
+                </div>
               </form>
 
-              <div>
-                  <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
-                      <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated()" @click="login()">
-                          Log In
-                      </b-dropdown-item>
-                      <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated()" @click="logout()">
-                          Log Out
-                      </b-dropdown-item>
+              <div class="ddown">
+                <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated" @click="login()">
+                    Log In
+                  </b-dropdown-item>
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated" @click="logout()">
+                    Log Out
+                  </b-dropdown-item>
 
-                      <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-divider></b-dropdown-divider>
 
-                      <router-link to="/newbook" class="btn btn-primary btn-margin" tag = "b-dropdown-item">add room</router-link>
+                  <b-dropdown-item>
+                    <router-link to="/newbook" v-if = "authenticated">add room</router-link>
+                  </b-dropdown-item>
 
-
-                  </b-dropdown>
+                </b-dropdown>
               </div>
-=======
-        </div>
-        <div class="navbar navbar-dark bg-dark box-shadow">
-          <div class="container d-flex justify-content-between">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-              <strong>NotAirbnb</strong>
-            </a>
-
-            <form class="m-md-2 navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-              </div>
-            </form>
-
-            <div class="ddown">
-              <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
-                <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated" @click="login()">
-                  Log In
-                </b-dropdown-item>
-                <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated" @click="logout()">
-                  Log Out
-                </b-dropdown-item>
-
-                <b-dropdown-divider></b-dropdown-divider>
-
-                <b-dropdown-item>
-                  <router-link to="/newbook" v-if = "authenticated">add room</router-link>
-                </b-dropdown-item>
-
-              </b-dropdown>
->>>>>>> Stashed changes
             </div>
           </div>
         </header>
@@ -100,54 +69,15 @@
           <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
           <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
         </div>
-<<<<<<< HEAD
-      </header>
-    <router-view></router-view>
-    <br>
-    <footer class="text-muted">
-      <div class="container">
-        <p class="float-right">
-          <a href="#">Back to top</a>
-        </p>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-        <strong>© NotAirbnb, Inc.</strong>
-      </div>
-    </footer>
-  </div>
-=======
       </footer>
     </div>
->>>>>>> 00ed0f64cb016b4b0159bff87f5b2497c3dc3c5a
 </template>
 
 <script>
-<<<<<<< HEAD
-import AuthService from './auth/AuthService'
-import axios from 'axios'
-import newbook from '@/components/newbook.vue'
-import landing from '@/components/landing.vue'
-const API_URL = 'http://localhost:8000'
-const auth = new AuthService()
-export default {
-  name: 'app',
-  data () {
-    this.handleAuthentication()
-    this.authenticated = false
-
-    auth.authNotifier.on('authChange', authState => {
-      this.authenticated = authState.authenticated
-    })
-    return {
-      authenticated: false,
-      message: ''
-    }
-  },
-=======
 import Vue from 'vue'
 import router from '@/router'
 export default {
   name: 'App',
->>>>>>> 00ed0f64cb016b4b0159bff87f5b2497c3dc3c5a
   methods: {
     // this method calls the AuthService login() method
     login () {
