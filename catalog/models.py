@@ -488,3 +488,15 @@ class Event(models.Model):
 
     def delete_me(self):
         self.delete()
+
+
+def images(models.Model):
+
+    image_id = models.IntegerField()
+    ad_owner = models.CharField(max_length=100)
+    ad_id = models.IntegerField()
+
+    pic = models.CharField(max_length=500000)
+
+    def __str__(self):
+        return str(self.image_id) + ", " + self.ad_owner
