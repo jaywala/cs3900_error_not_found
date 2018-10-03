@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-9">
               <h1>{{this.message.accommodation_name}}</h1>
-              <small>&lt;{{this.message.suburb}}&gt;</small>
+              <small>{{this.message.suburb}}</small>
               <div style="">
                 <div style="margin-right: 16px;">{{this.message.num_guests}}guests</div>
                 <div style="margin-right: 16px;">{{this.message.num_bedrooms}} bed</div>
