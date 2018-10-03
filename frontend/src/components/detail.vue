@@ -1,6 +1,6 @@
 <template >
   <div id="app">
-    <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+    <small v-if="authenticated()">backend response message: {{this.message}}</small>
 
     <div class="container" style="">
       <div class="row">
@@ -12,7 +12,7 @@
 
           <div class="row">
             <div class="col-9">
-              <h1>&lt;{{this.message.accommodation_name}}&gt;</h1>
+              <h1>{{this.message.accommodation_name}}</h1>
               <small>&lt;{{this.message.suburb}}&gt;</small>
               <div style="">
                 <div style="margin-right: 16px;">{{this.message.num_guests}}guests</div>
@@ -20,13 +20,13 @@
                 <div style="margin-right: 16px;">{{this.message.num_bathrooms}} bath</div>
               </div>
               <br>
-              <p>&lt;{{this.message.accommodation_description}}&gt;</p>
-              <p>&lt;{{this.message.amenities}}&gt;</p>
+              <p>{{this.message.accommodation_description}}</p>
+              <p>{{this.message.amenities}}</p>
 
             </div>
             <div class="col-3">
-              <p>&lt;Profile image&gt;</p>
-              <small>&lt;host name&gt;</small>
+              <p>Profile image</p>
+              <small>host name</small>
             </div>
           </div>
         </div>

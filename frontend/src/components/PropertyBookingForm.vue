@@ -2,7 +2,7 @@
 <div class="PropertyBookingForm">
   <md-card>
     <md-card-header>
-      <div class="md-title">&lt;Booking Form&gt;</div>
+      <strong><div class="md-title">${{ this.message.base_price }}</div></strong>per night
     </md-card-header>
     <md-card-content>
       <md-datepicker v-model="selectedDate">
@@ -11,7 +11,7 @@
       <md-datepicker v-model="selectedDate">
         <label>Check Out date</label>
       </md-datepicker>
-      <md-field>
+      <md-field style="width:180px">
         <label for="nGuests">Number of Guests</label>
         <md-select name="nGuests" id="nGuests">
           <md-option value="1">1</md-option>
@@ -34,12 +34,29 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import router from '../router'
+import auth from '../auth'
 
 export default {
   name: 'LabeledDatepicker',
   data: () => ({
-    selectedDate: null
+    selectedDate: null,
+    message: null
+  }),
+
+  mounted () {
+  axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path.split('@')[0] + "/" + this.$router.currentRoute.path.split('@')[1].split('.')[0] +"/1/")
+  .then(response => {
+    // JSON responses are automatically parsed.
+    this.message = response.data
   })
+  .catch(e => {
+    this.errors.push(e)
+  })
+  console.log(this.message)
+  }
 }
 </script>
 
