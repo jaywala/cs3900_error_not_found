@@ -15,7 +15,7 @@ from django.db.models import Max
 
 #------------------------------User_Profile------------------------------#
 
-def user_profile_get(request, first, second): #works & tested
+def user_profile_get(request, first, second):
     """
     Give all the information related to the user profile based on email.
     (Model: User_Profile).
@@ -37,7 +37,7 @@ def user_profile_get(request, first, second): #works & tested
     return JsonResponse(serializer.data)
 
 
-def user_profile_update(request): # works & tested
+def user_profile_update(request):
     """
     Updates User Profile data for the given email.
     (Model: User_Profile)
@@ -61,36 +61,22 @@ def user_profile_update(request): # works & tested
     new_email = data['body']['email']
     new_profile_pic = data['body']['profile_pic']
     new_list_of_ads = data['body']['list_of_ads']
+    new_list_of_rentals = data['body']['list_of_rentals']
+    new_list_of_posted_reviews = data['body']['list_of_posted_reviews']
+
 
     user.set_user_name(new_user_name)
     user.set_name(new_name)
     user.set_email(new_email)
     user.set_profile_pic(new_profile_pic)
     user.set_list_of_ads(new_list_of_ads)
+    user.set_list_of_rentals(new_list_of_rentals)
+    user.set_list_of_posted_reviews(new_list_of_posted_reviews)
 
-    current_user_name = user.get_user_name()
-    current_name = user.get_name()
-    current_email = user.get_email()
-    current_profile_pic = user.get_profile_pic()
-    current_list_of_ads = user.get_list_of_ads()
-
-    '''
-    The data does get updated but it still goes into this if.
-    Not sure why, so taking this check out.
-
-    if new_user_name != current_user_name or \
-       new_name != current_name or \
-       new_email != current_email or \
-       new_profile_pic != current_profile_pic or \
-       new_list_of_ads != current_list_of_ads:
-        print('BAD REQUEST')
-        return HttpResponse(status=400)
-    else:
-    '''
     return HttpResponse(status=200)
 
 
-def create_user(data): #works & tested
+def create_user(data):
     """
     Creates a new user profile.
     """
@@ -100,7 +86,17 @@ def create_user(data): #works & tested
     email = data['body']['email']
     profile_pic = data['body']['profile_pic']
     list_of_ads = data['body']['list_of_ads']
-    u = User_Profile(user_name=user_name, name=name, email=email, profile_pic=profile_pic, list_of_ads=list_of_ads)
+    list_of_rentals = data['body']['list_of_rentals']
+    list_of_posted_reviews = data['body']['list_of_posted_reviews']
+
+    u = User_Profile(user_name=user_name,
+                     name=name,
+                     email=email,
+                     profile_pic=profile_pic,
+                     list_of_ads=list_of_ads,
+                     list_of_rentals=list_of_rentals,
+                     list_of_posted_reviews=list_of_posted_reviews,
+                     )
     u.save()
 
     try:
@@ -111,7 +107,7 @@ def create_user(data): #works & tested
     return True
 
 
-def is_loggedIn(request): #works & tested
+def is_loggedIn(request):
     """
     Checks if this user is registered in the database. If not, it creates one.
     """
@@ -124,7 +120,6 @@ def is_loggedIn(request): #works & tested
 
     try:
         user = User_Profile.objects.get(email=email)
-        return HttpResponse(status=200)
     except User_Profile.DoesNotExist:
         is_created = create_user(data) # returns True or False
         if is_created:
@@ -132,10 +127,12 @@ def is_loggedIn(request): #works & tested
         else:
             return HttpResponse(status=400)
 
+    return HttpResponse(status=200)
+
 
 #------------------------------Advertisement------------------------------#
 
-def advertisement_get(request, first, second): #works & tested
+def advertisement_get(request, first, second):
     """
     Give all the ads for this user.
     (Model: Advertisement)
@@ -157,7 +154,7 @@ def advertisement_get(request, first, second): #works & tested
     return JsonResponse(serializer.data, safe=False)
 
 
-def advertisement_update(request): #works & tested
+def advertisement_update(request):
     """
     Updates Advertisement data.
     (Model: Advertisement)
@@ -190,13 +187,14 @@ def advertisement_update(request): #works & tested
     num_guests = data['body']['num_guests']
     num_bedrooms = data['body']['num_bedrooms']
     num_bathrooms = data['body']['num_bathrooms']
-    suburb = data['body']['suburb']
-    state = data['body']['state']
-    country = data['body']['country']
+    address = data['body']['address']
+    zip_code = data['body']['zip_code']
     latitude = data['body']['latitude']
     longitude = data['body']['longitude']
+    property_type = data['body']['property_type']
     list_of_reviews = data['body']['list_of_reviews']
     list_of_events = data['body']['list_of_events']
+    list_of_images = data['body']['list_of_images']
 
     ad.set_ad_id(ad_id)
     ad.set_poster(poster)
@@ -209,18 +207,19 @@ def advertisement_update(request): #works & tested
     ad.set_num_guests(num_guests)
     ad.set_num_bedrooms(num_bedrooms)
     ad.set_num_bathrooms(num_bathrooms)
-    ad.set_suburb(suburb)
-    ad.set_state(state)
-    ad.set_country(country)
+    ad.set_address(address)
+    ad.zip_code(zip_code)
     ad.set_latitude(latitude)
     ad.set_longitude(longitude)
+    ad.set_property_type(property_type)
     ad.set_rev_ids(list_of_reviews)
     ad.set_event_ids(list_of_events)
+    ad.set_image_ids(list_of_images)
 
     return HttpResponse(status=201)
 
 
-def advertisement_create(request): # works & tested
+def advertisement_create(request):
     """
     Create a new advertisement for this user.
     (Model: Advertisement)
@@ -263,13 +262,13 @@ def advertisement_create(request): # works & tested
     num_guests = data['body']['num_guests']
     num_bedrooms = data['body']['num_bedrooms']
     num_bathrooms = data['body']['num_bathrooms']
-    suburb = data['body']['suburb']
-    state = data['body']['state']
-    country = data['body']['country']
+    address = data['body']['address']
+    zip_code = data['body']['zip_code']
     latitude = data['body']['latitude']
     longitude = data['body']['longitude']
     list_of_reviews = data['body']['list_of_reviews']
     list_of_events = data['body']['list_of_events']
+    property_type = data['body']['property_type']
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -283,13 +282,14 @@ def advertisement_create(request): # works & tested
             num_guests = num_guests,
             num_bedrooms = num_bedrooms,
             num_bathrooms = num_bathrooms,
-            suburb = suburb,
-            state = state,
-            country = country,
+            address = address,
+            zip_code = zip_code,
             latitude = latitude,
             longitude = longitude,
             list_of_reviews = list_of_reviews,
-            list_of_events = list_of_events
+            list_of_events = list_of_events,
+            property_type = property_type,
+            list_of_images = list_of_images,
         )
     ad.save()
 
@@ -312,7 +312,7 @@ def advertisement_create(request): # works & tested
         return HttpResponse(status=400)
 
 
-def advertisement_delete(request): # works & tested
+def advertisement_delete(request):
     """
     Deletes this advertisement.
     (Model: Advertisement)
@@ -348,16 +348,19 @@ def advertisement_delete(request): # works & tested
         for i in new_list:
             new_list_of_ads = new_list_of_ads + i + ','
 
-        print(new_list_of_ads)
         u.set_list_of_ads(new_list_of_ads)
 
         r = list(Accommodation_Review.objects.filter(ad_id=ad_id, ad_owner=email))
-        for i in r:
-            i.delete()
+        for j in r:
+            j.delete()
 
         e = list(Event.objects.filter(ad_id=ad_id, ad_owner=email))
-        for i in e:
-            i.delete()
+        for j in e:
+            j.delete()
+
+        i = list(PropertyImage.objects.filter(ad_owner=ad_owner, ad_id=ad_id))
+        for j in i:
+            j.delete()
 
         print('-----------> If empty list ad is deleted <-----------\n', ad, '\n------------------------')
         return HttpResponse(status=200)
@@ -370,7 +373,7 @@ def advertisement_delete(request): # works & tested
 #------------------------------Advertisement Reviews ------------------------------#
 
 
-def review_get(request, first, second, ad_id): # works & tested
+def review_get(request, first, second, ad_id):
     """
     Give all reviews this advertisement owns, identified by email and ad_id.
     (Model: Accommodation_Review)
@@ -392,7 +395,7 @@ def review_get(request, first, second, ad_id): # works & tested
     return JsonResponse(serializer.data, safe=False)
 
 
-def review_create(request): # works and tested
+def review_create(request):
     """
     Create a new review for this advertisement, identified by ad_id and ad_owner.
     (Model: Advertisement_Review)
@@ -449,7 +452,7 @@ def review_create(request): # works and tested
         return HttpResponse(status=400)
 
 
-def review_update(request): # works & tested
+def review_update(request):
     """
     Updates Advertisement Review for the given rev_id, ad_id and ad_owner.
     (Model: Advertisement_Review)
@@ -487,7 +490,7 @@ def review_update(request): # works & tested
     #    return HttpResponse(status=400)
 
 
-def review_delete(request): # works & tested
+def review_delete(request):
     """
     Deletes the advertisement review for the given rev_id, ad_id and ad_owner
     (Model: Advertisement_Review)
@@ -537,7 +540,7 @@ def review_delete(request): # works & tested
 #------------------------------Advertisement Events ------------------------------#
 
 
-def event_get(request, first, second, ad_id): # works & tested
+def event_get(request, first, second, ad_id):
     """
     Give events this advertisement owns, identified by email and ad_id.
     (Model: Event)
@@ -559,7 +562,7 @@ def event_get(request, first, second, ad_id): # works & tested
     return JsonResponse(serializer.data, safe=False)
 
 
-def event_create(request): # works & tested
+def event_create(request):
     """
     Create a new event for this advertisement, identified by email and ad_id.
     (Model: Event)
@@ -623,7 +626,7 @@ def event_create(request): # works & tested
         return HttpResponse(status=400)
 
 
-def event_update(request): # works & tested
+def event_update(request):
     """
     Updates event, identified by email and ad_id.
     (Model: Advertisement_Event)
@@ -667,7 +670,8 @@ def event_update(request): # works & tested
     else:
         return HttpResponse(status=400)
 
-def event_delete(request): # works & tested
+
+def event_delete(request):
     """
     Deletes the event with event_id, ad_owner and ad_id.
     """
@@ -713,7 +717,7 @@ def event_delete(request): # works & tested
 
 #------------------------------ General Views ------------------------------#
 
-def get_single_ad(request, first, second, ad_id): #worked & tested
+def get_single_ad(request, first, second, ad_id):
     """
     Gives ONE ad, identified by email and ad_id.
     (Model: Advertisement)
@@ -735,7 +739,7 @@ def get_single_ad(request, first, second, ad_id): #worked & tested
     return JsonResponse(serializer.data)
 
 
-def get_all_ads(request): # works & tested
+def get_all_ads(request):
     """
     Gets all the ads in the db.
     (Model: Advertisement)

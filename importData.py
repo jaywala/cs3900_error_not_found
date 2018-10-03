@@ -33,7 +33,14 @@ def importFromCSV():
             if count > 101:
                 break
 
-            user1 = User_Profile(user_name=row[21],name=row[21],email=(row[21]+"@example.com"),list_of_ads="1,")
+            user1 = User_Profile(user_name=row[21],
+                                 name=row[21],
+                                 email=(row[21]+"@example.com"),
+                                 profile_pic="",
+                                 list_of_ads="1,",
+                                 list_of_rentals="",
+                                 list_of_posted_reviews="",
+                                 )
             user1.save()
             print(count)
             amenitiestext = row[58]
@@ -45,21 +52,22 @@ def importFromCSV():
                 ad_id=1,
                 list_of_reviews="",
                 list_of_events="",
+                list_of_images="",
                 poster=(row[21]+"@example.com"),
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],
-                booking_rules="",
+                booking_rules="no parties",
                 amenities=amenitiestext,
                 base_price=float((row[60].strip("$")).replace(",","")),
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
-                suburb=row[41],
-                state="NSW",
-                country="Australia",
+                address=str(row[41]) + ", NSW", + ", Australia",
+                zip_code="2000",
                 latitude=float(row[48]),
                 longitude=float(row[49]),
+                property_type="home",
                 )
             advertisement.save()
 
@@ -71,12 +79,15 @@ def importFromCSV():
                     with open(filename,"rb") as image_file:
                         encoded_string = base64.b64encode(image_file.read())
                         string = "data:image/jpeg;base64," + encoded_string.decode('UTF-8')
-                    im = PropertyImage(image_id=im_number,ad_owner=(row[21]+"@example.com"),ad_id=1,pic=string)
+                    im = PropertyImage(image_id=im_number,
+                                       ad_owner=(row[21]+"@example.com"),
+                                       ad_id=1,
+                                       pic=string)
                     im.save()
 
 
 def importImages():
-    # import images          
+    # import images
     i = 1
     count = 0
     for i in range (1,3):
@@ -90,9 +101,9 @@ def importImages():
                 strin = encoded_string.decode('UTF-8')
                 print(type(strin))
                 print(len(strin))
-            
-                    
-                
+
+
+
 
 if __name__ == '__main__':
     importFromCSV()
