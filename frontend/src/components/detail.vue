@@ -12,16 +12,16 @@
 
           <div class="row">
             <div class="col-9">
-              <h1>&lt;Property Title&gt;</h1>
-              <small>&lt;Property Location&gt;</small>
+              <h1>&lt;{{this.message.accommodation_name}}&gt;</h1>
+              <small>&lt;{{this.message.suburb}}&gt;</small>
               <div style="">
-                <div style="margin-right: 16px;">2 guests</div>
-                <div style="margin-right: 16px;">1 bed</div>
-                <div style="margin-right: 16px;">1 bath</div>
+                <div style="margin-right: 16px;">{{this.message.num_guests}}guests</div>
+                <div style="margin-right: 16px;">{{this.message.num_bedrooms}} bed</div>
+                <div style="margin-right: 16px;">{{this.message.num_bathrooms}} bath</div>
               </div>
               <br>
-              <p>&lt;Property Description&gt;</p>
-              <p>&lt;Amenities Details&gt;</p>
+              <p>&lt;{{this.message.accommodation_description}}&gt;</p>
+              <p>&lt;{{this.message.amenities}}&gt;</p>
 
             </div>
             <div class="col-3">
