@@ -1,79 +1,80 @@
 <template>
   <div>
-    <div class="datepicker-trigger">
-      <h2>Book unique homes and experiences.</h2>
-      <h3>where</h3>
-      <input type="text" placeholder="Any where" v-model="message.where">
-      <h3>check-in n check-out</h3>
-      <input
-        type="text"
-        id="datepicker-trigger"
-        v-bind:placeholder="message.dateFormat"
-        :value="formatDates(message.dateOne, message.dateTwo)"
-      >
-
-      <AirbnbStyleDatepicker
-        :trigger-element-id="'datepicker-trigger'"
-        :mode="'range'"
-        :fullscreen-mobile="true"
-        :date-one="message.dateOne"
-        :date-two="message.dateTwo"
-        @date-one-selected="val => { message.dateOne = val }"
-        @date-two-selected="val => { message.dateTwo = val }"
-      />
-      <h3>guest</h3>
-
-      <md-button class="md-icon-button md-raised" v-bind:disabled="message.guests <= 0? true:false" v-on:click="message.guests -= 1" >
-        -
-      </md-button>
-      {{message.guests}}
-      <md-button class="md-icon-button md-raised" v-on:click="message.guests += 1" >
-        <md-icon>add</md-icon>
-      </md-button>
-
-    </div>
-    <div class="">
-      {{message.dateFormat}}
-      {{message.dateOne}}
-      {{message.dateTwo}}
-      {{message.where}}
-    </div>
+    <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
   </div>
 </template>
-
 <script>
-import format from 'date-fns/format'
-//import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
+
+import Vue from 'vue'
+import axios from 'axios'
+import router from '../router'
+import auth from '../auth'
+
 export default {
+    methods: {
+        // this method calls the AuthService login() method
+        login () {
+            router.app.$auth.login()
+            //this.$router.push('helloworld')
+        },
+        authenticated(){
+            return router.app.$auth.isAuthenticated()
+        },
+        logout(){
+            router.app.$auth.logout()
+        },
+        token(){
+            return router.app.$auth.getAuthToken()
+        },
+        get(){
+            return router.app.$auth.getUserProfile()
+        }
+    },
+
   data() {
     return {
       message :
-      {
-        "dateFormat": 'D MMM',
-        "dateOne": '',
-        "dateTwo": '',
-        "where": '',
-        "guests": 0
-      }
+          {
+              "ad_id": 1,
+              "poster": "Joe@example.com",
+              "accommodation_name": "Wow factor Harbour & Fire works",
+              "accommodation_description": "Lifestyle",
+              "house_rules": "No pets  No smoking indoors (balcony) No stiletto shoes indoors.",
+              "booking_rules": "",
+              "amenities": ",Elevator,Buzzer/wireless intercom,Heating,Family/kid",
+              "base_price": 275.0,
+              "num_guests": 1,
+              "num_bedrooms": 1,
+              "num_bathrooms": 0,
+              "suburb": "Darlinghurst",
+              "state": "NSW",
+              "country": "Australia",
+              "latitude": -33.87734192,
+              "longitude": 151.2209494,
+              "list_of_reviews": "",
+              "list_of_events": ""
+          }
     }
   },
-  methods: {
-    formatDates(dateOne, dateTwo) {
-      let formattedDates = ''
-      if (dateOne) {
-        formattedDates = format(dateOne, this.message.dateFormat)
-      }
-      if (dateTwo) {
-        formattedDates += ' - ' + format(dateTwo, this.message.dateFormat)
-      }
-      return formattedDates
-    },
-    postSearch(){
-      axios.post("http://localhost:8000/api/public/",{body:this.message})
-    }
 
-  }
+  mounted () {
 
+      axios.get("http://localhost:8000/get/advertisement/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0])
+       .then(response => {
+           // JSON responses are automatically parsed.
+           this.message = response.data
+       })
+       .catch(e => {
+           this.errors.push(e)
+       })
+       console.log(this.message)
+   }
+/*
+    mounted () {
+       axios.post("http://localhost:8000/post/review/create/", {body:this.message})
+   }
+*/
 }
+
 </script>
 <style src="./icon.css"></style>
