@@ -1,5 +1,6 @@
 <template>
   <div class="PropertyForm">
+    {{ $v.form.address }}
     <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -245,17 +246,17 @@
     methods: {
       greet: function () {
       // `this` inside methods points to the Vue instance
-          this.message.propertyType = this.form.propertyType
-          this.message.address = this,form.address
-          this.message.suburb = this.form.city
-          this.message,zipCode = this.form.zipCode
-          this.message.accommodation_name = this.form.title
-          this.message.accommodation_description = this.form.summary
-          this.message.num_guests = this.form.nGuests
-          this.message.num_bedrooms = this.form.nBedrooms
-          this.message.num_bathrooms = this.form.nBathrooms
-          this.message.amenities = this.form.amenities
-          axios.post("post/advertisement/create/")
+          /*this.message.propertyType = form.propertyType
+          this.message.address = form.address
+          this.message.suburb = form.city
+          this.message,zipCode = form.zipCode
+          this.message.accommodation_name = form.title
+          this.message.accommodation_description = form.summary
+          this.message.num_guests = form.nGuests
+          this.message.num_bedrooms = form.nBedrooms
+          this.message.num_bathrooms = form.nBathrooms
+          this.message.amenities = form.amenities*/
+          axios.post("post/advertisement/create/",{body:this.message})
       },
       getFiles(files){
         this.files = files
