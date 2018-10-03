@@ -22,9 +22,9 @@
               <div class="card mb-4 box-shadow">
                   <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <p class="card-text">&lt;Property Type&gt; · &lt;Location&gt;</p>
-                   <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, poster:ad.poster }}" > <h4 class="card-text">&lt;Listing Title&gt;</h4></router-link>
-                  <p class="card-text">$&lt;Cost&gt; AUD per night</p>
+                  <p class="card-text">&lt;Property Type&gt; · &lt;{{ad.suburb}}&gt;</p>
+                   <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, poster:ad.poster }}" > <h4 class="card-text">&lt;{{ad.accommodation_name}}&gt;</h4></router-link>
+                  <p class="card-text">$&lt;{{ad.base_price}}&gt; AUD per night</p>
                   <div class="d-flex justify-content-between align-items-center">
                     <small class="text-muted">&lt;Rating&gt; &lt;# of Reviews&gt;</small>
                   </div>
