@@ -124,7 +124,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Register property</md-button>
+          <md-button v-on:click="greet" type="submit" class="md-primary" :disabled="sending">Register property</md-button>
         </md-card-actions>
       </md-card>
 
@@ -158,7 +158,7 @@
     minLength,
     maxLength
   } from 'vuelidate/lib/validators'
-
+  import axios from 'axios'
   export default {
     components: { fileBase64, VueGoogleAutocomplete },
     mounted () {
@@ -177,12 +177,31 @@
         nGuests: null,
         nBedrooms: null,
         nBathrooms: null,
-        age: null,
         amenities: null,
       },
-      userSaved: false,
-      sending: false,
-      address: ''
+      message:{
+        ad_id: 1,
+        poster: "Colleen@example.com",
+        accommodation_name: "An Oasis in the City",
+        accommodation_description: "Quay ",
+        house_rules: "Be considerate. No showering after 2330h.",
+        booking_rules: "",
+        amenities: "TV,Ki,Hangers,Hair dryer,Iron,Bed linens,Extra pillows and blankets,Microwave,Refrigerator,Dishwasher,Dishes and silverware,Cooking basics,Stove,Single level home,Patio or balcony,Garden or backyard",
+        base_price: 65,
+        num_guests: 1,
+        num_bedrooms: 1,
+        num_bathrooms: 0,
+        suburb: "Potts Point",
+        state: "NSW",
+        country: "Australia",
+        latitude: -33.86916827,
+        longitude: 151.2265622,
+        list_of_reviews: "",
+        list_of_events: "",
+        userSaved: false,
+        sending: false,
+        address: ''
+      }
     }),
     validations: {
       form: {
@@ -224,6 +243,20 @@
       }
     },
     methods: {
+      greet: function () {
+      // `this` inside methods points to the Vue instance
+          this.message.propertyType = this.form.propertyType
+          this.message.address = this,form.address
+          this.message.suburb = this.form.city
+          this.message,zipCode = this.form.zipCode
+          this.message.accommodation_name = this.form.title
+          this.message.accommodation_description = this.form.summary
+          this.message.num_guests = this.form.nGuests
+          this.message.num_bedrooms = this.form.nBedrooms
+          this.message.num_bathrooms = this.form.nBathrooms
+          this.message.amenities = this.form.amenities
+          axios.post("post/advertisement/create/")
+      },
       getFiles(files){
         this.files = files
       },
