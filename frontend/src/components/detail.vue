@@ -1,6 +1,6 @@
 <template >
   <div id="app">
-    <small v-if="authenticated()">backend response message: {{this.message}}</small>
+    <!--<small v-if="authenticated()">backend response message: {{this.message}}</small>-->
 
     <div class="container" style="">
       <div class="row">

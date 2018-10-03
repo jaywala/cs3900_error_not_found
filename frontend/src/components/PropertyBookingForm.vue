@@ -1,5 +1,7 @@
 <template>
-<div class="PropertyBookingForm">
+
+
+<div class="PropertyBookingForm" style="">
   <md-card>
     <md-card-header>
       <strong><div class="md-title">${{ this.message.base_price }}</div></strong>per night
@@ -64,5 +66,9 @@ export default {
 .md-datepicker-dialog {
   height: 300px;
   top: 0px;
+}
+
+body {
+  background-color: black;
 }
 </style>
