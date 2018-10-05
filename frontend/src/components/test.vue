@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       message:
+                /*
                 {"id": 100,
                 "email": "gladyschanmail@gmail.com",
                 "given_name": "Boop",
@@ -46,12 +47,33 @@ export default {
                 "list_of_ads": null,
                 "list_of_rentals": null,
                 "list_of_posted_reviews": null}
+                */
+                {"ad_id": 1,
+                "poster": "gladyschanmail@gmail.com",
+                "list_of_reviews": "",
+                "list_of_events": "",
+                "list_of_images": "",
+                "title": "igloo",
+                "summary": "Very central to Circular  Quay ",
+                "propertyType": "Apartment",
+                "house_rules": "Be considerate. No showering after 2330h.",
+                "booking_rules": "no cancellation",
+                "amenities": "chair,TV,Kitchen,Elevator,Buzzer/wireless intercom",
+                "base_price": 65.0,
+                "nGuests": 1,
+                "nBedrooms": 1,
+                "nBathrooms": 0.0,
+                "address": "Potts Point",
+                "city": "Potts Point, Australia",
+                "zipCode": "2011",
+                "latitude": -33.86916827,
+                "longitude": 151.2265622}
     }
   },
 /*
   mounted () {
 
-      axios.get("http://localhost:8000/get/user/"+ "gladyschanmail/gmail/")
+      axios.get("http://localhost:8000/get/advertisement/"+ "Colleen/example/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
@@ -64,7 +86,7 @@ export default {
 */
 
     mounted () {
-       axios.post("http://localhost:8000/post/user/update/", {body:this.message})
+       axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
    }
 
 }

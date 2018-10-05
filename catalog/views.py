@@ -78,9 +78,9 @@ def create_user(data):
     name = data['body']['name']
     email = data['body']['email']
     profile_pic = data['body']['picture']
-    list_of_ads = "" #data['body']['list_of_ads']
-    list_of_rentals = "" #data['body']['list_of_rentals']
-    list_of_posted_reviews = "" #data['body']['list_of_posted_reviews']
+    list_of_ads = ""
+    list_of_rentals = ""
+    list_of_posted_reviews = ""
 
     u = User_Profile(user_name=user_name,
                      name=name,
@@ -167,7 +167,6 @@ def advertisement_update(request):
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
-
     print('Found ad:', ad[0])
     ad = ad[0]
 
@@ -175,6 +174,7 @@ def advertisement_update(request):
     poster = data['body']['poster']
     accommodation_name = data['body']['title']
     accommodation_description = data['body']['summary']
+    property_type = data['body']['propertyType']
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
@@ -183,21 +183,16 @@ def advertisement_update(request):
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
+    city = data['body']['city']
     zip_code = data['body']['zipCode']
-    cit = data['body']['city']
-    latitude = 0 #data['body']['latitude'] # TODO function to fill this in
-    longitude = 0 #data['body']['longitude']
-    property_type = data['body']['propertyType']
-
-    # because we are updating, we don't need to change these
-    #list_of_reviews = data['body']['list_of_reviews']
-    #list_of_events = data['body']['list_of_events']
-    #list_of_images = data['body']['list_of_images']
+    latitude = 0 # TODO function to fill this in
+    longitude = 0
 
     ad.set_ad_id(ad_id)
     ad.set_poster(poster)
     ad.set_accommodation_name(accommodation_name)
     ad.set_accommodation_description(accommodation_description)
+    ad.set_property_type(property_type)
     ad.set_house_rules(house_rules)
     ad.set_booking_rules(booking_rules)
     ad.set_amenities(amenities)
@@ -206,14 +201,10 @@ def advertisement_update(request):
     ad.set_num_bedrooms(num_bedrooms)
     ad.set_num_bathrooms(num_bathrooms)
     ad.set_address(address)
-    ad.zip_code(zip_code)
-    ad.city(city)
+    ad.set_city(city)
+    ad.set_zip_code(zip_code)
     ad.set_latitude(latitude)
     ad.set_longitude(longitude)
-    ad.set_property_type(property_type)
-    #ad.set_rev_ids(list_of_reviews)
-    #ad.set_event_ids(list_of_events)
-    #ad.set_image_ids(list_of_images)
 
     return HttpResponse(status=201)
 
@@ -252,8 +243,12 @@ def advertisement_create(request):
         ad_id = 1 #this is the first ad this user is posting
 
     poster = email
+    list_of_reviews = ""
+    list_of_events = ""
+    list_of_images = ""
     accommodation_name = data['body']['title']
     accommodation_description = data['body']['summary']
+    property_type = data['body']['propertyType']
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
@@ -262,20 +257,20 @@ def advertisement_create(request):
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
-    city = "Sydney"
+    city = data['body']['city']
     zip_code = data['body']['zipCode']
-    latitude = 0 #data['body']['latitude']
-    longitude = 0 #data['body']['longitude']
-    list_of_reviews = "" #data['body']['list_of_reviews']
-    list_of_events = "" #data['body']['list_of_events']
-    list_of_images = ""
-    property_type = data['body']['propertyType']
+    latitude = 0 # TODO function to fill this in
+    longitude = 0
 
     ad = Advertisement(
             ad_id = ad_id,
             poster = poster,
+            list_of_reviews = list_of_reviews,
+            list_of_events = list_of_events,
+            list_of_images = list_of_images,
             accommodation_name = accommodation_name,
             accommodation_description = accommodation_description,
+            property_type = property_type,
             house_rules = house_rules,
             booking_rules = booking_rules,
             amenities = amenities,
@@ -288,10 +283,6 @@ def advertisement_create(request):
             zip_code = zip_code,
             latitude = latitude,
             longitude = longitude,
-            list_of_reviews = list_of_reviews,
-            list_of_events = list_of_events,
-            property_type = propertyType,
-            list_of_images = list_of_images,
         )
     ad.save()
 
@@ -360,7 +351,7 @@ def advertisement_delete(request):
         for j in e:
             j.delete()
 
-        i = list(PropertyImage.objects.filter(ad_owner=ad_owner, ad_id=ad_id))
+        i = list(PropertyImage.objects.filter(ad_id=ad_id, ad_owner=email))
         for j in i:
             j.delete()
 
