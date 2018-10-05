@@ -48,17 +48,16 @@ export default {
       total: 10,
       current: Number,
       errors: String,
-      ads: {
-         ad:{
+      ads: [
+         {
            id: 4,
            email:"hdhh@gmail.com"
          }
-      },
+      ],
       parameters: ""
     }
   },
   mounted () {
-      console.log(this.$router.currentRoute.path)
       this.parameters = ""
       axios.get("http://localhost:8000/get/advertisement/" + this.parameters)
       .then(response => {
@@ -68,6 +67,10 @@ export default {
       .catch(e => {
           this.errors.push(e)
       })
+      /*for (var i = 0; i < ads.length; i++) {
+        let ad = ads[i]
+        axios.get("http://localhost:8000/get/advertisement/images/"+ad.ad_id)
+      }*/
       console.log(this.ads)
   }
 }

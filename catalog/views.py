@@ -5,7 +5,7 @@ from catalog.models import Advertisement, Accommodation_Review
 from catalog.models import Event, User_Profile, PropertyImage
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
-from catalog.serializers import EventSerializer, UserProfileSerializer
+from catalog.serializers import EventSerializer, UserProfileSerializer,PropertyImageSerializer
 
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -924,7 +924,7 @@ def images_get(request, first, second, ad_pk):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
+    print('-----------> inside GET Images <-----------\n', email, '\n------------------------')
 
     # try:
     #     ad = Advertisement.objects.filter(poster=email)
@@ -932,13 +932,14 @@ def images_get(request, first, second, ad_pk):
     #     return HttpResponse(status=404)
 
     try:
-        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=pk)
+        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_pk)
     except PropertyImage.DoesNotExist:
         return HttpResponse(status=404)
 
-    serializer = PropertyImage(Images, many=True)
+    print('here: --->', Images)
+
+    serializer = PropertyImageSerializer(Images, many=True)
 
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
-
