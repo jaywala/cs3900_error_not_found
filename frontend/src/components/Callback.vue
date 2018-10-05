@@ -3,9 +3,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+import router from '../router'
+import auth from '../auth'
 export default {
   name: 'callback',
   mounted() {
+    axios.post("http://localhost:8000/post/userLoggedIn",this.$auth.getUserProfile())
     this.$auth.handleAuthentication().then((data) => {
       this.$router.push({ name: 'home' })
       this.$router.go(this.$router.currentRoute)

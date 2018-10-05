@@ -1,8 +1,42 @@
 <template >
   <div id="app">
-  <h1 v-if="authenticated()">backend response message: {{this.message}}</h1>
+    <!--<small v-if="authenticated()">backend response message: {{this.message}}</small>-->
 
-</div>
+    <div class="container" style="">
+      <div class="row">
+
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <small>&lt;Property Type&gt;</small>
+
+          <div class="row">
+            <div class="col-9">
+              <h1>{{this.message.accommodation_name}}</h1>
+              <small>{{this.message.suburb}}</small>
+              <div style="">
+                <div style="margin-right: 16px;">{{this.message.num_guests}}guests</div>
+                <div style="margin-right: 16px;">{{this.message.num_bedrooms}} bed</div>
+                <div style="margin-right: 16px;">{{this.message.num_bathrooms}} bath</div>
+              </div>
+              <br>
+              <p>{{this.message.accommodation_description}}</p>
+              <p>{{this.message.amenities}}</p>
+
+            </div>
+            <div class="col-3">
+              <p>Profile image</p>
+              <small>host name</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <PropertyBookingForm></PropertyBookingForm>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -10,7 +44,13 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
+
+import PropertyBookingForm from './PropertyBookingForm.vue'
+
 export default {
+    components: {
+        PropertyBookingForm,
+    },
     methods: {
         // this method calls the AuthService login() method
         login () {
@@ -32,53 +72,12 @@ export default {
     },
     data () {
         return {
-            message:
-            /*{
-                ad_id : 1,
-                poster : "gladyschanmail@gmail.com",
-                accommodation_name : "Water Park",
-                accommodation_description : "lots of water",
-                house_rules : "don't jump out the window",
-                booking_rules : "tralalala",
-                amenities : "TV,Kitchen,Elevator, Garden or backyard",
-                base_price : 65,
-                num_guests : 1,
-                num_bedrooms : 1,
-                num_bathrooms : 0,
-                suburb : "Potts Point",
-                state : "NSW",
-                country : "Australia",
-                latitude : -33.86916827,
-                longitude : 151.2265622,
-                list_of_reviews : "",
-                list_of_events : "",
-            },*/
-            /*
-            {
-                id : 1,
-                user_name : "Gladys",
-                name : "Bip Boop",
-                email : "gladyschanmail@gmail.com",
-                profile_pic : null,
-                list_of_ads : "",
-            },
-            */
-            {
-                "id": 6,
-                "rev_id": 2,
-                "rating": 5,
-                "message": "update second review",
-                "ad_owner": "gladyschanmail@gmail.com",
-                "ad_id": 1
-            }
-
-
-
+            message: null
         }
     },
-/*
+
     mounted () {
-        axios.get("http://localhost:8000/get/review/"+ this.$auth.getUserProfile().email.split('@')[0] + "/" + this.$auth.getUserProfile().email.split('@')[1].split('.')[0] +"/1/")
+        axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path.split('@')[0] + "/" + this.$router.currentRoute.path.split('@')[1].split('.')[0] +"/" + this.$router.currentRoute.path.split('@')[1].split('/')[1]+"/")
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -86,13 +85,8 @@ export default {
         .catch(e => {
             this.errors.push(e)
         })
+        console.log(this.message)
     }
-*/
-
-    mounted () {
-        axios.post("http://localhost:8000/post/review/delete/", {body:this.message})
-    }
-
 
 }
 

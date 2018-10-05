@@ -124,7 +124,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="sending">Register property</md-button>
+          <md-button type="submit" @click = "submit" class="md-primary" :disabled="sending">Register property</md-button>
         </md-card-actions>
       </md-card>
 
@@ -158,7 +158,10 @@
     minLength,
     maxLength
   } from 'vuelidate/lib/validators'
-
+  import axios from 'axios'
+  import Vue from 'vue'
+  import router from '../router'
+  import auth from '../auth'
   export default {
     components: { fileBase64, VueGoogleAutocomplete },
     mounted () {
@@ -168,6 +171,7 @@
     data: () => ({
       files: [],
       form: {
+        poster: null,
         propertyType: 'apartment',
         address: null,
         city: null,
@@ -180,6 +184,7 @@
         age: null,
         amenities: null,
       },
+
       userSaved: false,
       sending: false,
       address: ''
@@ -224,6 +229,10 @@
       }
     },
     methods: {
+      submit(){
+        this.form.poster = router.app.$auth.getUserProfile().email
+        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form})
+      },
       getFiles(files){
         this.files = files
       },

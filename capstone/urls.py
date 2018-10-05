@@ -41,6 +41,8 @@ urlpatterns = [
     path('post/user/update/', views.user_profile_update),
     path('post/userLoggedIn/', views.is_loggedIn),
 
+    #---------------- Poster Views ----------------#
+
     # Advertisement
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
     path('post/advertisement/create/', views.advertisement_create),
@@ -59,11 +61,21 @@ urlpatterns = [
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
+    #---------------- Accommodation Seeker Views ----------------#
+
+    
+    #---------------- General Views ----------------#
+    path('get/advertisement/', views.get_all_ads),
+    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
+
+    #---------------- Search module views ----------------#
+
 
     # URLs for testing
     path('advertisement/<int:pk>/', views.advertisement_detail),
     path('user/<int:pk>/', views.user_detail),
     path('review/<int:pk>/', views.review_detail),
+    path('event/<int:pk>/', views.event_detail),
 
     path('api/public/', views.public),
     path('api/private/', views.private),

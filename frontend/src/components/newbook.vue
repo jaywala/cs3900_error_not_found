@@ -13,9 +13,9 @@
     </head>
 
     <body>
-      <PropertyForm></PropertyForm>      
+      <PropertyForm></PropertyForm>
     </body>
-        
+
   </div>
 </template>
 
@@ -29,7 +29,8 @@ export default {
     PropertyForm,
   },
   props: {
-      property_type: String,
+      message:
+      {property_type: String,
       address: String,
       address2: String,
       city: String,
@@ -40,7 +41,7 @@ export default {
       rules: String,
       nbathroom: Number,
       nbedroom: Number,
-      nguest: Number,
+      nguest: Number}
   },
   methods: {
 
