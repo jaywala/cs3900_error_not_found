@@ -57,13 +57,13 @@ def importFromCSV():
                 accommodation_name=row[4],
                 accommodation_description=row[7],
                 house_rules=row[14],
-                booking_rules="no parties",
+                booking_rules="no cancelation",
                 amenities=amenitiestext,
                 base_price=float((row[60].strip("$")).replace(",","")),
                 num_guests=int(row[65]),
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
-                address=str(row[41]) + ", NSW, Australia",
+                address=str(row[41]) + ", NSW, Australia", #TODO correct the rows for address, ciy, zip_code
                 city="Sydney",
                 zip_code="2000",
                 latitude=float(row[48]),
@@ -86,6 +86,11 @@ def importFromCSV():
                                        pic=string)
                     im.save()
 
+            temp_str = ""
+            for i in range(1, im_number+1): # range(0,5) [0, 1, 2, 3, 4], so plus 1
+                temp_str = temp_str+ str(i) + ","
+
+            advertisement.set_image_ids(temp_str)
 
 def importImages():
     # import images

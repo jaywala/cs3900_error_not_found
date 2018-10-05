@@ -61,9 +61,12 @@ urlpatterns = [
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
+    # Advertisement Images
+    path('get/advertisement/images/<slug:first>/<slug:second>/<slug:ad_pk>/', views.images_get),
+
     #---------------- Accommodation Seeker Views ----------------#
 
-    
+
     #---------------- General Views ----------------#
     path('get/advertisement/', views.get_all_ads),
     path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
@@ -81,7 +84,4 @@ urlpatterns = [
     path('api/private/', views.private),
 
     path('admin/', admin.site.urls),
-    
-    path('get/advertisement/images/<slug:first>/<slug:second>/<slug:ad_pk>/', views.images_get)
-
 ]

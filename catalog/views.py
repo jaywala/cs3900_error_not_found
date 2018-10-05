@@ -12,8 +12,6 @@ from rest_framework.parsers import JSONParser
 
 from django.db.models import Max
 
-# from drf_multiple_model.views import ObjectMultipleModelAPIView
-
 
 #------------------------------User_Profile------------------------------#
 
@@ -723,6 +721,31 @@ def event_delete(request):
         return HttpResponse(status=400)
 
 
+#------------------------------ Images ------------------------------#
+
+
+def images_get(request, first, second, ad_pk):
+    """
+    Give all the images for this advertisement.
+    (Model: PropertyImage)
+    """
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET Images <-----------\n', email, '\n------------------------')
+
+    try:
+        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_pk)
+    except PropertyImage.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyImageSerializer(Images, many=True)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data, safe=False)
+
+
 #------------------------------ General Views ------------------------------#
 
 def get_single_ad(request, first, second, ad_id):
@@ -898,53 +921,3 @@ def public(request):
 def private(request):
     print("hello+",request.body)
     return HttpResponse("You should not see this message if not authenticated!")
-
-
-# def advertisement_images_get(request, first, second):
-#     """
-#     Give all the ads for this user.
-#     (Model: Advertisement)
-#     """
-
-#     email = first + "@" + second + ".com"
-
-#     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
-
-#     try:
-#         ad = Advertisement.objects.filter(poster=email)
-#     except Advertisement.DoesNotExist:
-#         return HttpResponse(status=404)
-
-#     serializer = AdvertisementSerializer(ad, many=True)
-
-#     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
-
-#     return JsonResponse(serializer.data, safe=False)
-
-def images_get(request, first, second, ad_pk):
-    """
-    Give all the images for this advertisement.
-    (Model: Advertisement)
-    """
-
-    email = first + "@" + second + ".com"
-
-    print('-----------> inside GET Images <-----------\n', email, '\n------------------------')
-
-    # try:
-    #     ad = Advertisement.objects.filter(poster=email)
-    # except Advertisement.DoesNotExist:
-    #     return HttpResponse(status=404)
-
-    try:
-        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_pk)
-    except PropertyImage.DoesNotExist:
-        return HttpResponse(status=404)
-
-    print('here: --->', Images)
-
-    serializer = PropertyImageSerializer(Images, many=True)
-
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
-
-    return JsonResponse(serializer.data, safe=False)

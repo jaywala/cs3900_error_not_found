@@ -2,6 +2,8 @@
   <div>
     <div class="text-center">
       <img src="" alt="" :src="img.pic" v-for="img in message">
+
+      <h1>backend: {{this.message}} </h1>
     </div>
   </div>
 </template>
@@ -35,13 +37,21 @@ export default {
 
   data() {
     return {
-      message: null,
+      message:
+                { "id": 1,
+                "user_name": "New_Colleen",
+                "name": "Colleen",
+                "email": "Colleen@example.com",
+                "profile_pic": "",
+                "list_of_ads": "1,",
+                "list_of_rentals": "",
+                "list_of_posted_reviews": "" }
     }
   },
-
+/*
   mounted () {
 
-      axios.get("http://localhost:8000/get/advertisement/images/"+ "Colleen/example/1/")
+      axios.get("http://localhost:8000/get/user/"+ "Colleen/example/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
@@ -51,11 +61,12 @@ export default {
        })
        console.log(this.message)
    }
-/*
-    mounted () {
-       axios.post("http://localhost:8000/post/review/create/", {body:this.message})
-   }
 */
+
+    mounted () {
+       axios.post("http://localhost:8000/post/user/update/", {body:this.message})
+   }
+
 }
 
 </script>
