@@ -83,3 +83,18 @@ Advertisement Event:
 
         8000/post/event/delete/
         --> delete event for this advertisement
+
+Advertisement Image:
+    GET:
+        8000/get/image/<first>/<second>/<ad_id>/
+        --> give images this advertisement owns
+
+    POST:
+        8000/post/image/create/
+        --> create image for this advertisement
+
+        8000/post/image/update/
+        --> update image for this advertisement
+
+        8000/post/image/delete/
+        --> delete image for this advertisement
