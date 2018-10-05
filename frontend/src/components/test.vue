@@ -1,22 +1,8 @@
 <template>
   <div>
-    <h1>all the bookings</h1>
-    <div v-for="book in bookings" class="col-md-4">
-      <h3>{{book.title}}</h3>
-      <h4>{{book.status}}</h4>
-      <div v-if = "book.status == 'finished'">
-        <md-radio v-model="radio" value="1">1</md-radio>
-        <md-radio v-model="radio" value="2">2</md-radio>
-        <md-radio v-model="radio" value="3">3</md-radio>
-        <md-radio v-model="radio" value="4">4</md-radio>
-        <md-radio v-model="radio" value="5">5</md-radio>
-        <md-field>
-      <label>Textarea</label>
-      <md-textarea v-model="textarea"></md-textarea>
-    </md-field>
-      </div>
+    <div class="text-center">
+      <img src="" alt="" :src="img.pic" v-for="img in message">
     </div>
-    {{this.radio}}
   </div>
 </template>
 <script>
@@ -27,37 +13,36 @@ import router from '../router'
 import auth from '../auth'
 
 export default {
-    methods: {
-        // this method calls the AuthService login() method
-        login () {
-            router.app.$auth.login()
-            //this.$router.push('helloworld')
-        },
-        authenticated(){
-            return router.app.$auth.isAuthenticated()
-        },
-        logout(){
-            router.app.$auth.logout()
-        },
-        token(){
-            return router.app.$auth.getAuthToken()
-        },
-        get(){
-            return router.app.$auth.getUserProfile()
-        }
-    },
+  methods: {
+      // this method calls the AuthService login() method
+      login () {
+          router.app.$auth.login()
+          //this.$router.push('helloworld')
+      },
+      authenticated(){
+          return router.app.$auth.isAuthenticated()
+      },
+      logout(){
+          router.app.$auth.logout()
+      },
+      token(){
+          return router.app.$auth.getAuthToken()
+      },
+      get(){
+          return router.app.$auth.getUserProfile()
+      }
+  },
 
   data() {
     return {
       message: null,
-      radio: Number
     }
   },
 
   mounted () {
 
-      axios.get()
-       .then(response => {
+      axios.get("http://localhost:8000/get/advertisement/images/"+ "Colleen/example/1/")
+      .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
        })
