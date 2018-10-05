@@ -69,19 +69,30 @@ export default {
                 "zipCode": "2011",
                 "latitude": -33.86916827,
                 "longitude": 151.2265622}*/
-
+                /*
                 {"id": 1,
                 "rev_id": 1,
                 "ad_owner": "gladyschanmail@gmail.com",
                 "ad_id": 1,
                 "rating": 5,
                 "message": null}
+                */
+                {"id": 1,
+                "event_id": 1,
+                "ad_owner": "gladyschanmail@gmail.com",
+                "ad_id": 1,
+                "start_day": "2018-10-06",
+                "start_day_start_time": "01:15:47",
+                "end_day": "2018-10-06",
+                "end_day_end_time": "02:15:50",
+                "booking_status": "booked",
+                "notes": ""}
     }
   },
-
+/*
   mounted () {
 
-      axios.get("http://localhost:8000/get/review/"+ "gladyschanmail/gmail/1/")
+      axios.get("http://localhost:8000/get/event/"+ "gladyschanmail/gmail/1/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
@@ -91,12 +102,12 @@ export default {
        })
        console.log(this.message)
    }
-
-/*
-    mounted () {
-       axios.post("http://localhost:8000/post/review/update/", {body:this.message})
-   }
 */
+
+    mounted () {
+       axios.post("http://localhost:8000/post/event/delete/", {body:this.message})
+   }
+
 }
 
 </script>
