@@ -62,12 +62,16 @@ urlpatterns = [
     path('post/event/delete/', views.event_delete),
 
     # Advertisement Images
-    path('get/advertisement/images/<slug:first>/<slug:second>/<slug:ad_pk>/', views.images_get),
+    path('get/image/<slug:first>/<slug:second>/<slug:ad_id>/', views.image_get),
+    path('post/image/create/', views.image_create),
+    path('post/image/update/', views.image_update),
+    path('post/image/delete/', views.image_delete),
 
     #---------------- Accommodation Seeker Views ----------------#
 
 
     #---------------- General Views ----------------#
+
     path('get/advertisement/', views.get_all_ads),
     path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
 
@@ -79,6 +83,7 @@ urlpatterns = [
     path('user/<int:pk>/', views.user_detail),
     path('review/<int:pk>/', views.review_detail),
     path('event/<int:pk>/', views.event_detail),
+    path('image/<int:pk>/', views.image_detail),
 
     path('api/public/', views.public),
     path('api/private/', views.private),

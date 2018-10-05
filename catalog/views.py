@@ -713,7 +713,7 @@ def event_delete(request):
 
 #------------------------------ Images ------------------------------#
 
-def images_get(request, first, second, ad_pk):
+def image_get(request, first, second, ad_id):
     """
     Give all the images for this advertisement.
     (Model: PropertyImage)
@@ -724,15 +724,153 @@ def images_get(request, first, second, ad_pk):
     print('-----------> inside GET Images <-----------\n', email, '\n------------------------')
 
     try:
-        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_pk)
+        images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
     except PropertyImage.DoesNotExist:
         return HttpResponse(status=404)
 
-    serializer = PropertyImageSerializer(Images, many=True)
+    serializer = PropertyImageSerializer(images, many=True)
 
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
+
+def image_create(request):
+    """
+    Create a new image for this advertisement, identified by email and ad_id.
+    (Model: PropertyImage)
+    """
+
+    data = JSONParser().parse(request)
+
+    ad_owner = data['body']['ad_owner']
+    ad_id = data['body']['ad_id']
+
+    print('-----------> inside CREATE image <-----------\n', ad_owner, '\n------------------------')
+
+    u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+
+    str_of_id = u.get_image_ids()
+    if str_of_id == None or str_of_id == "":
+        image_id = 1 #this is the first image for this ad
+    else:
+        temp = str_of_id.split(',')
+        temp_list = []
+        for i in temp:
+            if i =='':
+                continue
+            else:
+                temp_list.append(int(i))
+        max_id = max(temp_list)
+        new_id = max_id + 1
+        image_id = new_id
+
+    image_id = data['body']['image_id']
+    ad_owner = data['body']['ad_owner']
+    ad_id = data['body']['ad_id']
+    pic = data['body']['pic']
+
+    image = PropertyImage(
+            image_id=image_id,
+            ad_owner=ad_owner,
+            ad_id=ad_id,
+            pic=pic,
+            )
+    image.save()
+
+    temp_image = PropertyImage.objects.filter(image_id=image_id, ad_owner=ad_owner, ad_id=ad_id)
+
+    if temp_image.exists() and len(temp_image) == 1:
+
+        a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+        str_of_image_ids = a.get_image_ids()
+        if str_of_image_ids == None or str_of_image_ids == "":
+            new_str_of_images = str(image_id) + ',' # first image for this ad
+        else:
+            new_str_of_images = str_of_image_ids + str(image_id) + ','
+        a.set_image_ids(new_str_of_images)
+
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=400)
+
+def image_update(request):
+    """
+    Updates image, identified by email and ad_id.
+    (Model: PropertyImage)
+    """
+
+    data = JSONParser().parse(request)
+
+    image_id = data['body']['image_id']
+    ad_owner = data['body']['ad_owner']
+    ad_id = data['body']['ad_id']
+
+    print('-----------> inside UPDATE image <-----------\n', ad_owner, '\n------------------------')
+
+    image = PropertyImage.objects.filter(image_id=image_id, ad_owner=ad_owner, ad_id=ad_id)
+
+    if image.exists() and len(image) == 1:
+
+        image = image[0]
+
+        image_id = data['body']['image_id']
+        ad_owner = data['body']['ad_owner']
+        ad_id = data['body']['ad_id']
+        pic = data['body']['pic']
+
+        image.set_image_id(image_id)
+        image.set_ad_owner(ad_owner)
+        image.set_ad_id(ad_id)
+        image.set_pic(pic)
+
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=400)
+
+def image_delete(request):
+    """
+    Deletes the image with image_id, ad_owner and ad_id.
+    """
+
+    data = JSONParser().parse(request)
+
+    image_id = data['body']['image_id']
+    ad_owner = data['body']['ad_owner']
+    ad_id = data['body']['ad_id']
+
+    print('-----------> inside DELETE event <-----------\n', image_id, '\n------------------------')
+
+    image = PropertyImage.objects.filter(image_id=image_id, ad_owner=ad_owner, ad_id=ad_id)
+
+    if image.exists() and len(image) == 1:
+
+        image.delete()
+
+        a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
+        str_of_image = a.get_image_ids()
+        if str_of_image == None or str_of_image == "":
+            new_list_of_images = ''
+        else:
+            str_list_of_images = str_of_image.split(',')
+            new_list = []
+            for i in str_list_of_images:
+                if i == '':
+                    continue
+                elif i == str(image_id): # delete the event_id so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+            new_list_of_images = '' #contruct the string again to put back into db
+            for i in new_list:
+                new_list_of_images = new_list_of_images + i + ','
+
+        a.set_image_ids(new_list_of_images)
+
+        print('-----------> If deleted this is an empty list ', image, '\n------------------------')
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
 
 
 #------------------------------ General Views ------------------------------#
@@ -897,6 +1035,35 @@ def event_detail(request, pk):
 
     elif request.method == 'DELETE':
         ad.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+
+def image_detail(request, pk):
+    """
+    Shows JSON in browser of a particular image.
+    """
+
+    try:
+        im = PropertyImage.objects.get(pk=pk)
+    except PropertyImage.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = PropertyImageSerializer(im)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = PropertyImageSerializer(im, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        im.delete()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=404)

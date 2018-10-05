@@ -77,6 +77,7 @@ export default {
                 "rating": 5,
                 "message": null}
                 */
+                /*
                 {"id": 1,
                 "event_id": 1,
                 "ad_owner": "gladyschanmail@gmail.com",
@@ -87,12 +88,17 @@ export default {
                 "end_day_end_time": "02:15:50",
                 "booking_status": "booked",
                 "notes": ""}
+                */
+                {"id": 1,
+                "image_id": 1,
+                "ad_owner": "gladyschanmail@gmail.com",
+                "ad_id": 1,
+                "pic": "hi"}
     }
   },
-/*
-  mounted () {
 
-      axios.get("http://localhost:8000/get/event/"+ "gladyschanmail/gmail/1/")
+  mounted () {
+      axios.get("http://localhost:8000/get/advertisement/"+ "gladyschanmail/gmail/1/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
@@ -102,12 +108,12 @@ export default {
        })
        console.log(this.message)
    }
-*/
 
+/*
     mounted () {
-       axios.post("http://localhost:8000/post/event/delete/", {body:this.message})
+       axios.post("http://localhost:8000/post/image/delete/", {body:this.message})
    }
-
+*/
 }
 
 </script>
