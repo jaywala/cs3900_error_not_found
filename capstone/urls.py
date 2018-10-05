@@ -69,4 +69,7 @@ urlpatterns = [
     path('api/private/', views.private),
 
     path('admin/', admin.site.urls),
+    
+    path('get/advertisement/images/<slug:first>/<slug:second>/<slug:ad_pk>/', views.images_get)
+
 ]
