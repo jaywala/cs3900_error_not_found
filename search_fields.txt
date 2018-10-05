@@ -1,0 +1,10 @@
+"dateOne": '',
+        "dateTwo": '',
+        "where": '',
+        "guests": 1,
+        "distance": '',
+        "minPrice": '',
+        "maxPrice": '',
+
+
+take all the params then filter it out

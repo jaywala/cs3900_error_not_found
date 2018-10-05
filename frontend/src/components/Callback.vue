@@ -9,9 +9,34 @@ import router from '../router'
 import auth from '../auth'
 export default {
   name: 'callback',
+  methods: {
+      // this method calls the AuthService login() method
+      login () {
+          router.app.$auth.login()
+          //this.$router.push('helloworld')
+      },
+      authenticated(){
+          return router.app.$auth.isAuthenticated()
+      },
+      logout(){
+          router.app.$auth.logout()
+      },
+      token(){
+          return router.app.$auth.getAuthToken()
+      },
+      get(){
+          return router.app.$auth.getUserProfile()
+      }
+  },
+  data() {
+    return {
+      message: null,
+    }
+  },
   mounted() {
-    axios.post("http://localhost:8000/post/userLoggedIn",this.$auth.getUserProfile())
     this.$auth.handleAuthentication().then((data) => {
+      this.message = this.$auth.getUserProfile()
+      axios.post("http://localhost:8000/post/userLoggedIn/", {body: this.message})
       this.$router.push({ name: 'home' })
       this.$router.go(this.$router.currentRoute)
     })

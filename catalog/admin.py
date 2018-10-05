@@ -31,6 +31,7 @@ class AdvertisementAdmin(admin.ModelAdmin):
         (None, {'fields': ['num_bedrooms']}),
         (None, {'fields': ['num_bathrooms']}),
         ('Location', {'fields': ['address']}),
+        (None, {'fields': ['city']}),
         (None, {'fields': ['zip_code']}),
         (None, {'fields': ['latitude']}),
         (None, {'fields': ['longitude']}),

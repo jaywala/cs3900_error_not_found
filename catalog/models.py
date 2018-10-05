@@ -117,6 +117,7 @@ class Advertisement(models.Model):
     num_bathrooms = models.IntegerField(null=True, blank=True)
 
     address = models.CharField(null=True, blank=True, max_length=1000)
+    city = models.CharField(null=True, blank=True, max_length=1000)
     zip_code = models.CharField(null=True, blank=True, max_length=100)
 
     latitude = models.FloatField(null=True, blank=True)
@@ -175,6 +176,9 @@ class Advertisement(models.Model):
 
     def get_address(self):
         return self.address
+
+    def get_city(self):
+        return self.city
 
     def get_zip_code(self):
         return self.zip_code
@@ -263,6 +267,11 @@ class Advertisement(models.Model):
     def set_address(self, new_address):
         a = Advertisement.objects.get(id=self.id)
         a.address = new_address
+        a.save()
+
+    def set_city(self, new_city):
+        a = Advertisement.objects.get(id=self.id)
+        a.address = city
         a.save()
 
     def set_zip_code(self, new_zip_code):

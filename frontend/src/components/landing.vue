@@ -54,11 +54,12 @@ export default {
            email:"hdhh@gmail.com"
          }
       },
-      parameters: ""
+      parameters: "",
+      message: ""
     }
   },
   mounted () {
-      console.log(this.$router.currentRoute.path)
+
       this.parameters = ""
       axios.get("http://localhost:8000/get/advertisement/" + this.parameters)
       .then(response => {
