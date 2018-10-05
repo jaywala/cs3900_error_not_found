@@ -7,7 +7,7 @@ import test from '@/components/test.vue'
 import detail from '@/components/detail.vue'
 import search from '@/components/search.vue'
 import editprofile from '@/components/editprofile.vue'
-
+import review from '@/components/review.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -48,6 +48,11 @@ const router = new Router({
         path: '/editprofile',
         component: editprofile,
         name: editprofile
+      },
+      {
+        path: '/review',
+        component: review,
+        name: review
       }
   ]
 })

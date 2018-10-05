@@ -50,7 +50,7 @@
                       <b-dropdown-divider></b-dropdown-divider>
 
                       <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">add room</router-link>
-
+                      <router-link to="/review" v-if="authenticated()" tag = "b-dropdown-item">review bookings</router-link>
                       <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
 
 

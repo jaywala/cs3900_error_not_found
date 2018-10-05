@@ -49,7 +49,16 @@ export default {
 
   data() {
     return {
-      message: null,
+      bookings : [
+          {
+            status:"finished",
+            title:"finished",
+          },
+          {
+            status:"commited",
+            title:"commited",
+          }
+      ],
       radio: Number
     }
   },
