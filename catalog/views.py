@@ -12,7 +12,7 @@ from rest_framework.parsers import JSONParser
 
 from django.db.models import Max
 
-from drf_multiple_model.views import ObjectMultipleModelAPIView
+# from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 
 #------------------------------User_Profile------------------------------#
