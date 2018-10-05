@@ -58,22 +58,22 @@ def user_profile_update(request):
 
     print('-----------> data to UPDATE <-----------\n', data, '\n------------------------')
 
-    new_user_name = data['body']['user_name']
+    new_user_name = data['body']['given_name']
     new_name = data['body']['name']
     new_email = data['body']['email']
-    new_profile_pic = data['body']['profile_pic']
-    new_list_of_ads = data['body']['list_of_ads']
-    new_list_of_rentals = data['body']['list_of_rentals']
-    new_list_of_posted_reviews = data['body']['list_of_posted_reviews']
+    new_profile_pic = data['body']['picture']
+    #new_list_of_ads = data['body']['list_of_ads']
+    #new_list_of_rentals = data['body']['list_of_rentals']
+    #new_list_of_posted_reviews = data['body']['list_of_posted_reviews']
 
 
     user.set_user_name(new_user_name)
     user.set_name(new_name)
     user.set_email(new_email)
     user.set_profile_pic(new_profile_pic)
-    user.set_list_of_ads(new_list_of_ads)
-    user.set_list_of_rentals(new_list_of_rentals)
-    user.set_list_of_posted_reviews(new_list_of_posted_reviews)
+    #user.set_list_of_ads(new_list_of_ads)
+    #user.set_list_of_rentals(new_list_of_rentals)
+    #user.set_list_of_posted_reviews(new_list_of_posted_reviews)
 
     return HttpResponse(status=200)
 
@@ -83,13 +83,13 @@ def create_user(data):
     Creates a new user profile.
     """
 
-    user_name = data['body']['user_name']
+    user_name = data['body']['given_name']
     name = data['body']['name']
     email = data['body']['email']
-    profile_pic = data['body']['profile_pic']
-    list_of_ads = data['body']['list_of_ads']
-    list_of_rentals = data['body']['list_of_rentals']
-    list_of_posted_reviews = data['body']['list_of_posted_reviews']
+    profile_pic = data['body']['picture']
+    list_of_ads = "" #data['body']['list_of_ads']
+    list_of_rentals = "" #data['body']['list_of_rentals']
+    list_of_posted_reviews = "" #data['body']['list_of_posted_reviews']
 
     u = User_Profile(user_name=user_name,
                      name=name,
@@ -115,7 +115,6 @@ def is_loggedIn(request):
     """
 
     data = JSONParser().parse(request)
-
     email = data['body']['email']
 
     print('-----------> inside is_loggedIn <-----------\n', email, '\n------------------------')
@@ -180,23 +179,26 @@ def advertisement_update(request):
 
     ad_id = data['body']['ad_id']
     poster = data['body']['poster']
-    accommodation_name = data['body']['accommodation_name']
-    accommodation_description = data['body']['accommodation_description']
-    house_rules = data['body']['house_rules']
-    booking_rules = data['body']['booking_rules']
+    accommodation_name = data['body']['title']
+    accommodation_description = data['body']['summary']
+    house_rules = "" #data['body']['house_rules']
+    booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = data['body']['base_price']
-    num_guests = data['body']['num_guests']
-    num_bedrooms = data['body']['num_bedrooms']
-    num_bathrooms = data['body']['num_bathrooms']
+    base_price = 50 #data['body']['base_price']
+    num_guests = data['body']['nGuests']
+    num_bedrooms = data['body']['nBedrooms']
+    num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
-    zip_code = data['body']['zip_code']
-    latitude = data['body']['latitude']
-    longitude = data['body']['longitude']
-    property_type = data['body']['property_type']
-    list_of_reviews = data['body']['list_of_reviews']
-    list_of_events = data['body']['list_of_events']
-    list_of_images = data['body']['list_of_images']
+    zip_code = data['body']['zipCode']
+    cit = data['body']['city']
+    latitude = 0 #data['body']['latitude'] # TODO function to fill this in
+    longitude = 0 #data['body']['longitude']
+    property_type = data['body']['propertyType']
+
+    # because we are updating, we don't need to change these
+    #list_of_reviews = data['body']['list_of_reviews']
+    #list_of_events = data['body']['list_of_events']
+    #list_of_images = data['body']['list_of_images']
 
     ad.set_ad_id(ad_id)
     ad.set_poster(poster)
@@ -211,12 +213,13 @@ def advertisement_update(request):
     ad.set_num_bathrooms(num_bathrooms)
     ad.set_address(address)
     ad.zip_code(zip_code)
+    ad.city(city)
     ad.set_latitude(latitude)
     ad.set_longitude(longitude)
     ad.set_property_type(property_type)
-    ad.set_rev_ids(list_of_reviews)
-    ad.set_event_ids(list_of_events)
-    ad.set_image_ids(list_of_images)
+    #ad.set_rev_ids(list_of_reviews)
+    #ad.set_event_ids(list_of_events)
+    #ad.set_image_ids(list_of_images)
 
     return HttpResponse(status=201)
 
@@ -228,7 +231,6 @@ def advertisement_create(request):
     """
 
     data = JSONParser().parse(request)
-    print(data)
 
     email = data['body']['poster']
 
@@ -256,22 +258,24 @@ def advertisement_create(request):
         ad_id = 1 #this is the first ad this user is posting
 
     poster = email
-    accommodation_name = data['body']['accommodation_name']
-    accommodation_description = data['body']['accommodation_description']
-    house_rules = data['body']['house_rules']
-    booking_rules = data['body']['booking_rules']
+    accommodation_name = data['body']['title']
+    accommodation_description = data['body']['summary']
+    house_rules = "" #data['body']['house_rules']
+    booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = data['body']['base_price']
-    num_guests = data['body']['num_guests']
-    num_bedrooms = data['body']['num_bedrooms']
-    num_bathrooms = data['body']['num_bathrooms']
+    base_price = 50 #data['body']['base_price']
+    num_guests = data['body']['nGuests']
+    num_bedrooms = data['body']['nBedrooms']
+    num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
-    zip_code = data['body']['zip_code']
-    latitude = data['body']['latitude']
-    longitude = data['body']['longitude']
-    list_of_reviews = data['body']['list_of_reviews']
-    list_of_events = data['body']['list_of_events']
-    property_type = data['body']['property_type']
+    city = "Sydney"
+    zip_code = data['body']['zipCode']
+    latitude = 0 #data['body']['latitude']
+    longitude = 0 #data['body']['longitude']
+    list_of_reviews = "" #data['body']['list_of_reviews']
+    list_of_events = "" #data['body']['list_of_events']
+    list_of_images = ""
+    property_type = data['body']['propertyType']
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -286,12 +290,13 @@ def advertisement_create(request):
             num_bedrooms = num_bedrooms,
             num_bathrooms = num_bathrooms,
             address = address,
+            city = city,
             zip_code = zip_code,
             latitude = latitude,
             longitude = longitude,
             list_of_reviews = list_of_reviews,
             list_of_events = list_of_events,
-            property_type = property_type,
+            property_type = propertyType,
             list_of_images = list_of_images,
         )
     ad.save()
@@ -757,7 +762,7 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    #print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 

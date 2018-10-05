@@ -24,7 +24,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         fields = ('ad_id', 'poster', 'accommodation_name', 'accommodation_description',
                   'property_type', 'house_rules', 'booking_rules', 'amenities',
                   'base_price', 'num_guests', 'num_bedrooms', 'num_bathrooms',
-                  'address', 'zip_code', 'latitude', 'longitude', 'list_of_reviews',
+                  'address', 'city', 'zip_code', 'latitude', 'longitude', 'list_of_reviews',
                   'list_of_events', 'list_of_images')
         exclude = ()
 

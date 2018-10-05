@@ -64,6 +64,7 @@ def importFromCSV():
                 num_bedrooms=int(row[55]),
                 num_bathrooms=int(float(row[54])),
                 address=str(row[41]) + ", NSW, Australia",
+                city="Sydney",
                 zip_code="2000",
                 latitude=float(row[48]),
                 longitude=float(row[49]),

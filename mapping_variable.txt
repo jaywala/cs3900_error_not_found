@@ -1,0 +1,59 @@
+mapping of variables that need to be changed
+
+backend = frontend
+
+-----create AD-----
+ad_id = "",
+poster = poster, #-----#
+accommodation_name = title, #-----#
+accommodation_description = summary, #-----#
+house_rules = house_rules,
+booking_rules = booking_rules,
+amenities = amenities, #-----#
+base_price = base_price,
+num_guests = nGuests, #-----#
+num_bedrooms = nBedrooms, #-----#
+num_bathrooms = nBathrooms, #-----#
+address = address, #-----#
+city = city #---add field to model---#
+zip_code = zipCode, #-----#
+latitude = latitude,
+longitude = longitude,
+list_of_reviews = list_of_reviews,
+list_of_events = list_of_events,
+propertyType = propertyType, #-----#
+list_of_images = list_of_images,
+
+-----update AD-----
+ad_id = "", #---need to give me---#
+poster = poster, #-----#
+accommodation_name = title, #-----#
+accommodation_description = summary, #-----#
+house_rules = house_rules,
+booking_rules = booking_rules,
+amenities = amenities, #-----#
+base_price = base_price,
+num_guests = nGuests, #-----#
+num_bedrooms = nBedrooms, #-----#
+num_bathrooms = nBathrooms, #-----#
+address = address, #-----#
+city = city #---add field to model---#
+zip_code = zipCode, #-----#
+latitude = latitude,
+longitude = longitude,
+list_of_reviews = list_of_reviews,
+list_of_events = list_of_events,
+propertyType = propertyType, #-----#
+list_of_images = list_of_images,
+
+
+-----create user-----
+user_name = given_name
+name = name
+email = email
+profile_pic = picture
+list_of_ads = ""
+list_of_rentals = ""
+list_of_posted_reviews = ""
+
+-----update user-----
