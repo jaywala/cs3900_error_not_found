@@ -4,12 +4,13 @@
       <h2>Book unique homes and experiences.</h2>
       <h3>where</h3>
       <input type="text" placeholder="Any where" v-model="message.where">
+      {{message.where}}
       <h3>check-in n check-out</h3>
       <input
         type="text"
         id="datepicker-trigger"
-        v-bind:placeholder="message.dateFormat"
-        :value="formatDates(message.dateOne, message.dateTwo)"
+        v-bind:placeholder="this.message.dateFormat"
+        :value="formatDates(this.message.dateOne, this.message.dateTwo)"
       >
 
       <AirbnbStyleDatepicker
@@ -52,7 +53,8 @@ export default {
         "dateOne": '',
         "dateTwo": '',
         "where": '',
-        "guests": 0
+        "guests": 0,
+        "dateFormated":'',
       }
     }
   },
@@ -60,10 +62,10 @@ export default {
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
-        formattedDates = format(message.dateOne, message.dateFormat)
+        formattedDates = format(dateOne, this.message.dateFormat)
       }
       if (dateTwo) {
-        formattedDates += ' - ' + format(message.dateTwo, message.dateFormat)
+        formattedDates += ' - ' + format(dateTwo, this.message.dateFormat)
       }
       return formattedDates
     }
