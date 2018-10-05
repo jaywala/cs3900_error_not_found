@@ -37,7 +37,7 @@ export default {
 
   data() {
     return {
-      message:
+      message: /*null*/
                 /*
                 {"id": 100,
                 "email": "gladyschanmail@gmail.com",
@@ -48,6 +48,7 @@ export default {
                 "list_of_rentals": null,
                 "list_of_posted_reviews": null}
                 */
+                /*
                 {"ad_id": 1,
                 "poster": "gladyschanmail@gmail.com",
                 "list_of_reviews": "",
@@ -67,13 +68,20 @@ export default {
                 "city": "Potts Point, Australia",
                 "zipCode": "2011",
                 "latitude": -33.86916827,
-                "longitude": 151.2265622}
+                "longitude": 151.2265622}*/
+
+                {"id": 1,
+                "rev_id": 1,
+                "ad_owner": "gladyschanmail@gmail.com",
+                "ad_id": 1,
+                "rating": 5,
+                "message": null}
     }
   },
-/*
+
   mounted () {
 
-      axios.get("http://localhost:8000/get/advertisement/"+ "Colleen/example/")
+      axios.get("http://localhost:8000/get/review/"+ "gladyschanmail/gmail/1/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
@@ -83,12 +91,12 @@ export default {
        })
        console.log(this.message)
    }
-*/
 
+/*
     mounted () {
-       axios.post("http://localhost:8000/post/advertisement/delete/", {body:this.message})
+       axios.post("http://localhost:8000/post/review/update/", {body:this.message})
    }
-
+*/
 }
 
 </script>

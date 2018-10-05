@@ -223,7 +223,7 @@ def advertisement_create(request):
 
     u = User_Profile.objects.get(email=email)
     str_of_id = u.get_list_of_ads()
-    if str_of_id != None:
+    if str_of_id != None and str_of_id != "":
         temp = str_of_id.split(',')
         #because the split() gives back this [''] so that's length 1
         #hence, the len(temp) > 1
@@ -294,9 +294,10 @@ def advertisement_create(request):
 
         u = User_Profile.objects.get(email=email)
         str_of_ads = u.get_list_of_ads()
-        if str_of_ads == None:
-            str_of_ads = ""
-        new_str_of_ads = str_of_ads + str(ad_id) + ','
+        if str_of_ads == None or str_of_ads == "":
+            new_str_of_ads = "1,"
+        else:
+            new_str_of_ads = str_of_ads + str(ad_id) + ','
         u.set_list_of_ads(new_str_of_ads)
 
         return HttpResponse(status=201)
@@ -326,7 +327,7 @@ def advertisement_delete(request):
 
         u = User_Profile.objects.get(email=email)
         str_of_ads = u.get_list_of_ads()
-        if str_of_ads != None:
+        if str_of_ads != None and str_of_ads != "":
             str_list_of_ads = str_of_ads.split(',')
             new_list = []
             for i in str_list_of_ads:
@@ -337,9 +338,11 @@ def advertisement_delete(request):
                 else:
                     new_list.append(i)
 
-        new_list_of_ads = '' #contruct the string again to put back into db
-        for i in new_list:
-            new_list_of_ads = new_list_of_ads + i + ','
+            new_list_of_ads = '' #contruct the string again to put back into db
+            for i in new_list:
+                new_list_of_ads = new_list_of_ads + i + ','
+        else:
+            new_list_of_ads = ""
 
         u.set_list_of_ads(new_list_of_ads)
 
@@ -364,7 +367,6 @@ def advertisement_delete(request):
 
 
 #------------------------------Advertisement Reviews ------------------------------#
-
 
 def review_get(request, first, second, ad_id):
     """
@@ -402,8 +404,9 @@ def review_create(request):
 
     u = Advertisement.objects.filter(ad_id=ad_id, poster=ad_owner)
     str_of_id = u[0].get_rev_ids()
-    if str_of_id != None:
+    if str_of_id != None and str_of_id != "":
         temp = str_of_id.split(',')
+        print(temp)
         temp_list = []
         for i in temp:
             if i =='':
@@ -421,10 +424,10 @@ def review_create(request):
 
     review = Accommodation_Review(
             rev_id=rev_id,
-            rating=rating,
-            message=message,
             ad_owner=ad_owner,
             ad_id=ad_id,
+            rating=rating,
+            message=message,
             )
     review.save()
 
@@ -434,7 +437,7 @@ def review_create(request):
 
         a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_rev_ids = a.get_rev_ids()
-        if str_of_rev_ids == None:
+        if str_of_rev_ids == None or str_of_rev_ids == "":
             new_str_of_rev = str(rev_id) + ',' # first review for this ad
         else:
             new_str_of_rev = str_of_rev_ids + str(rev_id) + ','
@@ -462,10 +465,6 @@ def review_update(request):
     review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
     review = review[0]
 
-    #if review.exists() and len(review) == 1:
-    #NOTE: not sure why sometimes .exists() works for model instances and sometimes it doesn't
-    #TODO look into this later
-
     rev_id = data['body']['rev_id']
     rating = data['body']['rating']
     message = data['body']['message']
@@ -479,8 +478,6 @@ def review_update(request):
     review.set_ad_id(ad_id)
 
     return HttpResponse(status=201)
-    #else:
-    #    return HttpResponse(status=400)
 
 
 def review_delete(request):
@@ -506,7 +503,7 @@ def review_delete(request):
         a = Advertisement.objects.filter(poster=ad_owner, ad_id=ad_id)
         a = a[0]
         str_of_rev = a.get_rev_ids()
-        if str_of_rev != None:
+        if str_of_rev != None and str_of_rev != "":
             str_list_of_rev = str_of_rev.split(',')
             new_list = []
             for i in str_list_of_rev:
@@ -517,9 +514,11 @@ def review_delete(request):
                 else:
                     new_list.append(i)
 
-        new_list_of_rev = '' #contruct the string again to put back into db
-        for i in new_list:
-            new_list_of_rev = new_list_of_rev + i + ','
+            new_list_of_rev = '' #contruct the string again to put back into db
+            for i in new_list:
+                new_list_of_rev = new_list_of_rev + i + ','
+        else:
+            new_list_of_rev = ''
 
         a.set_rev_ids(new_list_of_rev)
 
@@ -531,7 +530,6 @@ def review_delete(request):
 
 
 #------------------------------Advertisement Events ------------------------------#
-
 
 def event_get(request, first, second, ad_id):
     """
@@ -710,7 +708,6 @@ def event_delete(request):
 
 #------------------------------ Images ------------------------------#
 
-
 def images_get(request, first, second, ad_pk):
     """
     Give all the images for this advertisement.
@@ -783,7 +780,6 @@ def get_all_ads(request):
 
 
 #------------------------------Test Views------------------------------#
-
 
 def user_detail(request, pk):
     """
