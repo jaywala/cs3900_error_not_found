@@ -13,6 +13,10 @@ class User_Profile(models.Model):
 
     # contains the ad id's that this user owns
     list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
+    # contains the ad id's that this user has rented or is renting
+    list_of_rentals = models.CharField(null=True, blank=True, max_length=1000)
+    # contains the review id's that this user has written
+    list_of_posted_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
         return self.email
@@ -33,6 +37,12 @@ class User_Profile(models.Model):
 
     def get_list_of_ads(self):
         return self.list_of_ads
+
+    def get_list_of_rentals(self):
+        return self.list_of_rentals
+
+    def get_list_of_posted_reviews(self):
+        return self.list_of_posted_reviews
 
     #--------------------------------
 
@@ -61,6 +71,16 @@ class User_Profile(models.Model):
         u.list_of_ads = new_list_of_ads
         u.save()
 
+    def set_list_of_rentals(self, new_list_of_rentals):
+        u = User_Profile.objects.get(id=self.id)
+        u.list_of_rentals = new_list_of_rentals
+        u.save()
+
+    def set_list_of_posted_reviews(self, new_list_of_posted_reviews):
+        u = User_Profile.objects.get(id=self.id)
+        u.list_posted_reviews = new_list_of_posted_reviews
+        u.save()
+
     #--------------------------------
 
     def delete_me(self):
@@ -74,8 +94,11 @@ class Advertisement(models.Model):
     # contains the ad review id's that this ad owns
     list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
-    #  contains the event id's that this ad owns
+    # contains the event id's that this ad owns
     list_of_events = models.CharField(null=True, blank=True, max_length=1000)
+
+    # contains the images that this ad owns
+    list_of_images = models.CharField(null=True, blank=True, max_length=1000)
 
     poster = models.CharField(null=True, blank=True, max_length=1000)
 
@@ -93,12 +116,14 @@ class Advertisement(models.Model):
     num_bedrooms = models.IntegerField(null=True, blank=True)
     num_bathrooms = models.IntegerField(null=True, blank=True)
 
-    suburb = models.CharField(null=True, blank=True, max_length=1000)
-    state = models.CharField(null=True, blank=True, max_length=1000)
-    country = models.CharField(null=True, blank=True, max_length=1000)
+    address = models.CharField(null=True, blank=True, max_length=1000)
+    zip_code = models.CharField(null=True, blank=True, max_length=100)
 
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+
+    property_type = models.CharField(null=True, blank=True, max_length=100)
+
 
     def __str__(self):
         temp = str(self.ad_id) + ', ' + str(self.poster) + ', ' + str(self.accommodation_name)
@@ -114,6 +139,9 @@ class Advertisement(models.Model):
 
     def get_event_ids(self):
         return self.list_of_events
+
+    def get_image_ids(self):
+        return self.list_of_images
 
     def get_poster(self):
         return self.poster
@@ -145,20 +173,20 @@ class Advertisement(models.Model):
     def get_num_bathrooms(self):
         return self.num_bathrooms
 
-    def get_suburb(self):
-        return self.suburb
+    def get_address(self):
+        return self.address
 
-    def get_state(self):
-        return self.state
-
-    def get_country(self):
-        return self.country
+    def get_zip_code(self):
+        return self.zip_code
 
     def get_latitude(self):
         return self.latitude
 
     def get_longitude(self):
         return self.longitude
+
+    def get_property_type(self):
+        return self.property_type
 
     #--------------------------------
 
@@ -175,6 +203,11 @@ class Advertisement(models.Model):
     def set_event_ids(self, new_list_of_event):
         a = Advertisement.objects.get(id=self.id)
         a.list_of_events = new_list_of_event
+        a.save()
+
+    def set_image_ids(self, new_list_of_image):
+        a = Advertisement.objects.get(id=self.id)
+        a.list_of_images = new_list_of_image
         a.save()
 
     def set_poster(self, new_poster):
@@ -227,19 +260,14 @@ class Advertisement(models.Model):
         a.num_bathrooms = new_num_bathrooms
         a.save()
 
-    def set_suburb(self, new_suburb):
+    def set_address(self, new_address):
         a = Advertisement.objects.get(id=self.id)
-        a.suburb = new_suburb
+        a.address = new_address
         a.save()
 
-    def set_state(self, new_state):
+    def set_zip_code(self, new_zip_code):
         a = Advertisement.objects.get(id=self.id)
-        a.state = new_state
-        a.save()
-
-    def set_country(self, new_country):
-        a = Advertisement.objects.get(id=self.id)
-        a.country = new_country
+        a.zip_code = new_zip_code
         a.save()
 
     def set_latitude(self, new_latitude):
@@ -250,6 +278,11 @@ class Advertisement(models.Model):
     def set_longitude(self, new_longitude):
         a = Advertisement.objects.get(id=self.id)
         a.longitude= new_longitude
+        a.save()
+
+    def set_property_type(self, new_property_type):
+        a = Advertisement.objects.get(id=self.id)
+        a.property_type= new_property_type
         a.save()
 
     #--------------------------------
@@ -499,3 +532,44 @@ class PropertyImage(models.Model):
 
     def __str__(self):
         return str(self.image_id) + ", " + self.ad_owner
+
+    #--------------------------------
+
+    def get_image_id(self):
+        return self.image_id
+
+    def get_ad_owner(self):
+        return self.ad_owner
+
+    def get_ad_id(self):
+        return self.ad_id
+
+    def get_pic(self):
+        return self.pic
+
+    #--------------------------------
+
+    def set_image_id(self, new_id):
+        i = PropertyImage.objects.get(id=self.id)
+        i.image_id = new_id
+        i.save()
+
+    def set_ad_owner(self, new_ad_owner):
+        i = PropertyImage.objects.get(id=self.id)
+        i.ad_owner = new_ad_owner
+        i.save()
+
+    def set_ad_id(self, new_ad_id):
+        i = PropertyImage.objects.get(id=self.id)
+        i.ad_id = new_ad_id
+        i.save()
+
+    def set_pic(self, new_pic):
+        i = PropertyImage.objects.get(id=self.id)
+        i.pic = new_pic
+        i.save()
+
+    #--------------------------------
+
+    def delete_me(self):
+        self.delete()

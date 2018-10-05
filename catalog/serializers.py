@@ -11,7 +11,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User_Profile
-        field = ('user_name', 'name', 'email', 'profile_pic', 'list_of_ads')
+        field = ('user_name', 'name', 'email', 'profile_pic', 'list_of_ads',
+                 'list_of_rentals', 'list_of_posted_reviews')
         exclude = ()
 
 
@@ -21,10 +22,10 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         model = Advertisement
 
         fields = ('ad_id', 'poster', 'accommodation_name', 'accommodation_description',
-                  'house_rules', 'booking_rules', 'amenities', 'base_price',
-                  'num_guests', 'num_bedrooms', 'num_bathrooms', 'suburb', 'state',
-                  'country', 'latitude', 'longitude', 'list_of_reviews',
-                  'list_of_events')
+                  'property_type', 'house_rules', 'booking_rules', 'amenities',
+                  'base_price', 'num_guests', 'num_bedrooms', 'num_bathrooms',
+                  'address', 'zip_code', 'latitude', 'longitude', 'list_of_reviews',
+                  'list_of_events', 'list_of_images')
         exclude = ()
 
 
