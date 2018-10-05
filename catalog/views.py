@@ -56,22 +56,15 @@ def user_profile_update(request):
 
     print('-----------> data to UPDATE <-----------\n', data, '\n------------------------')
 
+    new_email = data['body']['email']
     new_user_name = data['body']['given_name']
     new_name = data['body']['name']
-    new_email = data['body']['email']
     new_profile_pic = data['body']['picture']
-    #new_list_of_ads = data['body']['list_of_ads']
-    #new_list_of_rentals = data['body']['list_of_rentals']
-    #new_list_of_posted_reviews = data['body']['list_of_posted_reviews']
-
 
     user.set_user_name(new_user_name)
     user.set_name(new_name)
     user.set_email(new_email)
     user.set_profile_pic(new_profile_pic)
-    #user.set_list_of_ads(new_list_of_ads)
-    #user.set_list_of_rentals(new_list_of_rentals)
-    #user.set_list_of_posted_reviews(new_list_of_posted_reviews)
 
     return HttpResponse(status=200)
 
@@ -103,6 +96,9 @@ def create_user(data):
         user = User_Profile.objects.get(email=email)
     except User_Profile.DoesNotExist:
         return False
+
+    print('-----------> inside create_user, created user: <-----------\n', \
+    email, '\n------------------------')
 
     return True
 

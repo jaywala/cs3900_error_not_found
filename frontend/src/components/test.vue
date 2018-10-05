@@ -38,20 +38,20 @@ export default {
   data() {
     return {
       message:
-                { "id": 1,
-                "user_name": "New_Colleen",
-                "name": "Colleen",
-                "email": "Colleen@example.com",
-                "profile_pic": "",
-                "list_of_ads": "1,",
-                "list_of_rentals": "",
-                "list_of_posted_reviews": "" }
+                {"id": 100,
+                "email": "gladyschanmail@gmail.com",
+                "given_name": "Boop",
+                "name": "Gladys Chan",
+                "picture": "https://lh5.googleusercontent.com/-tUOv4633lvo/AAAAAAAAAAI/AAAAAAAAAAA/AAN31DXj19KOrdLyLEG7I4P5yrKElyWY0A/mo/photo.jpg",
+                "list_of_ads": null,
+                "list_of_rentals": null,
+                "list_of_posted_reviews": null}
     }
   },
 /*
   mounted () {
 
-      axios.get("http://localhost:8000/get/user/"+ "Colleen/example/")
+      axios.get("http://localhost:8000/get/user/"+ "gladyschanmail/gmail/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
