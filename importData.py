@@ -30,45 +30,47 @@ def importFromCSV():
 
         for row in readcsv:
             count += 1
-            if count > 101:
+            if count == 101:
                 break
 
-            user1 = User_Profile(user_name=row[21],
+            print(count)
+
+            user1 = User_Profile(email=(row[21]+"@example.com"), # column V
+                                 user_name=row[21],
                                  name=row[21],
-                                 email=(row[21]+"@example.com"),
                                  profile_pic="",
                                  list_of_ads="1,",
                                  list_of_rentals="",
                                  list_of_posted_reviews="",
                                  )
             user1.save()
-            print(count)
-            amenitiestext = row[58]
+
+            amenitiestext = row[58] # column BG
             amenitiestext = amenitiestext.strip("{")
             amenitiestext = amenitiestext.strip("}")
             amenitiestext = amenitiestext.strip()
             amenitiestext = amenitiestext.replace('"', '')
             advertisement = Advertisement(
                 ad_id=1,
+                poster=(row[21]+"@example.com"),
                 list_of_reviews="",
                 list_of_events="",
                 list_of_images="",
-                poster=(row[21]+"@example.com"),
-                accommodation_name=row[4],
-                accommodation_description=row[7],
-                house_rules=row[14],
-                booking_rules="no cancelation",
+                accommodation_name=row[4], # column E
+                accommodation_description=row[7], # column
+                house_rules=row[14], # column O
+                booking_rules="no cancellation",
                 amenities=amenitiestext,
-                base_price=float((row[60].strip("$")).replace(",","")),
-                num_guests=int(row[65]),
-                num_bedrooms=int(row[55]),
-                num_bathrooms=int(float(row[54])),
-                address=str(row[41]) + ", NSW, Australia", #TODO correct the rows for address, ciy, zip_code
-                city="Sydney",
-                zip_code="2000",
-                latitude=float(row[48]),
-                longitude=float(row[49]),
-                property_type="home",
+                base_price=float((row[60].strip("$")).replace(",","")), # column BI
+                num_guests=int(row[65]), # column BN
+                num_bedrooms=int(row[55]), # column BD
+                num_bathrooms=int(float(row[54])), # column BC
+                address=str(row[41]), # column AP
+                city=row[45], # column AT
+                zip_code=row[43], # column AR
+                latitude=float(row[48]), # column AW
+                longitude=float(row[49]), # column AX
+                property_type=row[51], # column AZ
                 )
             advertisement.save()
 
@@ -86,11 +88,10 @@ def importFromCSV():
                                        pic=string)
                     im.save()
 
-            temp_str = ""
-            for i in range(1, im_number+1): # range(0,5) [0, 1, 2, 3, 4], so plus 1
-                temp_str = temp_str+ str(i) + ","
-
-            advertisement.set_image_ids(temp_str)
+                temp_str = ""
+                for i in range(1, im_number+1): # range(0,5) [0, 1, 2, 3, 4], so plus 1
+                    temp_str = temp_str+ str(i) + ","
+                advertisement.set_image_ids(temp_str)
 
 def importImages():
     # import images

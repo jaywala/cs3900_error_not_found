@@ -797,34 +797,6 @@ def get_all_ads(request):
 
 #------------------------------Test Views------------------------------#
 
-def advertisement_detail(request, pk):
-    """
-    Shows JSON in browser of a particular ad.
-    """
-
-    try:
-        ad = Advertisement.objects.get(pk=pk)
-    except Advertisement.DoesNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = AdvertisementSerializer(ad)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = AdvertisementSerializer(ad, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        ad.delete()
-        return HttpResponse(status=204)
-    else:
-        return HttpResponse(status=404)
-
 
 def user_detail(request, pk):
     """
@@ -843,6 +815,35 @@ def user_detail(request, pk):
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = UserProfileSerializer(ad, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        ad.delete()
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+
+
+def advertisement_detail(request, pk):
+    """
+    Shows JSON in browser of a particular ad.
+    """
+
+    try:
+        ad = Advertisement.objects.get(pk=pk)
+    except Advertisement.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = AdvertisementSerializer(ad)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AdvertisementSerializer(ad, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
