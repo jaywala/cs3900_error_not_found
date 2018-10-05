@@ -2,7 +2,7 @@
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import Event, User_Profile
+from catalog.models import Event, User_Profile, PropertyImage
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
 from catalog.serializers import EventSerializer, UserProfileSerializer
@@ -805,3 +805,52 @@ def public(request):
 def private(request):
     print("hello+",request.body)
     return HttpResponse("You should not see this message if not authenticated!")
+
+
+# def advertisement_images_get(request, first, second):
+#     """
+#     Give all the ads for this user.
+#     (Model: Advertisement)
+#     """
+
+#     email = first + "@" + second + ".com"
+
+#     print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
+
+#     try:
+#         ad = Advertisement.objects.filter(poster=email)
+#     except Advertisement.DoesNotExist:
+#         return HttpResponse(status=404)
+
+#     serializer = AdvertisementSerializer(ad, many=True)
+
+#     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+#     return JsonResponse(serializer.data, safe=False)
+
+def images_get(request, first, second, ad_pk):
+    """
+    Give all the images for this advertisement.
+    (Model: Advertisement)
+    """
+
+    email = first + "@" + second + ".com"
+
+    print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
+
+    # try:
+    #     ad = Advertisement.objects.filter(poster=email)
+    # except Advertisement.DoesNotExist:
+    #     return HttpResponse(status=404)
+
+    try:
+        Images = PropertyImage.objects.filter(ad_owner=email, ad_id=pk)
+    except PropertyImage.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyImage(Images, many=True)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data, safe=False)
+
