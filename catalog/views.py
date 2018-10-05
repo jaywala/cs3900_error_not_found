@@ -226,6 +226,7 @@ def advertisement_create(request):
     """
 
     data = JSONParser().parse(request)
+    print(data)
 
     email = data['body']['poster']
 
