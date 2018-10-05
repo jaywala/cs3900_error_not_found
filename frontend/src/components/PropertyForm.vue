@@ -1,6 +1,5 @@
 <template>
   <div class="PropertyForm">
-    {{ $v.form.address }}
     <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item md-size-50 md-small-size-100">
         <md-card-header>
@@ -125,7 +124,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
         <md-card-actions>
-          <md-button v-on:click="greet" type="submit" class="md-primary" :disabled="sending">Register property</md-button>
+          <md-button type="submit" @click = "submit" class="md-primary" :disabled="sending">Register property</md-button>
         </md-card-actions>
       </md-card>
 
@@ -160,6 +159,9 @@
     maxLength
   } from 'vuelidate/lib/validators'
   import axios from 'axios'
+  import Vue from 'vue'
+  import router from '../router'
+  import auth from '../auth'
   export default {
     components: { fileBase64, VueGoogleAutocomplete },
     mounted () {
@@ -169,6 +171,7 @@
     data: () => ({
       files: [],
       form: {
+        poster: null,
         propertyType: 'apartment',
         address: null,
         city: null,
@@ -178,31 +181,13 @@
         nGuests: null,
         nBedrooms: null,
         nBathrooms: null,
+        age: null,
         amenities: null,
       },
-      message:{
-        ad_id: 1,
-        poster: "Colleen@example.com",
-        accommodation_name: "An Oasis in the City",
-        accommodation_description: "Quay ",
-        house_rules: "Be considerate. No showering after 2330h.",
-        booking_rules: "",
-        amenities: "TV,Ki,Hangers,Hair dryer,Iron,Bed linens,Extra pillows and blankets,Microwave,Refrigerator,Dishwasher,Dishes and silverware,Cooking basics,Stove,Single level home,Patio or balcony,Garden or backyard",
-        base_price: 65,
-        num_guests: 1,
-        num_bedrooms: 1,
-        num_bathrooms: 0,
-        suburb: "Potts Point",
-        state: "NSW",
-        country: "Australia",
-        latitude: -33.86916827,
-        longitude: 151.2265622,
-        list_of_reviews: "",
-        list_of_events: "",
-        userSaved: false,
-        sending: false,
-        address: ''
-      }
+
+      userSaved: false,
+      sending: false,
+      address: ''
     }),
     validations: {
       form: {
@@ -244,19 +229,9 @@
       }
     },
     methods: {
-      greet: function () {
-      // `this` inside methods points to the Vue instance
-          /*this.message.propertyType = form.propertyType
-          this.message.address = form.address
-          this.message.suburb = form.city
-          this.message,zipCode = form.zipCode
-          this.message.accommodation_name = form.title
-          this.message.accommodation_description = form.summary
-          this.message.num_guests = form.nGuests
-          this.message.num_bedrooms = form.nBedrooms
-          this.message.num_bathrooms = form.nBathrooms
-          this.message.amenities = form.amenities*/
-          axios.post("post/advertisement/create/",{body:this.message})
+      submit(){
+        this.form.poster = router.app.$auth.getUserProfile().email
+        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form})
       },
       getFiles(files){
         this.files = files
