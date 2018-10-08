@@ -1,0 +1,62 @@
+mapping of variables that need to be changed
+
+backend = frontend
+
+-----User-----
+email = email #---need to give me for all views---#
+user_name = given_name
+name = name
+profile_pic = picture
+list_of_ads = ""
+list_of_rentals = ""
+list_of_posted_reviews = ""
+
+-----AD-----
+ad_id = "", #---need to give me when updating, deleting, getting a single ad
+            (don't need when getting all ads for one poster)---#
+poster = poster, #---need to give me for all views---#
+list_of_reviews = ,
+list_of_events = ,
+list_of_images = ,
+accommodation_name = title,
+accommodation_description = summary,
+property_type = propertyType,
+house_rules = ,
+booking_rules = ,
+amenities = amenities,
+base_price = ,
+num_guests = nGuests,
+num_bedrooms = nBedrooms,
+num_bathrooms = nBathrooms,
+address = address,
+city = city,
+zip_code = zipCode,
+latitude = ,
+longitude = ,
+
+-----Review-----
+rev_id = #---need to give me when updating, deleting, getting a single review
+            (don't need when getting all review for one poster)---#
+ad_owner = #---need to give me for all views---#
+ad_id = #---need to give me for all views---#
+rating =
+message =
+
+-----Event-----
+event_id = #---need to give me when updating, deleting, getting a single review
+            (don't need when getting all review for one poster)---#
+ad_owner = #---need to give me for all views---#
+ad_id = #---need to give me for all views---#
+start_day =
+start_day_start_time =
+end_day =
+end_day_end_time =
+booking_status =
+notes =
+
+-----PropertyImage-----
+image_id = #---need to give me when updating, deleting, getting a single review
+            (don't need when getting all review for one poster)---#
+ad_owner = #---need to give me for all views---#
+ad_id = #---need to give me for all views---#
+pic =

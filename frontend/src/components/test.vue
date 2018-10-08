@@ -77,9 +77,10 @@ export default {
        console.log(this.message)
 
    }
+
 /*
     mounted () {
-       axios.post("http://localhost:8000/post/review/create/", {body:this.message})
+       axios.post("http://localhost:8000/post/image/delete/", {body:this.message})
    }
 */
 }

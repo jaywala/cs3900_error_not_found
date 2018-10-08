@@ -28,7 +28,7 @@ TODO list
     need to write a method to tell frontend part from a 401 message. -
     [Backend] booking request module: check the advertisement's events
 
-7. [Backend] allow user to decline, accept, cancel booking requests TODO (need functions to support this)
+7. (DONE) - [Backend] allow user to decline, accept, cancel booking requests
 
 8. [Backend] email communication between users TODO
 
@@ -39,7 +39,8 @@ TODO list
 (DONE) - when adding a id to a list we need to have a comma after the id
 (DONE) - check if the get views can return multiple querysets
 - validity check on events TODO
-- add image list field to advertisement model TODO
+(DONE) - add image list field to advertisement model
 
-TODO 1. user profile needs a list_of_rentals (ad_id, poster, event_id) —> the places you are renting, have rented
-TODO 2. user profile need a list of posted_reviews (ad_id, poster) —> the reviews that you wrote for a rented place
+1. user profile needs a list_of_rentals (event_id) —> the places you are renting, have rented
+2. user profile need a list of posted_reviews (rev_id) —> the reviews that you wrote for a rented place
+TODO need functions to update the list_of_rentals and posted_reviews 

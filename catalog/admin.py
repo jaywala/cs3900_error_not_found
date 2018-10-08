@@ -18,8 +18,11 @@ class UserAdmin(admin.ModelAdmin):
 
 class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['ad_id']}),
-        (None, {'fields': ['poster']}),
+        ('Ad ID', {'fields': ['ad_id']}),
+        ('Poster', {'fields': ['poster']}),
+        ('Accommodation Review IDs', {'fields': ['list_of_reviews']}),
+        ('Event IDs', {'fields': ['list_of_events']}),
+        ('Image IDs', {'fields': ['list_of_images']}),
         ('Accommodation Information',    {'fields': ['accommodation_name']}),
         (None, {'fields': ['accommodation_description']}),
         (None, {'fields': ['property_type']}),
@@ -31,12 +34,10 @@ class AdvertisementAdmin(admin.ModelAdmin):
         (None, {'fields': ['num_bedrooms']}),
         (None, {'fields': ['num_bathrooms']}),
         ('Location', {'fields': ['address']}),
+        (None, {'fields': ['city']}),
         (None, {'fields': ['zip_code']}),
         (None, {'fields': ['latitude']}),
         (None, {'fields': ['longitude']}),
-        ('Accommodation Review IDs', {'fields': ['list_of_reviews']}),
-        ('Event IDs', {'fields': ['list_of_events']}),
-        ('Image IDs', {'fields': ['list_of_images']}),
     ]
 
 
@@ -62,6 +63,7 @@ class EventAdmin(admin.ModelAdmin):
         ('booking_status', {'fields': ['booking_status']}),
         ('notes', {'fields': ['notes']}),
     ]
+
 
 class PropertyImageAdmin(admin.ModelAdmin):
     fieldsets = [
