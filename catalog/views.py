@@ -586,12 +586,17 @@ def event_create(request):
         new_id = max_id + 1
         event_id = new_id
 
-    start_day = data['body']['start_day']
-    start_day_start_time = data['body']['start_day_start_time']
-    end_day = data['body']['end_day']
-    end_day_end_time = data['body']['end_day_end_time']
-    booking_status = data['body']['booking_status']
-    notes = data['body']['notes']
+    temp_str = data['body']['start_day'].split('T')
+    temp_str_1 = data['body']['end_day'].split('T')
+    print(temp_str_1, '----------')
+    start_day =  temp_str[0] #'2018-09-30T14:00:00.000Z'
+    start_day_start_time = ""#data['body']['start_day_start_time']
+    end_day = temp_str_1[0]
+    end_day_end_time = ""#data['body']['end_day_end_time']
+    booking_status = "booked"#data['body']['booking_status']
+    notes = ""#data['body']['notes']
+
+    #TODO add ngeusts
 
     event = Event(
             event_id=event_id,
