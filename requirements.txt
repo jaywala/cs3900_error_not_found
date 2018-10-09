@@ -7,8 +7,13 @@ djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
 ecdsa==0.13
 future==0.16.0
+geographiclib==1.49
+geopy==1.17.0
 idna==2.7
+npm==0.1.1
+optional-django==0.1.0
 Pillow==5.2.0
+pkg-resources==0.0.0
 pyasn1==0.4.4
 pycparser==2.18
 PyJWT==1.6.4
