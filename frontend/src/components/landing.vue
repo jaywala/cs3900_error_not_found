@@ -22,11 +22,10 @@
               <div class="card mb-4 box-shadow">
                   <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
                 <div class="card-body">
-                  <p class="card-text">Property Type · {{ad.suburb}}</p>
-                   <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, poster:ad.poster }}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
+                  <p class="card-text">Property Type · {{ad.property_type}}</p>
+                   <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
                   <p class="card-text">${{ad.base_price}} AUD per night</p>
                   <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">&lt;Rating&gt; &lt;# of Reviews&gt;</small>
                   </div>
                 </div>
               </div>
@@ -50,15 +49,35 @@ export default {
       errors: String,
       ads: [
          {
-           id: 4,
-           email:"hdhh@gmail.com"
+           ad_id: 1,
+           poster: "Colleen@example.com",
+           list_of_reviews: "1,",
+           list_of_events: "",
+           list_of_images: "1,2,3,4,5,6,7,8,9,10,",
+           accommodation_name: "An Oasis in the City",
+           accommodation_description: "Very  Quay ",
+           property_type: "Apartment",
+           house_rules: "Be considerate. No showering after 2330h.",
+           booking_rules: "no cancellation",
+           amenities: "TV,Kitchen,Elevator,Buzzer/wireless intercom,Heating,Washer,Smoke detector,Fire extinguisher,Essentials,Hangers,Hair dryer,Iron,Bed linens,Extra pillows and blankets,Microwave,Refrigerator,Dishwasher,Dishes and silverware,Cooking basics,Stove,Single level home,Patio or balcony,Garden or backyard",
+           base_price: 65,
+           num_guests: 1,
+           num_bedrooms: 1,
+           num_bathrooms: 0,
+           address: "Potts Point",
+           city: "Potts Point, Australia",
+           zip_code: "2011",
+           latitude: -33.86916827,
+           longitude: 151.2265622
          }
       ],
-      parameters: ""
+      parameters: "",
+      reviews: [],
+      ratings: [],
     }
   },
   mounted () {
-      this.parameters = ""
+
       axios.get("http://localhost:8000/get/advertisement/" + this.parameters)
       .then(response => {
           // JSON responses are automatically parsed.
@@ -71,7 +90,6 @@ export default {
         let ad = ads[i]
         axios.get("http://localhost:8000/get/advertisement/images/"+ad.ad_id)
       }*/
-      console.log(this.ads)
   }
 }
 </script>
