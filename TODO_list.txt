@@ -38,9 +38,9 @@ TODO list
     , when deleting, creating
 (DONE) - when adding a id to a list we need to have a comma after the id
 (DONE) - check if the get views can return multiple querysets
-- validity check on events TODO
+(DONE) - validity check on events
 (DONE) - add image list field to advertisement model
 
 1. user profile needs a list_of_rentals (event_id) —> the places you are renting, have rented
 2. user profile need a list of posted_reviews (rev_id) —> the reviews that you wrote for a rented place
-TODO need functions to update the list_of_rentals and posted_reviews 
+TODO need functions to update the list_of_rentals and posted_reviews

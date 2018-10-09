@@ -12,6 +12,8 @@ from rest_framework.parsers import JSONParser
 
 from django.db.models import Max
 
+from .geo import position
+
 
 #------------------------------User_Profile------------------------------#
 
@@ -919,7 +921,57 @@ def get_all_ads(request):
 
 #------------------------------Search Module Views------------------------------#
 
+def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, maxPrice):
+    """
+    Searches through all the ads and returns the ads that satisfies the parameters.
+    (Model: Advertisement)
+    """
 
+    ads = Advertisement.objects.all()
+    pk_list = []
+
+    for a in ads:
+        if nGuests == "null" or a.num_guests >= nGuests:
+            if minPrice == "null" or a.base_price >= minPrice:
+                if maxPrice == "null" or a.base_price <= maxPrice:
+                    d = None
+                    radius = None
+                    if location != "null":
+                        search_latitude, search_longitude = geo.position(location)
+                        if distance != "null":
+                            radius = float(distance)
+                            ads_latitude = a.get_latitude()
+                            ads_longitude = a.get_longitude()
+
+                            d = sqrt((ads_latitude - search_latitude)**2 + \
+                                    (ads_longitude - search_longitude)**2)
+
+                    if d != None and radius != None:
+                        if d > radius: # not inside radius
+                            continue
+
+                    event_ids = a.get_event_ids
+                    # convert string into list
+                    event_ids = event_ids.split(',')
+
+                    is_clashing = False
+                    for i in event_ids:
+                        e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
+                        '''
+                        # need to see format of string TODO
+                        if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
+                            is_clashing = True
+                        elif
+                        '''
+
+                    if not is_clashing:
+                        pk_list.append(a.pk)
+
+    suitable_ads = Advertisement.objects.filter(pk__in=suitable_ads)
+
+    serializer = AdvertisementSerializer(suitable_ads, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
 
 
 #------------------------------Test Views------------------------------#

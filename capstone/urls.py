@@ -77,8 +77,10 @@ urlpatterns = [
 
     #---------------- Search module views ----------------#
 
+    path('get/<slug:checkIn>/<slug:checkOut>/<slug:location>/<slug:nGuests>/<slug:distance>/<slug:minPrice>/<slug:maxPrice>/', views.search),
 
-    # URLs for testing
+    #---------------- URLs for testing ----------------#
+
     path('advertisement/<int:pk>/', views.advertisement_detail),
     path('user/<int:pk>/', views.user_detail),
     path('review/<int:pk>/', views.review_detail),
