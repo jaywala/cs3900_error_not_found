@@ -912,7 +912,7 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    #print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
