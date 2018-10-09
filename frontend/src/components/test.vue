@@ -121,7 +121,7 @@ export default {
   },
 
   mounted () {
-      axios.get("http://localhost:8000/get/advertisement/"+ "gladyschanmail/gmail/1/")
+      axios.get("http://localhost:8000/get/null/null/null/2/5/5/100")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data

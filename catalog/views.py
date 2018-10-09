@@ -13,6 +13,7 @@ from rest_framework.parsers import JSONParser
 from django.db.models import Max
 
 from .geo import position
+import math
 
 
 #------------------------------User_Profile------------------------------#
@@ -927,49 +928,64 @@ def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, ma
     (Model: Advertisement)
     """
 
+    print('-----------> inside GET search <-----------')
+
     ads = Advertisement.objects.all()
     pk_list = []
 
     for a in ads:
-        if nGuests == "null" or a.num_guests >= nGuests:
-            if minPrice == "null" or a.base_price >= minPrice:
-                if maxPrice == "null" or a.base_price <= maxPrice:
+        if nGuests == "null" or a.num_guests >= int(nGuests):
+            if minPrice == "null" or a.base_price >= float(minPrice):
+                if maxPrice == "null" or a.base_price <= float(maxPrice):
                     d = None
                     radius = None
                     if location != "null":
-                        search_latitude, search_longitude = geo.position(location)
+                        search_latitude, search_longitude = position(location)
                         if distance != "null":
                             radius = float(distance)
                             ads_latitude = a.get_latitude()
                             ads_longitude = a.get_longitude()
 
-                            d = sqrt((ads_latitude - search_latitude)**2 + \
+                            d = math.sqrt((ads_latitude - search_latitude)**2 + \
                                     (ads_longitude - search_longitude)**2)
 
                     if d != None and radius != None:
                         if d > radius: # not inside radius
                             continue
 
-                    event_ids = a.get_event_ids
-                    # convert string into list
-                    event_ids = event_ids.split(',')
+                    is_clashing = None
+                    if checkIn != "null" and checkOut != "null":
+                        event_ids = a.get_event_ids
+                        # convert string into list
+                        event_ids = event_ids.split(',')
 
-                    is_clashing = False
-                    for i in event_ids:
-                        e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
-                        '''
-                        # need to see format of string TODO
-                        if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
-                            is_clashing = True
-                        elif
-                        '''
+                        is_clashing = False
+                        for i in event_ids:
+                            e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
 
-                    if not is_clashing:
+                            checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
+                            checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
+
+                            if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
+                                is_clashing = True
+                            elif checkIn == e.get_start_day() or checkIn == e.get_end_day():
+                                is_clashing = True
+                            elif checkOut >= e.get_start_day() and checkOut <= e.get_end_day():
+                                is_clashing = True
+                            elif checkOut == e.get_start_day() or checkOut == e.get_end_day():
+                                is_clashing = True
+
+                        if not is_clashing:
+                            pk_list.append(a.pk)
+
+                    if is_clashing == None:
                         pk_list.append(a.pk)
 
-    suitable_ads = Advertisement.objects.filter(pk__in=suitable_ads)
+    suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
 
     serializer = AdvertisementSerializer(suitable_ads, many=True)
+
+    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
