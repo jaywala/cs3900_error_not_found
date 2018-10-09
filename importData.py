@@ -81,6 +81,7 @@ def importFromCSV():
                      rating=4,
                      message="",
                      )
+            review.save()
 
             if count <= 2:
                 im_number = 0
