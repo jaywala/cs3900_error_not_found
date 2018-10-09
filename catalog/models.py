@@ -359,6 +359,7 @@ class Event(models.Model):
     event_id = models.IntegerField(null=False, blank=False)
     ad_owner = models.CharField(null=False, blank=False, max_length=1000)
     ad_id =  models.IntegerField(null=False, blank=False)
+    booker = models.CharField(null=False, blank=False, max_length=1000)
 
     start_day = models.DateField(null=False, blank=False)
     start_day_start_time = models.TimeField(null=False, blank=False)
@@ -444,6 +445,9 @@ class Event(models.Model):
     def get_ad_id(self):
         return self.ad_id
 
+    def get_booker(self):
+        return self.booker
+
     def get_start_day(self):
         return self.start_day
 
@@ -477,6 +481,11 @@ class Event(models.Model):
     def set_ad_id(self, new_ad_id):
         u = Event.objects.get(id=self.id)
         u.ad_id = new_ad_id
+        u.save()
+
+    def set_booker(self, new_booker):
+        u = Event.objects.get(id=self.id)
+        u.booker = new_booker
         u.save()
 
     def set_start_day(self, new_start_day):

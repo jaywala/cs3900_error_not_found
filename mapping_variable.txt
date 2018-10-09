@@ -43,16 +43,18 @@ rating =
 message =
 
 -----Event-----
+booker = #---need to give me for all views---#
 event_id = #---need to give me when updating, deleting, getting a single review
             (don't need when getting all review for one poster)---#
 ad_owner = #---need to give me for all views---#
 ad_id = #---need to give me for all views---#
-start_day =
-start_day_start_time =
-end_day =
-end_day_end_time =
-booking_status =
-notes =
+booker = booker
+start_day = checkIn
+start_day_start_time = ""
+end_day = checkOut
+end_day_end_time = ""
+booking_status = ""
+notes = ""
 
 -----PropertyImage-----
 image_id = #---need to give me when updating, deleting, getting a single review
