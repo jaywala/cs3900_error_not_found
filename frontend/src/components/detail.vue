@@ -8,7 +8,7 @@
       </div>
       <div class="row">
         <div class="col-8">
-          <small>&lt;Property Type&gt;</small>
+          <small>&lt;{{this.message.property_type}}&gt;</small>
 
           <div class="row">
             <div class="col-9">
@@ -24,6 +24,11 @@
               <p>{{this.message.amenities}}</p>
 
             </div>
+
+            <div v-for="review in reviews">
+              <li>{{review.rating}}</li>
+            </div>
+
             <div class="col-3">
               <p>Profile image</p>
               <small>host name</small>
@@ -72,12 +77,34 @@ export default {
     },
     data () {
         return {
-            message: null
+            message: {
+              ad_id: 1,
+              poster: "Colleen@example.com",
+              list_of_reviews: "1,",
+              list_of_events: "",
+              list_of_images: "1,2,3,4,5,6,7,8,9,10,",
+              accommodation_name: "An Oasis in the City",
+              accommodation_description: "Very  Quay ",
+              property_type: "Apartment",
+              house_rules: "Be considerate. No showering after 2330h.",
+              booking_rules: "no cancellation",
+              amenities: "TV,Kitchen,Elevator,Buzzer/wireless intercom,Heating,Washer,Smoke detector,Fire extinguisher,Essentials,Hangers,Hair dryer,Iron,Bed linens,Extra pillows and blankets,Microwave,Refrigerator,Dishwasher,Dishes and silverware,Cooking basics,Stove,Single level home,Patio or balcony,Garden or backyard",
+              base_price: 65,
+              num_guests: 1,
+              num_bedrooms: 1,
+              num_bathrooms: 0,
+              address: "Potts Point",
+              city: "Potts Point, Australia",
+              zip_code: "2011",
+              latitude: -33.86916827,
+              longitude: 151.2265622
+            },
+            reviews: "hello",
         }
     },
 
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path.split('@')[0] + "/" + this.$router.currentRoute.path.split('@')[1].split('.')[0] +"/" + this.$router.currentRoute.path.split('@')[1].split('/')[1]+"/")
+        axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path+'/')
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -85,7 +112,11 @@ export default {
         .catch(e => {
             this.errors.push(e)
         })
-        console.log(this.message)
+        axios.get("http://localhost:8000/get/review"+ this.$router.currentRoute.path+'/')
+        .then(response => {
+            // JSON responses are automatically parsed.
+            this.reviews = response.data
+        })
     }
 
 }
