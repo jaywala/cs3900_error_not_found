@@ -53,7 +53,7 @@ def importFromCSV():
             advertisement = Advertisement(
                 ad_id=1,
                 poster=(row[21]+"@example.com"),
-                list_of_reviews="",
+                list_of_reviews="1,",
                 list_of_events="",
                 list_of_images="",
                 accommodation_name=row[4], # column E
@@ -73,6 +73,14 @@ def importFromCSV():
                 property_type=row[51], # column AZ
                 )
             advertisement.save()
+
+            review = Accommodation_Review(
+                     rev_id=1,
+                     ad_owner=(row[21]+"@example.com"),
+                     ad_id=1,
+                     rating=4,
+                     message="",
+                     )
 
             if count <= 2:
                 im_number = 0
