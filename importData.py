@@ -11,7 +11,7 @@ django.setup()
 
 # Import models
 #from django.contrib.auth.models import User
-from catalog.models import User_Profile, Advertisement, PropertyImage
+from catalog.models import User_Profile, Advertisement, PropertyImage, Accommodation_Review
 
 
 def deleteData():
