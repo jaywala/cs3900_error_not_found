@@ -50,3 +50,9 @@ Coded initial views.py, urls.py, models.py.
 Tested views.
 
 Week 10
+Made several adjustments to models to make front and backend consistent.
+Made PropertyImage views.
+
+Week 11
+Made search views function for search module.
+Fixed Events validity issues.

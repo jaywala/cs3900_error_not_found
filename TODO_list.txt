@@ -19,7 +19,7 @@ TODO list
 
 3. (DONE) Make methods that will write the given JSON to database
 
-4. [Backend] write methods for searches for the search module TODO
+4. [Backend] write methods for searches for the search module
 
 5. (DONE) - get events for an ad - [Backend] booking module: give frontend the
     dates and time for each event
