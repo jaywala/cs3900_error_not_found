@@ -304,6 +304,7 @@ class Accommodation_Review(models.Model):
     rev_id = models.IntegerField(null=False)
     ad_owner = models.CharField(null=False, max_length=1000)
     ad_id =  models.IntegerField(null=False)
+    reviewer = models.CharField(null=False, blank=False, max_length=1000)
 
     rating = models.IntegerField(null=True, blank=True)
     message = models.CharField(null=True, blank=True, max_length=1000)
@@ -324,6 +325,9 @@ class Accommodation_Review(models.Model):
 
     def get_ad_id(self):
         return self.ad_id
+
+    def get_reviewer(self):
+        return self.reviewer
 
     def get_rating(self):
         return self.rating
@@ -346,6 +350,11 @@ class Accommodation_Review(models.Model):
     def set_ad_id(self, new_ad_id):
         u = Accommodation_Review.objects.get(id=self.id)
         u.ad_id = new_ad_id
+        u.save()
+
+    def set_reviewer(self, new_reviewer):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.reviewer = new_reviewer
         u.save()
 
     def set_rating(self, new_rating):

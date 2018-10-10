@@ -53,6 +53,8 @@ TODO
             even though I have that in the search form.
 - {Gladys/Jay} need to work out how to pattern match the SEARCH URL given by frontend
 - {Gladys} test the clashing events, still don't think it works perfectly
+- {George/Joseph} when creating a review, I need the email of the reviewer,
+                something like this.auth0.username
 
 Errors fixed:
 - the search distance, solution: use Haversine formula (refer to python file for more details)

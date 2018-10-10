@@ -404,6 +404,7 @@ def review_create(request):
     data = JSONParser().parse(request)
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
+    reviewer = "me" #data['body']['reviewer'] #TODO
 
     print('-----------> inside CREATE Review <-----------\n', ad_id, '\n------------------------')
 
@@ -431,6 +432,7 @@ def review_create(request):
             rev_id=rev_id,
             ad_owner=ad_owner,
             ad_id=ad_id,
+            reviewer=reviewer,
             rating=rating,
             message=message,
             )
@@ -440,6 +442,7 @@ def review_create(request):
 
     if temp_review.exists() and len(temp_review) == 1:
 
+        # update user advertisement list_of_reviews
         a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_rev_ids = a.get_rev_ids()
         if str_of_rev_ids == None or str_of_rev_ids == "":
@@ -447,6 +450,18 @@ def review_create(request):
         else:
             new_str_of_rev = str_of_rev_ids + str(rev_id) + ','
         a.set_rev_ids(new_str_of_rev)
+
+        # update user profile list_of_posted_reviews
+        u = User_Profile.objects.get(email=reviewer)
+        str_of_posted_reviews = u.get_list_of_posted_reviews()
+        # string format: (ad_owner, ad_id, review_id)
+        if str_of_posted_reviews == None or str_of_posted_reviews == "":
+            # first posted review for this user
+            new_str_of_posted_revs = '(' + ad_owner + str(ad_id) + str(review_id) + '),'
+        else:
+            new_str_of_posted_revs = str_of_posted_reviews + '(' + ad_owner + str(ad_id) + str(review_id) + '),'
+        u.set_list_of_posted_reviews(new_str_of_posted_revs)
+
 
         return HttpResponse(status=201)
     else:
@@ -470,17 +485,11 @@ def review_update(request):
     review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
     review = review[0]
 
-    rev_id = data['body']['rev_id']
     rating = data['body']['rating']
     message = data['body']['message']
-    ad_owner = data['body']['ad_owner']
-    ad_id = data['body']['ad_id']
 
-    review.set_rev_id(rev_id)
     review.set_rating(rating)
     review.set_message(message)
-    review.set_ad_owner(ad_owner)
-    review.set_ad_id(ad_id)
 
     return HttpResponse(status=201)
 
@@ -496,6 +505,7 @@ def review_delete(request):
     rev_id = data['body']['rev_id']
     ad_id = data['body']['ad_id']
     ad_owner = data['body']['ad_owner']
+    reviewer = "me"#data['body']['reviewer'] TODO
 
     print('-----------> inside DELETE review <-----------\n', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '\n------------------------')
 
@@ -526,6 +536,32 @@ def review_delete(request):
                 new_list_of_rev = new_list_of_rev + i + ','
 
         a.set_rev_ids(new_list_of_rev)
+
+        # delete review from User_Profile list_of_posted_reviews
+        a = User_Profile.objects.get(email=reviewer)
+        str_of_posted_revs = a.get_list_of_posted_reviews()
+        if str_of_posted_revs == None or str_of_posted_revs == "":
+            new_list_of_posted_revs = '' # really should never be in this if statement
+        else:
+            str_list_of_posted_revs = str_of_posted_revs.split(',')
+            new_list = []
+            str_to_delete = '(' + ad_owner + str(ad_id) + str(rev_id) + '),'
+            for i in str_list_of_posted_revs:
+                if i == '':
+                    continue
+                elif i == str_to_delete: # delete the rental so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+            new_list_of_posted_revs = '' #contruct the string again to put back into db
+            for i in new_list:
+                new_list_of_posted_revs = new_list_of_posted_revs + i + ','
+
+        a.set_list_of_posted_reviews(new_list_of_posted_revs)
+
+
+
 
         print('-----------> If deleted this should be empty ', rev, '\n------------------------')
         return HttpResponse(status=200)
