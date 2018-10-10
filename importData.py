@@ -41,7 +41,8 @@ def importFromCSV():
                                  profile_pic="",
                                  list_of_ads="1,",
                                  list_of_rentals="",
-                                 list_of_posted_reviews="",
+                                 # (ad_owner, ad_id, rev_id); Since this is dummy data, they reviewed their own ad
+                                 list_of_posted_reviews= "(" + row[21]+ "@example.com"  + "," + "1,1" + ");",
                                  )
             user1.save()
 
@@ -57,7 +58,8 @@ def importFromCSV():
                 list_of_events="",
                 list_of_images="",
                 accommodation_name=row[4], # column E
-                accommodation_description=row[7], # column
+                accommodation_description=row[7], # column H
+                property_type=row[51], # column AZ
                 house_rules=row[14], # column O
                 booking_rules="no cancellation",
                 amenities=amenitiestext,
@@ -70,7 +72,6 @@ def importFromCSV():
                 zip_code=row[43], # column AR
                 latitude=float(row[48]), # column AW
                 longitude=float(row[49]), # column AX
-                property_type=row[51], # column AZ
                 )
             advertisement.save()
 
@@ -78,6 +79,8 @@ def importFromCSV():
                      rev_id=1,
                      ad_owner=(row[21]+"@example.com"),
                      ad_id=1,
+                     # Since this is dummy data, they reviewed their own ad
+                     reviewer= (row[21]+ "@example.com"),
                      rating=4,
                      message="",
                      )

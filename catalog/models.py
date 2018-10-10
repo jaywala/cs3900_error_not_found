@@ -19,13 +19,13 @@ class User_Profile(models.Model):
     list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
 
     # contains the ad id's that this user has rented or is renting
-    # each rental will be identified by ad_id, ad_owner, event_id
-    # string format: (ad_owner, ad_id, event_id), (ad_owner, ad_id, event_id), etc.
+    # each rental will be identified by ad_owner, ad_id, event_id
+    # string format: (ad_owner, ad_id, event_id);(ad_owner, ad_id, event_id); etc.
     list_of_rentals = models.CharField(null=True, blank=True, max_length=1000)
 
     # contains the review id's that this user has written
-    # each review will be identified by ad_id, ad_owner, rev_id
-    # string format: (ad_owner, ad_id, rev_id), (ad_owner, ad_id, rev_id), etc.
+    # each review will be identified by ad_owner, ad_id, rev_id
+    # string format: (ad_owner, ad_id, rev_id);(ad_owner, ad_id, rev_id); etc.
     list_of_posted_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
@@ -102,7 +102,7 @@ class Advertisement(models.Model):
     list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
     # contains the event id's that this ad owns
     list_of_events = models.CharField(null=True, blank=True, max_length=1000)
-    # contains the images that this ad owns
+    # contains the images id's that this ad owns
     list_of_images = models.CharField(null=True, blank=True, max_length=1000)
 
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
@@ -313,7 +313,8 @@ class Accommodation_Review(models.Model):
     def __str__(self):
         return 'rev_id: ' + str(self.rev_id) + \
                ', ad_owner: ' + self.ad_owner + \
-               ', ad_id: ' + str(self.ad_id)
+               ', ad_id: ' + str(self.ad_id) + \
+               ', reviewer: ' + self.reviewer
 
     #--------------------------------
 
@@ -506,10 +507,13 @@ class Event(models.Model):
 
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=datetime.strptime(new_start_day, "%Y-%m-%d").date(),
             start_day_start_time=e.start_day_start_time,
             end_day=e.end_day,
@@ -526,10 +530,13 @@ class Event(models.Model):
 
     def set_start_day_start_time(self, new_start_time):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=datetime.strptime(new_start_time, "%H:%M:%S").time(),
             end_day=e.end_day,
@@ -546,10 +553,13 @@ class Event(models.Model):
 
     def set_end_day(self, new_end_day):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=e.start_day_start_time,
             end_day=datetime.strptime(new_end_day, "%Y-%m-%d").date(),
@@ -566,10 +576,13 @@ class Event(models.Model):
 
     def set_end_day_end_time(self, new_end_time):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=e.start_day_start_time,
             end_day=e.end_day,

@@ -28,7 +28,8 @@ def user_profile_get(request, first, second):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside GET user_profile_get <-----------\n', email, '\n------------------------')
+    print('-----------> inside GET user_profile_get <-----------\n', email, \
+          '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
@@ -37,7 +38,8 @@ def user_profile_get(request, first, second):
 
     serializer = UserProfileSerializer(user)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data)
 
@@ -52,23 +54,25 @@ def user_profile_update(request):
 
     email = data['body']['email']
 
-    print('-----------> inside UPDATE user_profile <-----------\n', email, '\n------------------------')
+    print('-----------> inside UPDATE user_profile <-----------\n', email, \
+          '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
     except User_Profile.DoesNotExist:
         return HttpResponse(status=404)
 
-    print('-----------> data to UPDATE <-----------\n', data, '\n------------------------')
+    print('-----------> data to UPDATE <-----------\n', data, \
+          '\n------------------------')
 
     new_email = data['body']['email']
     new_user_name = data['body']['given_name']
     new_name = data['body']['name']
     new_profile_pic = data['body']['picture']
 
+    user.set_email(new_email)
     user.set_user_name(new_user_name)
     user.set_name(new_name)
-    user.set_email(new_email)
     user.set_profile_pic(new_profile_pic)
 
     return HttpResponse(status=200)
@@ -77,19 +81,20 @@ def user_profile_update(request):
 def create_user(data):
     """
     Creates a new user profile.
+    (Model: User_Profile)
     """
 
+    email = data['body']['email']
     user_name = data['body']['given_name']
     name = data['body']['name']
-    email = data['body']['email']
     profile_pic = data['body']['picture']
     list_of_ads = ""
     list_of_rentals = ""
     list_of_posted_reviews = ""
 
-    u = User_Profile(user_name=user_name,
+    u = User_Profile(email=email,
+                     user_name=user_name,
                      name=name,
-                     email=email,
                      profile_pic=profile_pic,
                      list_of_ads=list_of_ads,
                      list_of_rentals=list_of_rentals,
@@ -110,13 +115,15 @@ def create_user(data):
 
 def is_loggedIn(request):
     """
-    Checks if this user is registered in the database. If not, it creates one.
+    Checks if this user is registered in the database.
+    If not, it creates a user.
     """
 
     data = JSONParser().parse(request)
     email = data['body']['email']
 
-    print('-----------> inside is_loggedIn <-----------\n', email, '\n------------------------')
+    print('-----------> inside is_loggedIn <-----------\n', email, \
+          '\n------------------------')
 
     try:
         user = User_Profile.objects.get(email=email)
@@ -140,7 +147,8 @@ def advertisement_get(request, first, second):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside GET advertisement <-----------\n', email, '\n------------------------')
+    print('-----------> inside GET advertisement <-----------\n', email, \
+          '\n------------------------')
 
     try:
         ad = Advertisement.objects.filter(poster=email)
@@ -149,7 +157,8 @@ def advertisement_get(request, first, second):
 
     serializer = AdvertisementSerializer(ad, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -162,39 +171,37 @@ def advertisement_update(request):
 
     data = JSONParser().parse(request)
 
-    email = data['body']['poster']
+    poster = data['body']['poster']
     ad_id = data['body']['ad_id']
 
-    print('-----------> inside UPDATE advertisement <-----------\n', email, ' --- ', ad_id, '\n------------------------')
+    print('-----------> inside UPDATE advertisement <-----------\n', \
+          poster, ' --- ', ad_id, '\n------------------------')
 
     try:
-        ad = Advertisement.objects.filter(ad_id=ad_id, poster=email)
+        ad = Advertisement.objects.get(ad_id=ad_id, poster=poster)
     except Advertisement.DoesNotExist:
         return HttpResponse(status=404)
 
-    print('Found ad:', ad[0])
-    ad = ad[0]
+    print('-----------> Found ad:\n', ad, '\n------------------------')
 
-    ad_id = data['body']['ad_id']
-    poster = data['body']['poster']
     accommodation_name = data['body']['title']
     accommodation_description = data['body']['summary']
     property_type = data['body']['propertyType']
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price']
+    base_price = 50 #data['body']['base_price'] TODO frontend need to give me one
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
     city = data['body']['city']
     zip_code = data['body']['zipCode']
-    latitude = 0 # TODO function to fill this in
-    longitude = 0
 
-    ad.set_ad_id(ad_id)
-    ad.set_poster(poster)
+    lat, long = position(address)
+    latitude = lat
+    longitude = long
+
     ad.set_accommodation_name(accommodation_name)
     ad.set_accommodation_description(accommodation_description)
     ad.set_property_type(property_type)
@@ -222,11 +229,13 @@ def advertisement_create(request):
 
     data = JSONParser().parse(request)
 
-    email = data['body']['poster']
+    poster = data['body']['poster']
 
-    print('-----------> inside CREATE advertisement <-----------\n', email, '\n------------------------')
+    print('-----------> inside CREATE advertisement <-----------\n', poster, \
+          '\n------------------------')
 
-    u = User_Profile.objects.get(email=email)
+    # Find the next ad_id for this user's ads
+    u = User_Profile.objects.get(email=poster)
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
         ad_id = 1 #this is the first ad this user is posting
@@ -247,7 +256,7 @@ def advertisement_create(request):
         else:
             ad_id = 1
 
-    poster = email
+    poster = poster
     list_of_reviews = ""
     list_of_events = ""
     list_of_images = ""
@@ -257,15 +266,17 @@ def advertisement_create(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price']
+    base_price = 50 #data['body']['base_price'] # TODO frontend need to give me one
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
     address = data['body']['address']
     city = data['body']['city']
     zip_code = data['body']['zipCode']
-    latitude = 0 # TODO function to fill this in
-    longitude = 0
+
+    lat, long = position(address)
+    latitude = lat
+    longitude = long
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -291,16 +302,17 @@ def advertisement_create(request):
         )
     ad.save()
 
-    temp_ad = Advertisement.objects.filter(ad_id=ad_id, poster=email)
+    temp_ad = Advertisement.objects.filter(ad_id=ad_id, poster=poster)
 
-    print('Created ad: ', temp_ad)
+    print('-----------> Created ad: ', temp_ad, '\n------------------------')
 
     if temp_ad.exists() and len(temp_ad) == 1:
 
-        u = User_Profile.objects.get(email=email)
+        # update the list_of_ads id for this user
+        u = User_Profile.objects.get(email=poster)
         str_of_ads = u.get_list_of_ads()
         if str_of_ads == None or str_of_ads == "":
-            new_str_of_ads = "1,"
+            new_str_of_ads = "1," # first ad this user has posted
         else:
             new_str_of_ads = str_of_ads + str(ad_id) + ','
         u.set_list_of_ads(new_str_of_ads)
@@ -319,18 +331,20 @@ def advertisement_delete(request):
 
     data = JSONParser().parse(request)
 
-    email = data['body']['poster']
+    poster = data['body']['poster']
     ad_id = data['body']['ad_id']
 
-    print('-----------> inside DELETE advertisement <-----------\n', email, '\n------------------------')
+    print('-----------> inside DELETE advertisement <-----------\n', poster, \
+          '\n------------------------')
 
-    ad = Advertisement.objects.filter(poster=email, ad_id=ad_id)
+    ad = Advertisement.objects.filter(poster=poster, ad_id=ad_id)
 
     if ad.exists() and len(ad) == 1:
 
         ad.delete()
 
-        u = User_Profile.objects.get(email=email)
+        # delete ad_id from user's list_of_ads
+        u = User_Profile.objects.get(email=poster)
         str_of_ads = u.get_list_of_ads()
         if str_of_ads == None or str_of_ads == "":
             new_list_of_ads = ""
@@ -340,34 +354,39 @@ def advertisement_delete(request):
             for i in str_list_of_ads:
                 if i == '':
                     continue
-                elif i == str(ad_id): # delete the ad_id so we don't add to list
+                elif i == str(ad_id):
+                    # delete the ad_id so we don't add to new_list
                     continue
                 else:
                     new_list.append(i)
 
-            new_list_of_ads = '' #contruct the string again to put back into db
+            new_list_of_ads = '' # contruct the string again to put back into db
             for i in new_list:
                 new_list_of_ads = new_list_of_ads + i + ','
 
         u.set_list_of_ads(new_list_of_ads)
 
-        r = list(Accommodation_Review.objects.filter(ad_id=ad_id, ad_owner=email))
+        # delete all instances of this ad's reviews
+        r = list(Accommodation_Review.objects.filter(ad_id=ad_id, ad_owner=poster))
         for j in r:
             j.delete()
 
-        e = list(Event.objects.filter(ad_id=ad_id, ad_owner=email))
+        # delete all instances of this ad's events
+        e = list(Event.objects.filter(ad_id=ad_id, ad_owner=poster))
         for j in e:
             j.delete()
 
-        i = list(PropertyImage.objects.filter(ad_id=ad_id, ad_owner=email))
+        # delete all instances of this ad's property images
+        i = list(PropertyImage.objects.filter(ad_id=ad_id, ad_owner=poster))
         for j in i:
             j.delete()
 
-        print('-----------> If empty list ad is deleted <-----------\n', ad, '\n------------------------')
+        print('-----------> If empty list ad is deleted <-----------\n', ad, \
+              '\n------------------------')
+
         return HttpResponse(status=200)
 
     else:
-        print('BAD REQUEST')
         return HttpResponse(status=400)
 
 
@@ -375,29 +394,33 @@ def advertisement_delete(request):
 
 def review_get(request, first, second, ad_id):
     """
-    Give all reviews this advertisement owns, identified by email and ad_id.
+    Give all reviews this advertisement owns, identified by ad_owner and ad_id.
     (Model: Accommodation_Review)
     """
 
-    email = first + "@" + second + ".com"
+    ad_owner = first + "@" + second + ".com"
 
-    print('-----------> inside GET Review <-----------\n', email, ' --- ', ad_id, '\n------------------------')
+    print('-----------> inside GET Review <-----------\n', \
+          'ad_owner: ', ad_owner, ', ad_id: ', ad_id, \
+          '\n------------------------')
 
     try:
-        rev = Accommodation_Review.objects.filter(ad_owner=email, ad_id=ad_id)
+        rev = Accommodation_Review.objects.filter(ad_owner=ad_owner, ad_id=ad_id)
     except Accommodation_Review.DoesNotExist:
         return HttpResponse(status=404)
 
     serializer = AccommodationReviewSerializer(rev, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
 
 def review_create(request):
     """
-    Create a new review for this advertisement, identified by ad_id and ad_owner.
+    Create a new review for this advertisement,
+    identified by ad_id and ad_owner.
     (Model: Advertisement_Review)
     """
 
@@ -406,18 +429,20 @@ def review_create(request):
     ad_id = data['body']['ad_id']
     reviewer = "me" #data['body']['reviewer'] #TODO
 
-    print('-----------> inside CREATE Review <-----------\n', ad_id, '\n------------------------')
+    print('-----------> inside CREATE Review <-----------\n', \
+          'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
+          ', reviewer: ', reviewer, '\n------------------------')
 
-    u = Advertisement.objects.filter(ad_id=ad_id, poster=ad_owner)
-    str_of_id = u[0].get_rev_ids()
+    # Find the next rev_id for this ads's review
+    u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+    str_of_id = u.get_rev_ids()
     if str_of_id == None or str_of_id == "":
-        rev_id = 1 #this is the first review for this ad
+        rev_id = 1 # this is the first review for this ad
     else:
         temp = str_of_id.split(',')
-        print(temp)
         temp_list = []
         for i in temp:
-            if i =='':
+            if i == '':
                 continue
             else:
                 temp_list.append(int(i))
@@ -442,7 +467,7 @@ def review_create(request):
 
     if temp_review.exists() and len(temp_review) == 1:
 
-        # update user advertisement list_of_reviews
+        # Adding review ID to this advertisement's list_of_reviews
         a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_rev_ids = a.get_rev_ids()
         if str_of_rev_ids == None or str_of_rev_ids == "":
@@ -454,14 +479,14 @@ def review_create(request):
         # update user profile list_of_posted_reviews
         u = User_Profile.objects.get(email=reviewer)
         str_of_posted_reviews = u.get_list_of_posted_reviews()
-        # string format: (ad_owner, ad_id, review_id)
+        # string format: (ad_owner, ad_id, review_id);
         if str_of_posted_reviews == None or str_of_posted_reviews == "":
             # first posted review for this user
-            new_str_of_posted_revs = '(' + ad_owner + str(ad_id) + str(review_id) + '),'
+            new_str_of_posted_revs = '(' + ad_owner + ',' + str(ad_id) + ',' + str(review_id) + ');'
         else:
-            new_str_of_posted_revs = str_of_posted_reviews + '(' + ad_owner + str(ad_id) + str(review_id) + '),'
+            new_str_of_posted_revs = str_of_posted_reviews + \
+                '(' + ad_owner + ',' + str(ad_id) + ',' + str(review_id) + ');'
         u.set_list_of_posted_reviews(new_str_of_posted_revs)
-
 
         return HttpResponse(status=201)
     else:
@@ -479,11 +504,15 @@ def review_update(request):
     rev_id = data['body']['rev_id']
     ad_id = data['body']['ad_id']
     ad_owner = data['body']['ad_owner']
+    reviewer = "me" #data['body']['reviewer'] #TODO
 
-    print('-----------> inside UPDATE review <-----------\n', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '\n------------------------')
+    print('-----------> inside UPDATE Review <-----------\n', \
+          'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
+          'rev_id: ', rev_id, ', reviewer: ', reviewer,       \
+          '\n------------------------')
 
-    review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
-    review = review[0]
+    review = Accommodation_Review.objects.get(rev_id=rev_id, ad_id=ad_id, \
+                                              ad_owner=ad_owner)
 
     rating = data['body']['rating']
     message = data['body']['message']
@@ -507,16 +536,20 @@ def review_delete(request):
     ad_owner = data['body']['ad_owner']
     reviewer = "me"#data['body']['reviewer'] TODO
 
-    print('-----------> inside DELETE review <-----------\n', rev_id, ' --- ', ad_id, ' --- ', ad_owner, '\n------------------------')
+    print('-----------> inside DELETE Review <-----------\n', \
+          'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
+          'rev_id: ', rev_id, ', reviewer: ', reviewer,       \
+          '\n------------------------')
 
-    rev = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
+    rev = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id,
+                                              ad_owner=ad_owner)
 
     if rev.exists() and len(rev) == 1:
 
         rev.delete()
 
-        a = Advertisement.objects.filter(poster=ad_owner, ad_id=ad_id)
-        a = a[0]
+        # deleting the rev_id from this ads list_of_reviews
+        a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_rev = a.get_rev_ids()
         if str_of_rev == None or str_of_rev == "":
             new_list_of_rev = ''
@@ -526,7 +559,8 @@ def review_delete(request):
             for i in str_list_of_rev:
                 if i == '':
                     continue
-                elif i == str(rev_id): # delete the rev_id so we don't add to list
+                elif i == str(rev_id):
+                    # delete the rev_id so we don't add to new_list
                     continue
                 else:
                     new_list.append(i)
@@ -541,32 +575,33 @@ def review_delete(request):
         a = User_Profile.objects.get(email=reviewer)
         str_of_posted_revs = a.get_list_of_posted_reviews()
         if str_of_posted_revs == None or str_of_posted_revs == "":
-            new_list_of_posted_revs = '' # really should never be in this if statement
+            new_list_of_posted_revs = ''
         else:
-            str_list_of_posted_revs = str_of_posted_revs.split(',')
+            str_list_of_posted_revs = str_of_posted_revs.split(';')
             new_list = []
-            str_to_delete = '(' + ad_owner + str(ad_id) + str(rev_id) + '),'
+            # string format: (ad_owner, ad_id, rev_id);
+            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ');'
             for i in str_list_of_posted_revs:
                 if i == '':
                     continue
-                elif i == str_to_delete: # delete the rental so we don't add to list
+                elif i == str_to_delete:
+                    # delete the rental so we don't add to list
                     continue
                 else:
                     new_list.append(i)
 
-            new_list_of_posted_revs = '' #contruct the string again to put back into db
+            new_list_of_posted_revs = ''
+            # contruct the string again to put back into db
             for i in new_list:
-                new_list_of_posted_revs = new_list_of_posted_revs + i + ','
+                new_list_of_posted_revs = new_list_of_posted_revs + i + ';'
 
         a.set_list_of_posted_reviews(new_list_of_posted_revs)
 
+        print('-----------> If deleted this should be empty ', rev, \
+              '\n------------------------')
 
-
-
-        print('-----------> If deleted this should be empty ', rev, '\n------------------------')
         return HttpResponse(status=200)
     else:
-        print('BAD REQUEST')
         return HttpResponse(status=400)
 
 
@@ -574,22 +609,24 @@ def review_delete(request):
 
 def event_get(request, first, second, ad_id):
     """
-    Give events this advertisement owns, identified by email and ad_id.
+    Give events this advertisement owns, identified by poster and ad_id.
     (Model: Event)
     """
 
-    email = first + "@" + second + ".com"
+    poster = first + "@" + second + ".com"
 
-    print('-----------> inside GET Event <-----------\n', email, ' --- ', ad_id, '\n------------------------')
+    print('-----------> inside GET Event <-----------\n', poster, \
+          ' ad_id: ', ad_id, '\n------------------------')
 
     try:
-        event = Event.objects.filter(ad_owner=email, ad_id=ad_id)
+        event = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
     except Event.DoesNotExist:
         return HttpResponse(status=404)
 
     serializer = EventSerializer(event, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -605,16 +642,17 @@ def event_create(request):
 
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me"#data['body']['booker'] TODO
+    booker = "me" #data['body']['booker'] TODO
 
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
           ad_owner, '\n booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
 
+    # Find the next event id for this event
     str_of_id = u.get_event_ids()
     if str_of_id == None or str_of_id == "":
-        event_id = 1 #this is the first event for this ad
+        event_id = 1 # this is the first event for this ad
     else:
         temp = str_of_id.split(',')
         temp_list = []
@@ -655,7 +693,7 @@ def event_create(request):
 
     if temp_event.exists() and len(temp_event) == 1:
 
-        # update user advertisement list_of_events
+        # update ad's list_of_events
         a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
         str_of_event_ids = a.get_event_ids()
         if str_of_event_ids == None or str_of_event_ids == "":
@@ -667,12 +705,13 @@ def event_create(request):
         # update user profile list_of_rentals
         u = User_Profile.objects.get(email=booker)
         str_of_rentals = u.get_list_of_rentals()
-        # string format: (ad_owner, ad_id, event_id)
+        # string format: (ad_owner, ad_id, event_id);
         if str_of_rentals == None or str_of_rentals == "":
             # first rental for this booker
-            new_str_of_rentals = '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+            new_str_of_rentals = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
         else:
-            new_str_of_rentals = str_of_rentals + '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+            new_str_of_rentals = str_of_rentals + \
+                '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
         u.set_list_of_rentals(new_str_of_rentals)
 
         return HttpResponse(status=201)
@@ -692,7 +731,7 @@ def event_update(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me"#data['body']['booker'] TODO
+    booker = "me" #data['body']['booker'] TODO
 
     print('-----------> inside UPDATE Event <-----------\n ad_owner: ', \
           ad_owner, '\n booker: ', booker, '\n------------------------')
@@ -713,9 +752,6 @@ def event_update(request):
         booking_status = "booked"
         notes = "number of guests " + str(data['body']['guest'])
 
-        event.set_event_id(event_id)
-        event.set_ad_owner(ad_owner)
-        event.set_ad_id(ad_id)
         event.set_booker(booker)
         event.set_start_day(start_day)
         event.set_start_day_start_time(start_day_start_time)
@@ -732,6 +768,7 @@ def event_update(request):
 def event_delete(request):
     """
     Deletes the event with event_id, ad_owner and ad_id.
+    (Model: Event)
     """
 
     data = JSONParser().parse(request)
@@ -739,9 +776,10 @@ def event_delete(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me"#data['body']['booker'] TODO
+    booker = "me" #data['body']['booker'] TODO
 
-    print('-----------> inside DELETE event <-----------\n', event_id, '\n------------------------')
+    print('-----------> inside DELETE event <-----------\n', event_id, \
+          '\n------------------------')
 
     event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
 
@@ -760,7 +798,8 @@ def event_delete(request):
             for i in str_list_of_events:
                 if i == '':
                     continue
-                elif i == str(event_id): # delete the event_id so we don't add to list
+                elif i == str(event_id):
+                    # delete the event_id so we don't add to list
                     continue
                 else:
                     new_list.append(i)
@@ -775,27 +814,31 @@ def event_delete(request):
         a = User_Profile.objects.get(email=booker)
         str_of_rentals = a.get_list_of_rentals()
         if str_of_rentals == None or str_of_rentals == "":
-            new_list_of_rentals = '' # really should never be in this if statement
+            new_list_of_rentals = ''
         else:
-            str_list_of_rentals = str_of_rentals.split(',')
+            str_list_of_rentals = str_of_rentals.split(';')
             new_list = []
-            str_to_delete = '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+            # string format: (ad_owner, ad_id, event_id);
+            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
             for i in str_list_of_rentals:
                 if i == '':
                     continue
-                elif i == str_to_delete: # delete the rental so we don't add to list
+                elif i == str_to_delete:
+                    # delete the rental so we don't add to list
                     continue
                 else:
                     new_list.append(i)
 
-            new_list_of_rentals = '' #contruct the string again to put back into db
+            new_list_of_rentals = '' # contruct the string again to put back into db
             for i in new_list:
-                new_list_of_rentals = new_list_of_rentals + i + ','
+                new_list_of_rentals = new_list_of_rentals + i + ';'
 
         a.set_list_of_rentals(new_list_of_rentals)
 
 
-        print('-----------> If deleted this is an empty list ', event, '\n------------------------')
+        print('-----------> If deleted this is an empty list ', event,
+              '\n------------------------')
+
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
@@ -809,24 +852,27 @@ def image_get(request, first, second, ad_id):
     (Model: PropertyImage)
     """
 
-    email = first + "@" + second + ".com"
+    poster = first + "@" + second + ".com"
 
-    print('-----------> inside GET Images <-----------\n', email, '\n------------------------')
+    print('-----------> inside GET Images <-----------\n', poster, \
+          '\n------------------------')
 
     try:
-        images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
+        images = PropertyImage.objects.filter(ad_owner=poster, ad_id=ad_id)
     except PropertyImage.DoesNotExist:
         return HttpResponse(status=404)
 
     serializer = PropertyImageSerializer(images, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
+
 def image_create(request):
     """
-    Create a new image for this advertisement, identified by email and ad_id.
+    Create a new image for this advertisement, identified by ad_owner and ad_id.
     (Model: PropertyImage)
     """
 
@@ -835,18 +881,19 @@ def image_create(request):
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
 
-    print('-----------> inside CREATE image <-----------\n', ad_owner, '\n------------------------')
+    print('-----------> inside CREATE image <-----------\n', ad_owner, \
+          '\n------------------------')
 
+    # Find the next image id for this ad
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
-
     str_of_id = u.get_image_ids()
     if str_of_id == None or str_of_id == "":
-        image_id = 1 #this is the first image for this ad
+        image_id = 1 # this is the first image for this ad
     else:
         temp = str_of_id.split(',')
         temp_list = []
         for i in temp:
-            if i =='':
+            if i == '':
                 continue
             else:
                 temp_list.append(int(i))
@@ -871,6 +918,7 @@ def image_create(request):
 
     if temp_image.exists() and len(temp_image) == 1:
 
+        # add this image id to ad's list_of_images
         a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
         str_of_image_ids = a.get_image_ids()
         if str_of_image_ids == None or str_of_image_ids == "":
@@ -882,6 +930,7 @@ def image_create(request):
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=400)
+
 
 def image_update(request):
     """
@@ -895,7 +944,8 @@ def image_update(request):
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
 
-    print('-----------> inside UPDATE image <-----------\n', ad_owner, '\n------------------------')
+    print('-----------> inside UPDATE image <-----------\n', ad_owner, \
+          '\n------------------------')
 
     image = PropertyImage.objects.filter(image_id=image_id, ad_owner=ad_owner, ad_id=ad_id)
 
@@ -917,6 +967,7 @@ def image_update(request):
     else:
         return HttpResponse(status=400)
 
+
 def image_delete(request):
     """
     Deletes the image with image_id, ad_owner and ad_id.
@@ -928,7 +979,8 @@ def image_delete(request):
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
 
-    print('-----------> inside DELETE event <-----------\n', image_id, '\n------------------------')
+    print('-----------> inside DELETE event <-----------\n', image_id, \
+          '\n------------------------')
 
     image = PropertyImage.objects.filter(image_id=image_id, ad_owner=ad_owner, ad_id=ad_id)
 
@@ -936,6 +988,7 @@ def image_delete(request):
 
         image.delete()
 
+        # delete the image id from this ads list_of_images
         a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_image = a.get_image_ids()
         if str_of_image == None or str_of_image == "":
@@ -946,18 +999,21 @@ def image_delete(request):
             for i in str_list_of_images:
                 if i == '':
                     continue
-                elif i == str(image_id): # delete the event_id so we don't add to list
+                elif i == str(image_id):
+                    # delete the event_id so we don't add to list
                     continue
                 else:
                     new_list.append(i)
 
-            new_list_of_images = '' #contruct the string again to put back into db
+            new_list_of_images = '' # contruct the string again to put back into db
             for i in new_list:
                 new_list_of_images = new_list_of_images + i + ','
 
         a.set_image_ids(new_list_of_images)
 
-        print('-----------> If deleted this is an empty list ', image, '\n------------------------')
+        print('-----------> If deleted this is an empty list ', image, \
+              '\n------------------------')
+
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=400)
@@ -973,7 +1029,8 @@ def get_single_ad(request, first, second, ad_id):
 
     email = first + "@" + second + ".com"
 
-    print('-----------> inside GET SINGLE advertisement <-----------\n', email, '\n------------------------')
+    print('-----------> inside GET SINGLE advertisement <-----------\n', \
+          email, '\n------------------------')
 
     try:
         ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
@@ -982,7 +1039,8 @@ def get_single_ad(request, first, second, ad_id):
 
     serializer = AdvertisementSerializer(ad)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data)
 
@@ -1002,7 +1060,8 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -1030,6 +1089,7 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
     pk_list = []
 
     for a in ads:
+        # if null then this ad is still qualified for search
         if nGuests == "null" or a.num_guests >= int(nGuests):
             if minPrice == "null" or a.base_price >= float(minPrice):
                 if maxPrice == "null" or a.base_price <= float(maxPrice):
@@ -1067,7 +1127,7 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
 
                         is_clashing = False
                         for i in event_ids:
-                            e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
+                            e = Event.objects.filter(event_id=int(i), ad_owner=a.poster, ad_id=a.ad_id)
 
                             checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
                             checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
@@ -1089,11 +1149,13 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
                     if is_clashing == None: # checkIn & checkOut was not given
                         pk_list.append(a.pk)
 
+    # here we use the actual primary keys given buy the database
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
 
     serializer = AdvertisementSerializer(suitable_ads, many=True)
 
-    print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 

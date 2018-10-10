@@ -1,4 +1,4 @@
-TODO list
+TO DO list
 
 1. write the API
     (DONE) - determine URL for each GET and POST
@@ -43,18 +43,24 @@ TODO list
 
 1. user profile needs a list_of_rentals (event_id) —> the places you are renting, have rented
 2. user profile need a list of posted_reviews (rev_id) —> the reviews that you wrote for a rented place
-TODO need functions to update the list_of_rentals and posted_reviews
+(DONE) need functions to update the list_of_rentals and posted_reviews
+(DONE) change the separators for list of posted reviews and rentals to ;
 
 
 TODO
 - {George} when making booking, I need the email of the user booking the property,
             something like this.auth0.username
+    - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
 - {Joseph} /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
             even though I have that in the search form.
-- {Gladys/Jay} need to work out how to pattern match the SEARCH URL given by frontend
+- {Gladys | Jay} need to work out how to pattern match the SEARCH URL given by frontend
 - {Gladys} test the clashing events, still don't think it works perfectly
-- {George/Joseph} when creating a review, I need the email of the reviewer,
+- {George | Joseph} when creating a review, I need the email of the reviewer,
                 something like this.auth0.username
+    - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
+- {George & Gladys} test current views and check they work [FIRST thing TODO on Friday]
+- {George | Joseph} does creating an ad give backend a base_price?
+
 
 Errors fixed:
 - the search distance, solution: use Haversine formula (refer to python file for more details)
