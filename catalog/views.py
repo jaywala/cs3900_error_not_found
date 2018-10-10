@@ -13,6 +13,7 @@ from rest_framework.parsers import JSONParser
 from django.db.models import Max
 
 from .geo import position
+from .haversine import haversine
 import math
 
 
@@ -933,13 +934,22 @@ def get_all_ads(request):
 
 #------------------------------Search Module Views------------------------------#
 
-def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, maxPrice):
+def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, distance):
     """
     Searches through all the ads and returns the ads that satisfies the parameters.
     (Model: Advertisement)
     """
 
-    print('-----------> inside GET search <-----------')
+    print('-----------> inside GET search <-----------\n',
+          'checkin: ', checkIn,
+          '\ncheckOut: ', checkOut,
+          '\nlocation: ', location,
+          '\nnGuests: ', nGuests,
+          '\nminPrice: ', minPrice,
+          '\nmaxPrice: ', maxPrice,
+          '\ndistance', distance,
+          '\n'
+         )
 
     ads = Advertisement.objects.all()
     pk_list = []
@@ -948,21 +958,31 @@ def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, ma
         if nGuests == "null" or a.num_guests >= int(nGuests):
             if minPrice == "null" or a.base_price >= float(minPrice):
                 if maxPrice == "null" or a.base_price <= float(maxPrice):
-                    d = None
-                    radius = None
+
+                    search_distance = None
                     if location != "null":
+
                         search_latitude, search_longitude = position(location)
+                        search_loc = (search_longitude, search_latitude)
+
+                        ads_latitude = a.get_latitude()
+                        ads_longitude = a.get_longitude()
+                        ads_loc = (ads_longitude, ads_latitude)
+
                         if distance != "null":
-                            radius = float(distance)
-                            ads_latitude = a.get_latitude()
-                            ads_longitude = a.get_longitude()
+                            search_distance = float(distance)
+                        else:
+                            # if no distance given, default search is 10 km
+                            search_distance = 10
 
-                            d = math.sqrt((ads_latitude - search_latitude)**2 + \
-                                    (ads_longitude - search_longitude)**2)
 
-                    if d != None and radius != None:
-                        if d > radius: # not inside radius
-                            continue
+                        # calculates the distance between two long/lat
+                        # coordnate pairs in km.
+                        dist_apart = haversine(ads_loc, search_loc)
+
+                    if search_distance != None:
+                        if dist_apart > search_distance: # too far away
+                            continue # don't add this ad to search results
 
                     is_clashing = None
                     if checkIn != "null" and checkOut != "null":
@@ -987,9 +1007,11 @@ def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, ma
                                 is_clashing = True
 
                         if not is_clashing:
+                            # if it's not clashing then is_clashing would equal False
+                            # so not is_clashing equals true
                             pk_list.append(a.pk)
 
-                    if is_clashing == None:
+                    if is_clashing == None: # checkIn & checkOut was not given
                         pk_list.append(a.pk)
 
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
