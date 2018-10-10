@@ -53,13 +53,16 @@ TODO
     - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
 - {Joseph} /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
             even though I have that in the search form.
-- {Gladys | Jay} need to work out how to pattern match the SEARCH URL given by frontend
+- {backend} need to work out how to pattern match the SEARCH URL given by frontend
 - {Gladys} test the clashing events, still don't think it works perfectly
-- {George | Joseph} when creating a review, I need the email of the reviewer,
+- {George} when creating a review, I need the email of the reviewer,
                 something like this.auth0.username
     - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
 - {George & Gladys} test current views and check they work [FIRST thing TODO on Friday]
-- {George | Joseph} does creating an ad give backend a base_price?
+- {frontend} does creating an ad give backend a base_price?
+- {George & Gladys} when creating an ad post the image is not given to backend
+    - need to post the image separately --> path('post/image/create/', views.image_create),
+- {frontend} need submit review button on review view
 
 
 Errors fixed:
