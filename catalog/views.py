@@ -703,6 +703,7 @@ def event_delete(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
+    booker = "me"#data['body']['booker'] TODO
 
     print('-----------> inside DELETE event <-----------\n', event_id, '\n------------------------')
 
@@ -712,6 +713,7 @@ def event_delete(request):
 
         event.delete()
 
+        # delete the event_id from Advertisement list_of_events
         a = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
         str_of_events = a.get_event_ids()
         if str_of_events == None or str_of_events == "":
@@ -732,6 +734,30 @@ def event_delete(request):
                 new_list_of_events = new_list_of_events + i + ','
 
         a.set_event_ids(new_list_of_events)
+
+        # delete rental from User_Profile list_of_rentals
+        a = User_Profile.objects.get(email=booker)
+        str_of_rentals = a.get_list_of_rentals()
+        if str_of_rentals == None or str_of_rentals == "":
+            new_list_of_rentals = '' # really should never be in this if statement
+        else:
+            str_list_of_rentals = str_of_rentals.split(',')
+            new_list = []
+            str_to_delete = '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+            for i in str_list_of_rentals:
+                if i == '':
+                    continue
+                elif i == str_to_delete: # delete the rental so we don't add to list
+                    continue
+                else:
+                    new_list.append(i)
+
+            new_list_of_rentals = '' #contruct the string again to put back into db
+            for i in new_list:
+                new_list_of_rentals = new_list_of_rentals + i + ','
+
+        a.set_list_of_rentals(new_list_of_rentals)
+
 
         print('-----------> If deleted this is an empty list ', event, '\n------------------------')
         return HttpResponse(status=200)
