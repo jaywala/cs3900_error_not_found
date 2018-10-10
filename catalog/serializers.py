@@ -11,7 +11,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User_Profile
-        field = ('user_name', 'name', 'email', 'profile_pic', 'list_of_ads',
+        field = ('email', 'user_name', 'name', 'profile_pic', 'list_of_ads',
                  'list_of_rentals', 'list_of_posted_reviews')
         exclude = ()
 
@@ -33,7 +33,7 @@ class AccommodationReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Accommodation_Review
-        field = ('rev_id', 'ad_owner', 'ad_id', 'rating', 'message')
+        field = ('rev_id', 'ad_owner', 'ad_id', 'reviewer', 'rating', 'message')
         exclude = ()
 
 
@@ -41,7 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        field = ('event_id', 'ad_owner', 'ad_id', 'start_day',
+        field = ('event_id', 'ad_owner', 'ad_id', 'booker', 'start_day', 
                  'start_day_start_time', 'end_day', 'end_day_end_time',
                  'booking_status', 'notes')
         exclude = ()
