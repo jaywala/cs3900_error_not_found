@@ -33,7 +33,7 @@ def importFromCSV():
             if count == 101:
                 break
 
-            print(count)
+            print(count, "  " ,row[21])
 
             user1 = User_Profile(email=(row[21]+"@example.com"), # column V
                                  user_name=row[21],
