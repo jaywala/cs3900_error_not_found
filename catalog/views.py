@@ -14,6 +14,7 @@ from django.db.models import Max
 
 from .geo import position
 from .haversine import haversine
+from datetime import datetime, time
 import math
 
 
@@ -568,10 +569,10 @@ def event_create(request):
 
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = data['body']['booker']
+    booker = "me"#data['body']['booker'] TODO
 
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
-          ad_owner, 'booker: ', booker, '\n------------------------')
+          ad_owner, '\n booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
 
@@ -590,17 +591,15 @@ def event_create(request):
         new_id = max_id + 1
         event_id = new_id
 
-    temp_str = data['body']['start_day'].split('T')
-    temp_str_1 = data['body']['end_day'].split('T')
-    print(temp_str_1, '----------')
-    start_day =  temp_str[0] #'2018-09-30T14:00:00.000Z'
-    start_day_start_time = ""#data['body']['start_day_start_time']
-    end_day = temp_str_1[0]
-    end_day_end_time = ""#data['body']['end_day_end_time']
-    booking_status = "booked"#data['body']['booking_status']
-    notes = ""#data['body']['notes']
+    checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
 
-    #TODO add ngeusts
+    start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+    start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+    end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
+    end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+    booking_status = "booked"
+    notes = "number of guests " + str(data['body']['guest'])
 
     event = Event(
             event_id=event_id,
@@ -620,6 +619,7 @@ def event_create(request):
 
     if temp_event.exists() and len(temp_event) == 1:
 
+        # update user advertisement list_of_events
         a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
         str_of_event_ids = a.get_event_ids()
         if str_of_event_ids == None or str_of_event_ids == "":
@@ -628,7 +628,16 @@ def event_create(request):
             new_str_of_events = str_of_event_ids + str(event_id) + ','
         a.set_event_ids(new_str_of_events)
 
-        # TODO update user profile list_of_rentals
+        # update user profile list_of_rentals
+        u = User_Profile.objects.get(email=booker)
+        str_of_rentals = u.get_list_of_rentals()
+        # string format: (ad_owner, ad_id, event_id)
+        if str_of_rentals == None or str_of_rentals == "":
+            # first rental for this booker
+            new_str_of_rentals = '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+        else:
+            new_str_of_rentals = str_of_rentals + '(' + ad_owner + str(ad_id) + str(event_id) + '),'
+        u.set_list_of_rentals(new_str_of_rentals)
 
         return HttpResponse(status=201)
     else:

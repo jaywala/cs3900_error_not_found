@@ -17,9 +17,15 @@ class User_Profile(models.Model):
 
     # contains the ad id's that this user owns
     list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
+
     # contains the ad id's that this user has rented or is renting
+    # each rental will be identified by ad_id, ad_owner, event_id
+    # string format: (ad_owner, ad_id, event_id), (ad_owner, ad_id, event_id), etc.
     list_of_rentals = models.CharField(null=True, blank=True, max_length=1000)
+
     # contains the review id's that this user has written
+    # each review will be identified by ad_id, ad_owner, rev_id
+    # string format: (ad_owner, ad_id, rev_id), (ad_owner, ad_id, rev_id), etc.
     list_of_posted_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
@@ -374,7 +380,8 @@ class Event(models.Model):
     def __str__(self):
         temp = 'event_id: ' + str(self.event_id) + \
                ', ad_owner: ' + self.ad_owner + \
-               ', ad_id: ' + str(self.ad_id)
+               ', ad_id: ' + str(self.ad_id) + \
+               ', booker: ' + self.booker
         return temp
 
     #--------------------------------
