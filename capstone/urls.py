@@ -1,4 +1,5 @@
-"""capstone URL Configuration
+"""
+capstone URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -20,8 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 """
-# tutorial said to replace all the contents here with below
-# commented out incase we need the previous code --> gladys
+
 from django.conf.urls import url
 from django.urls import path, include
 from django.contrib import admin
