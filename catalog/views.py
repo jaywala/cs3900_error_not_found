@@ -558,7 +558,8 @@ def event_get(request, first, second, ad_id):
 
 def event_create(request):
     """
-    Create a new event for this advertisement, identified by email and ad_id.
+    Create a new event for this advertisement, identified by ad_owner (email)
+    ad_id and booker (email).
     (Model: Event)
     """
 
@@ -566,8 +567,10 @@ def event_create(request):
 
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
+    booker = data['body']['booker']
 
-    print('-----------> inside CREATE Event <-----------\n', ad_owner, '\n------------------------')
+    print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
+          ad_owner, 'booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
 
@@ -602,6 +605,7 @@ def event_create(request):
             event_id=event_id,
             ad_owner=ad_owner,
             ad_id=ad_id,
+            booker=booker,
             start_day=start_day,
             start_day_start_time=start_day_start_time,
             end_day=end_day,
@@ -622,6 +626,8 @@ def event_create(request):
         else:
             new_str_of_events = str_of_event_ids + str(event_id) + ','
         a.set_event_ids(new_str_of_events)
+
+        # TODO update user profile list_of_rentals
 
         return HttpResponse(status=201)
     else:
@@ -993,6 +999,11 @@ def search(request, checkIn, checkOut, location, nGuests, distance, minPrice, ma
     print('-----------> data given to frontend <-----------\n', serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
+
+
+#------------------------------Booking Module Views------------------------------#
+
+
 
 
 #------------------------------Test Views------------------------------#

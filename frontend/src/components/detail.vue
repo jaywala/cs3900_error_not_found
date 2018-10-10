@@ -2,7 +2,7 @@
   <div id="app">
     <!--<small v-if="authenticated()">backend response message: {{this.message}}</small>-->
 
-    <div class="container" style="">
+    <div class="container content" style="">
       <div class="row">
 
       </div>

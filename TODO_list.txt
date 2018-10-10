@@ -30,7 +30,7 @@ TODO list
 
 7. (DONE) - [Backend] allow user to decline, accept, cancel booking requests
 
-8. [Backend] email communication between users TODO
+8. [Backend] email communication between users
 
 
 (DONE) - when deleting an ad, need to delete it's reviews and events

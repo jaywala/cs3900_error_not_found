@@ -65,7 +65,7 @@ export default {
   },
 
   mounted () {
-      axios.get("http://localhost:8000/get/advertisement/images/"+ "Colleen/example/1/")
+      axios.get("http://localhost:8000/get/review/Colleen/example/1/")
       .then(response => {
            // JSON responses are automatically parsed.
            this.message = response.data
