@@ -26,4 +26,19 @@ Week 6
 - Added google maps API for easy address-lookup.
 
 Week 7
-- Integrated component into main development application.
+- Integrated newbooking & newproperty form components into main development application.
+
+Week 8
+- Designed details webpage for displaying information specific to a property by hand.
+
+Week 9
+- Programmed and Implemented the details webpage and booking form that guests utilize.
+
+Week 10
+- Designed the new landing page view.
+- Worked with Gladys in defining the structure of how search queries would work between the frontend+backend
+
+Week 11
+- Programmed and stylized the search/filter component and fully integrated it with the backend server.
+- Researched potentia cloud deployment options. (Heroku, AWS, Etc.)
+
