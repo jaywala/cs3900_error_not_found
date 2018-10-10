@@ -646,8 +646,9 @@ def event_create(request):
 
 def event_update(request):
     """
-    Updates event, identified by email and ad_id.
-    (Model: Advertisement_Event)
+    Updates event, identified by ad_owner (email)
+    ad_id and event_id.
+    (Model: Event)
     """
 
     data = JSONParser().parse(request)
@@ -655,8 +656,10 @@ def event_update(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
+    booker = "me"#data['body']['booker'] TODO
 
-    print('-----------> inside UPDATE event <-----------\n', ad_owner, '\n------------------------')
+    print('-----------> inside UPDATE Event <-----------\n ad_owner: ', \
+          ad_owner, '\n booker: ', booker, '\n------------------------')
 
     event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
 
@@ -664,19 +667,20 @@ def event_update(request):
 
         event = event[0]
 
-        event_id = data['body']['event_id']
-        ad_owner = data['body']['ad_owner']
-        ad_id = data['body']['ad_id']
-        start_day = data['body']['start_day']
-        start_day_start_time = data['body']['start_day_start_time']
-        end_day = data['body']['end_day']
-        end_day_end_time = data['body']['end_day_end_time']
-        booking_status = data['body']['booking_status']
-        notes = data['body']['notes']
+        checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+        checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
+
+        start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+        start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+        end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
+        end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+        booking_status = "booked"
+        notes = "number of guests " + str(data['body']['guest'])
 
         event.set_event_id(event_id)
         event.set_ad_owner(ad_owner)
         event.set_ad_id(ad_id)
+        event.set_booker(booker)
         event.set_start_day(start_day)
         event.set_start_day_start_time(start_day_start_time)
         event.set_end_day(end_day)
