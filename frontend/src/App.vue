@@ -3,6 +3,8 @@
         <!-- Bootstrap core CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 
+        
+
         <!-- Custom styles for this template -->
         <link href="./components/album.css" rel="stylesheet">
 
@@ -25,8 +27,8 @@
               </div>
             </div>
           </div>
-          <div class="navbar navbar-dark bg-dark box-shadow">
-            <div class="container d-flex justify-content-between">
+          <div class="navbar navbar-dark navbar-static-top bg-dark box-shadow" style="position: fixed; width: 100%;">
+            <div class="container d-flex justify-content-between" >
               <a href="/" class="navbar-brand d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                 <strong>NotAirbnb</strong>
@@ -71,11 +73,26 @@
       </header>
     <br>
   </div>
+  
 </template>
 
 <script>
 import Vue from 'vue'
 import router from '@/router'
+
+// First, checks if it isn't implemented yet.
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) { 
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
 export default {
   name: 'App',
   methods: {
@@ -93,3 +110,16 @@ export default {
   }
 }
 </script>
+
+<style>
+.navbar-static-top {
+  position: fixed;
+  top: 0px;
+  z-index: 10000;
+}
+
+.content {
+  padding-top: 80px;
+}
+
+</style>

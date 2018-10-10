@@ -4,7 +4,7 @@
 
         <!-- Custom styles for this template -->
       <section class="jumbotron text-center">
-        <div class="container">
+        <div class="container content">
           <p>
             <h1 style="color:aliceblue;">Sydney</h1>
             <p style="color:aliceblue;">Relentlessly enterprising and culturally diverse, all eyes are on Sydney when this influential city takes the stage.</p>

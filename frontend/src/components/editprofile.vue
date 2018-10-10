@@ -1,5 +1,5 @@
 <template >
-  <div id="app">
+  <div id="app" class="container content">
   <h1 v-if="authenticated()">{{this.message}}</h1>
   {{this.url}}
   <h2>hello</h2>

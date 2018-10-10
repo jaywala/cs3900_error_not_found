@@ -1,7 +1,7 @@
 <template>
-  <div class="PropertyForm">
+  <div class="PropertyForm container content">
     <form novalidate class="md-layout" @submit.prevent="validateUser">
-      <md-card class="md-layout-item md-size-50 md-small-size-100">
+      <md-card class="md-layout-item md-size-100 md-small-size-200">
         <md-card-header>
           <div class="md-display-1">List your property</div>
         </md-card-header>

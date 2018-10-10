@@ -1,9 +1,10 @@
 <template>
-  <div class="container">
-    {{message.where}}
+  <div class="container content" >
+    <!--{{message.where}}-->
     <!--<input type="text" placeholder="Any where" v-model="message.where">-->
-    <md-field style="width: 500px">
-      <vue-google-autocomplete required
+    <div id="search-filters" style="">
+      <md-field style="width: 100%">
+        <vue-google-autocomplete required
           classname="md-input form-control"
           placeholder="Address"
           name="address"
@@ -11,27 +12,26 @@
           v-model="message.where"
           country='au'
           v-on:placechanged="getAddressData"
-        >
-      </vue-google-autocomplete>
-    </md-field>
+          >
+        </vue-google-autocomplete>
+      </md-field>
 
-    <!--<input
-      type="text"
-      id="datepicker-trigger"
-      v-bind:placeholder="message.dateFormat"
-      :value="formatDates(message.dateOne, message.dateTwo)"
-    >-->
-    <AirbnbStyleDatepicker
-      :trigger-element-id="'datepicker-trigger'"
-      :mode="'range'"
-      :fullscreen-mobile="true"
-      :date-one="message.dateOne"
-      :date-two="message.dateTwo"
-      :offset-y="10"
-      @date-one-selected="val => { message.dateOne = val }"
-      @date-two-selected="val => { message.dateTwo = val }"
-    />
-    <div id="search-filters">
+      <!--<input
+        type="text"
+        id="datepicker-trigger"
+        v-bind:placeholder="message.dateFormat"
+        :value="formatDates(message.dateOne, message.dateTwo)"
+      >-->
+      <AirbnbStyleDatepicker
+        :trigger-element-id="'datepicker-trigger'"
+        :mode="'range'"
+        :fullscreen-mobile="true"
+        :date-one="message.dateOne"
+        :date-two="message.dateTwo"
+        :offset-y="10"
+        @date-one-selected="val => { message.dateOne = val }"
+        @date-two-selected="val => { message.dateTwo = val }"
+      />
       <md-dialog :md-active.sync="showGuestsDialog">
         <md-dialog-title>Number of Guests</md-dialog-title>
           
@@ -88,18 +88,81 @@
         </md-dialog-actions>        
       </md-dialog>
 
-      <input type="button" id="datepicker-trigger" class="md-button md-primary md-raised md-theme-default" value="Dates">
-      <md-button class="md-primary md-raised" @click="showGuestsDialog = true">Guests</md-button>
-      <md-button class="md-primary md-raised" @click="showPriceDialog = true">Price Range</md-button>
-      <md-button class="md-primary md-raised" @click="showDistanceDialog = true">Distance</md-button>
-      <div class="">
+      <div v-if="this.message['dateOne'] && this.message['dateTwo']" style="display: inline">
+        <input type="button" id="datepicker-trigger" class="md-button md-primary md-raised md-theme-default" :value="datesRange">
+      </div>
+      <div v-else style="display: inline">  
+        <input type="button" id="datepicker-trigger" class="md-button md-secondary md-raised md-theme-default" value="Dates">
+      </div>
+
+      <md-button class="md-primary md-raised" @click="showGuestsDialog = true">{{ message.guests }} Guest(s)</md-button>
+      
+      <div v-if="this.message['minPrice'] || this.message['maxPrice']" style="display: inline">
+        <md-button class="md-primary md-raised" @click="showPriceDialog = true">Price Range</md-button>
+      </div>
+      <div v-else style="display: inline">
+        <md-button class="md-secondary md-raised" @click="showPriceDialog = true">Price Range</md-button>
+      </div>
+
+      <div v-if="this.message['distance']" style="display: inline">
+        <md-button class="md-primary md-raised" @click="showDistanceDialog = true">Distance</md-button>
+      </div>
+      <div v-else style="display: inline">
+        <md-button class="md-secondary md-raised" @click="showDistanceDialog = true">Distance</md-button>
+      </div>
+      
+      <div class="" hidden>
         {{message.dateFormat}}
         {{message.dateOne}}
         {{message.dateTwo}}
         {{message.where}}
       </div>
+      <md-button class="md-primary md-raised" style="width: 100%" v-on:click="searchAds()">Search</md-button>
+
     </div>
 
+    <div id="search-result">
+
+      <!-- Results -->
+      <div class="row">
+        <!-- Map -->
+        <div class="col-md-0">
+          <div id="map" class="map"></div>
+        </div>
+        
+        <!-- Tiles -->
+        <div class="col-md-12">
+          <md-content class="md-scrollbar">
+            <div id="ads" v-if="this.ads">
+              <h2>{{ this.ads.length }} Search Results</h2>
+
+              <div class="album py-5 bg-light"> <!-- Listings -->
+                <div class="row">
+                  <div v-for="ad in this.ads" class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
+                      <div class="card-body">
+                        <p class="card-text">Property Type · {{ad.property_type}}</p>
+                        <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
+                        <p class="card-text">${{ad.base_price}} AUD per night</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- End of Listings -->
+
+            </div>
+          </md-content>
+        </div>
+
+      </div>
+
+  
+  
+  
+    </div>
   </div>
 </template>
 
@@ -110,6 +173,7 @@ import axios from 'axios'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import format from 'date-fns/format'
 //import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
+
 export default {
   components: {
     VueGoogleAutocomplete,
@@ -130,6 +194,15 @@ export default {
         "maxPrice": '',
       },
       ads: null,
+      
+      map: null,
+      tileLayer: null,
+      layers: [],
+    }
+  },
+  computed: {
+    datesRange () {
+      return this.message['dateOne'] + "  -  " + this.message['dateTwo'];
     }
   },
   methods: {
@@ -159,22 +232,77 @@ export default {
 
     searchAds() {
       console.log(this.$router.currentRoute.path)
-      this.parameters = ""
-      axios.get("http://localhost:8000/get/advertisement/" + this.parameters)
+      this.parameters = {};
+      if (this.message['dateOne']) {
+        this.parameters['dateOne'] = this.message['dateOne'];
+      } else {
+        this.parameters['dateOne'] = 'null';
+      }
+      if (this.message['dateTwo']) {
+        this.parameters['dateTwo'] = this.message['dateTwo'];
+      } else {
+        this.parameters['dateTwo'] = 'null';
+      }
+      if (this.parameters['where']) {
+        this.parameters['where'] = this.message['where'];
+      } else {
+        this.parameters['where'] = 'null';
+      }
+      this.parameters['guests'] = this.message['guests'];
+      if (this.message['minPrice']) {
+        this.parameters['minPrice'] = this.message['minPrice'];
+      } else {
+        this.parameters['minPrice'] = 'null';
+      }
+      if (this.message['maxPrice']) {
+        this.parameters['maxPrice'] = this.message['maxPrice'];
+      } else {
+        this.parameters['maxPrice'] = 'null';
+      }
+      if (this.message['distance']) {
+        this.parameters['distance'] = this.message['distance'];
+      } else {
+        this.parameters['distance'] = 'null';
+      }
+
+      let queryString = "{0}/{1}/{2}/{3}/{4}/{5}/{6}/".format(this.parameters['dateOne'], this.parameters['dateTwo'], this.parameters['where'], this.parameters['guests'], this.parameters['minPrice'], this.parameters['maxPrice'], this.parameters['distance'])
+      // axios.get("http://127.0.0.1:8000/get/null/null/null/null/null/null/null/")
+      axios.get("http://127.0.0.1:8000/get/"+queryString)
       .then(response => {
         // JSON responses are automatically parsed.
         this.ads = response.data
+        
       })
       .catch(e => {
+        
         this.errors.push(e)
       })
-      console.log(this.ads)
-    }
-  }
+      console.log("lol: "+this.ads)
+    },
+    initMap() {
+      this.map = L.map('map').setView([38.63, -90.23], 12);
+      this.tileLayer = L.tileLayer(
+        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
+        {
+          maxZoom: 18,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+        }
+      );
+      this.tileLayer.addTo(this.map);
+    },
+    initLayers() {},
+  },
+  mounted() {
+    this.searchAds();
+    this.initMap();
+    this.initLayers();
+  },
 }
 </script>
 <style src="./icon.css">
 .search-filters {
   
 }
+
+.map { height: 600px; }
 </style>
