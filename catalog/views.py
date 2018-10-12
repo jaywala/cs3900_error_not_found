@@ -234,7 +234,8 @@ def advertisement_create(request):
 
     poster = data['body']['poster']
 
-
+    im = data['images']
+    print(im)
 
     print('-----------> inside CREATE advertisement <-----------\n', poster, \
           '\n------------------------')
@@ -1065,8 +1066,6 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 

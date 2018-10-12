@@ -34,7 +34,7 @@
       />
       <md-dialog :md-active.sync="showGuestsDialog">
         <md-dialog-title>Number of Guests</md-dialog-title>
-          
+
         <md-button style="display:inline-block;" class="md-icon-button md-raised" v-bind:disabled="message.guests <= 1? true:false" v-on:click="message.guests -= 1" >
           -
         </md-button>
@@ -52,14 +52,14 @@
       <md-dialog :md-active.sync="showPriceDialog">
         <md-dialog-title>Price</md-dialog-title>
 
-        <div class="md-layout-item md-layout md-gutter"> 
+        <div class="md-layout-item md-layout md-gutter">
           <div class="md-layout-item">
             <md-field>
               <label>Min</label>
               <md-input v-model="message.minPrice"></md-input>
             </md-field>
           </div>
-          
+
           <div class="md-layout-item">
             <md-field>
               <label>Max</label>
@@ -71,7 +71,7 @@
         <md-dialog-actions>
           <md-button class="md-primary" @click="showPriceDialog = false">Clear</md-button>
           <md-button class="md-primary" @click="showPriceDialog = false">Apply</md-button>
-        </md-dialog-actions>        
+        </md-dialog-actions>
       </md-dialog>
 
       <md-dialog :md-active.sync="showDistanceDialog">
@@ -85,18 +85,18 @@
         <md-dialog-actions>
           <md-button class="md-primary" @click="showDistanceDialog = false">Clear</md-button>
           <md-button class="md-primary" @click="showDistanceDialog = false">Apply</md-button>
-        </md-dialog-actions>        
+        </md-dialog-actions>
       </md-dialog>
 
       <div v-if="this.message['dateOne'] && this.message['dateTwo']" style="display: inline">
         <input type="button" id="datepicker-trigger" class="md-button md-primary md-raised md-theme-default" :value="datesRange">
       </div>
-      <div v-else style="display: inline">  
+      <div v-else style="display: inline">
         <input type="button" id="datepicker-trigger" class="md-button md-secondary md-raised md-theme-default" value="Dates">
       </div>
 
       <md-button class="md-primary md-raised" @click="showGuestsDialog = true">{{ message.guests }} Guest(s)</md-button>
-      
+
       <div v-if="this.message['minPrice'] || this.message['maxPrice']" style="display: inline">
         <md-button class="md-primary md-raised" @click="showPriceDialog = true">Price Range</md-button>
       </div>
@@ -110,7 +110,7 @@
       <div v-else style="display: inline">
         <md-button class="md-secondary md-raised" @click="showDistanceDialog = true">Distance</md-button>
       </div>
-      
+
       <div class="" hidden>
         {{message.dateFormat}}
         {{message.dateOne}}
@@ -129,7 +129,7 @@
         <div class="col-md-0">
           <div id="map" class="map"></div>
         </div>
-        
+
         <!-- Tiles -->
         <div class="col-md-12">
           <md-content class="md-scrollbar">
@@ -138,11 +138,11 @@
 
               <div class="album py-5 bg-light"> <!-- Listings -->
                 <div class="row">
-                  <div v-for="ad in this.ads" class="col-md-4">
+                  <div v-for="(ad,n) in this.ads" class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" src="https://images-na.ssl-images-amazon.com/images/I/51MZEBXRYML._SL500_AC_SS350_.jpg" alt="Card image cap">
+                        <img class="card-img-top" :src = "this.images[n].pic" alt="">
                       <div class="card-body">
-                        <p class="card-text">Property Type · {{ad.property_type}}</p>
+                        <p class="card-text">{{ad.property_type}}</p>
                         <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
                         <p class="card-text">${{ad.base_price}} AUD per night</p>
                         <div class="d-flex justify-content-between align-items-center">
@@ -159,9 +159,9 @@
 
       </div>
 
-  
-  
-  
+
+
+
     </div>
   </div>
 </template>
@@ -194,18 +194,33 @@ export default {
         "maxPrice": '',
       },
       ads: null,
-      
+      images: [
+        "hello",
+        "again",
+        "3",
+      ],
       map: null,
       tileLayer: null,
       layers: [],
+      parameters:null,
     }
   },
   computed: {
     datesRange () {
       return this.message['dateOne'] + "  -  " + this.message['dateTwo'];
-    }
+    },
   },
   methods: {
+    getPic(ads){
+      console.log(ads)
+      for(ad in ads){
+        axios.get("http://127.0.0.1:8000/get/"+"image/"+ "Colleen/example/1/" )
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.images.push(response.data)
+        })
+      }
+    },
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
@@ -229,9 +244,8 @@ export default {
         // console.log(placeResultData)
         // alert(document.getElementById('map').value)
     },
-
     searchAds() {
-      console.log(this.$router.currentRoute.path)
+
       this.parameters = {};
       if (this.message['dateOne']) {
         this.parameters['dateOne'] = this.message['dateOne'];
@@ -243,7 +257,7 @@ export default {
       } else {
         this.parameters['dateTwo'] = 'null';
       }
-      if (this.message['where']) {
+      if (this.parameters['where']) {
         this.parameters['where'] = this.message['where'];
       } else {
         this.parameters['where'] = 'null';
@@ -264,20 +278,17 @@ export default {
       } else {
         this.parameters['distance'] = 'null';
       }
-
       let queryString = "{0}/{1}/{2}/{3}/{4}/{5}/{6}/".format(this.parameters['dateOne'], this.parameters['dateTwo'], this.parameters['where'], this.parameters['guests'], this.parameters['minPrice'], this.parameters['maxPrice'], this.parameters['distance'])
       // axios.get("http://127.0.0.1:8000/get/null/null/null/null/null/null/null/")
       axios.get("http://127.0.0.1:8000/get/"+queryString)
       .then(response => {
         // JSON responses are automatically parsed.
         this.ads = response.data
-        
       })
       .catch(e => {
-        
-        this.errors.push(e)
+
+        _this.errors.push(e)
       })
-      console.log("lol: "+this.ads)
     },
     initMap() {
       this.map = L.map('map').setView([38.63, -90.23], 12);
@@ -292,16 +303,17 @@ export default {
     },
     initLayers() {},
   },
-  mounted() {
+  created() {
     this.searchAds();
     this.initMap();
     this.initLayers();
+    this.getPic(this.ads);
   },
 }
 </script>
 <style src="./icon.css">
 .search-filters {
-  
+
 }
 
 .map { height: 600px; }
