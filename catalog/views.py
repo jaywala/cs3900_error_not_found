@@ -2,10 +2,11 @@
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import Event, User_Profile, PropertyImage
+from catalog.models import Event, User_Profile, PropertyImage, PropertyRequest
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
 from catalog.serializers import EventSerializer, UserProfileSerializer,PropertyImageSerializer
+from catalog.serializers import PropertyRequestSerializer
 
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -1066,6 +1067,46 @@ def get_all_ads(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+def get_prop_requests(request):
+    """
+    Gets all property requests.
+    (Model: PropertyRequest)
+    """
+
+    print('-----------> inside GET prop_requests <-----------')
+
+    try:
+        a = PropertyRequest.objects.all()
+    except PropertyRequest.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyRequestSerializer(a, many=True)
+
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+def post_prop_request(request):
+    """
+    Posts a property request.
+    """
+
+    print('-----------> inside POST property request <-----------\n')
+
+    data = JSONParser().parse(request)
+
+    name = data['body']['name']
+    email = data['body']['email']
+    text = data['body']['text']
+
+    p = PropertyRequest(name=name, email=email, text=text)
+    p.save()
+
+    return HttpResponse(status=201)
+
+
 #------------------------------Search Module Views------------------------------#
 
 def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, distance):
@@ -1121,13 +1162,14 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
 
                     is_clashing = None
                     if checkIn != "null" and checkOut != "null":
-                        event_ids = a.get_event_ids
+                        event_ids = a.get_event_ids()
                         # convert string into list
                         event_ids = event_ids.split(',')
 
                         is_clashing = False
                         for i in event_ids:
-                            e = Event.objects.filter(event_id=int(i), ad_owner=a.poster, ad_id=a.ad_id)
+
+                            e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
 
                             checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
                             checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()

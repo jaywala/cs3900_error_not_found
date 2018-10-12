@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Advertisement, Accommodation_Review, PropertyImage
-from .models import User_Profile, Event
+from .models import User_Profile, Event, PropertyRequest
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -75,9 +75,17 @@ class PropertyImageAdmin(admin.ModelAdmin):
         (None, {'fields': ['pic']}),
     ]
 
+class PropertyRequestAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['name']}),
+        (None, {'fields': ['email']}),
+        (None, {'fields': ['text']}),
+    ]
+
 
 admin.site.register(User_Profile, UserAdmin)
 admin.site.register(Advertisement, AdvertisementAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Accommodation_Review, AccommodationReviewAdmin)
 admin.site.register(PropertyImage, PropertyImageAdmin)
+admin.site.register(PropertyRequest, PropertyRequestAdmin)

@@ -657,3 +657,41 @@ class PropertyImage(models.Model):
         i = PropertyImage.objects.get(id=self.id)
         i.pic = new_pic
         i.save()
+
+
+class PropertyRequest(models.Model):
+
+    name = models.CharField(null=True, blank=True, max_length=1000)
+    email = models.CharField(null=True, blank=True, max_length=1000)
+    text = models.CharField(null=True, blank=True, max_length=1000)
+
+    def __str__(self):
+        return self.name + ", " + self.email
+
+    #--------------------------------
+
+    def get_name(self):
+        return self.name
+
+    def get_email(self):
+        return self.email
+
+    def get_text(self):
+        return self.text
+
+    #--------------------------------
+
+    def set_name(self, new_name):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.name = new_name
+        r.save()
+
+    def set_email(self, new_email):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.email = new_email
+        r.save()
+
+    def set_text(self, new_text):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.text = new_text
+        r.save()
