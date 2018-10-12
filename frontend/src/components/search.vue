@@ -243,7 +243,7 @@ export default {
       } else {
         this.parameters['dateTwo'] = 'null';
       }
-      if (this.parameters['where']) {
+      if (this.message['where']) {
         this.parameters['where'] = this.message['where'];
       } else {
         this.parameters['where'] = 'null';
