@@ -77,13 +77,8 @@ urlpatterns = [
 
     #---------------- Search module views ----------------#
 
-    path('get/<checkIn>[0-9]{4}-[0-9]{2}-[0-9]{2}/    \
-              <checkOut>[0-9]{4}-[0-9]{2}-[0-9]{2}/   \
-              <location>/                             \
-              <nGuests>/                              \
-              <minPrice>[0-9].[0-9]/                  \
-              <maxPrice>[0-9].[0-9]/                  \
-              <distance>/', views.search),
+    path('get/<slug:checkIn>/<slug:checkOut>/<location>/<slug:nGuests>/<slug:minPrice>/<slug:maxPrice>/<slug:distance>/', views.search),
+
 
     #---------------- URLs for testing ----------------#
 
