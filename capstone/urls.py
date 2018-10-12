@@ -67,15 +67,15 @@ urlpatterns = [
     path('post/image/update/', views.image_update),
     path('post/image/delete/', views.image_delete),
 
-    #---------------- Accommodation Seeker Views ----------------#
+    #---------------- Property Seeker Views ----------------#
 
+    path('get/PropertyRequest/', views.get_prop_requests),
+    path('post/PropertyRequest/', views.post_prop_request),
 
     #---------------- General Views ----------------#
 
     path('get/advertisement/', views.get_all_ads), # in use
     path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad), # in use
-    path('get/PropertyRequest/', views.get_prop_requests),
-    path('post/PropertyRequest/', views.post_prop_request),
 
     #---------------- Search module views ----------------#
 

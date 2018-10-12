@@ -1086,6 +1086,7 @@ def get_prop_requests(request):
 
     return JsonResponse(serializer.data, safe=False)
 
+
 def post_prop_request(request):
     """
     Posts a property request.
@@ -1160,14 +1161,14 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
 
                     is_clashing = None
                     if checkIn != "null" and checkOut != "null":
-                        event_ids = a.get_event_ids
+                        event_ids = a.get_event_ids()
                         # convert string into list
-                        print('------', event_ids, '------')
                         event_ids = event_ids.split(',')
 
                         is_clashing = False
                         for i in event_ids:
-                            e = Event.objects.filter(event_id=int(i), ad_owner=a.poster, ad_id=a.ad_id)
+
+                            e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
 
                             checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
                             checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
