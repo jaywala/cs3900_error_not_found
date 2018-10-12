@@ -2,10 +2,11 @@
 from django.http import *
 
 from catalog.models import Advertisement, Accommodation_Review
-from catalog.models import Event, User_Profile, PropertyImage
+from catalog.models import Event, User_Profile, PropertyImage, PropertyRequest
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
 from catalog.serializers import EventSerializer, UserProfileSerializer,PropertyImageSerializer
+from catalog.serializers import PropertyRequestSerializer
 
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
