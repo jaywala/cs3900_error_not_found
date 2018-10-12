@@ -47,6 +47,11 @@ TO DO list
 (DONE) change the separators for list of posted reviews and rentals to ;
 
 
+Errors fixed:
+- the search distance, solution: use Haversine formula (refer to python file for more details)
+- fixed date formatting for booking accommodation
+
+
 TODO
 - {George} when making booking, I need the email of the user booking the property,
             something like this.auth0.username
@@ -63,8 +68,4 @@ TODO
 - {George & Gladys} when creating an ad post the image is not given to backend
     - need to post the image separately --> path('post/image/create/', views.image_create),
 - {frontend} need submit review button on review view
-
-
-Errors fixed:
-- the search distance, solution: use Haversine formula (refer to python file for more details)
-- fixed date formatting for booking accommodation
+- check data before changing db

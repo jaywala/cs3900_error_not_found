@@ -1066,6 +1066,45 @@ def get_all_ads(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+def get_prop_requests(request):
+    """
+    Gets all property requests.
+    (Model: PropertyRequest)
+    """
+
+    print('-----------> inside GET prop_requests <-----------')
+
+    try:
+        a = PropertyRequest.objects.all()
+    except PropertyRequest.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyRequestSerializer(a, many=True)
+
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
+
+    return JsonResponse(serializer.data, safe=False)
+
+def post_prop_request(request):
+    """
+    Posts a property request.
+    """
+
+    print('-----------> inside POST property request <-----------\n')
+
+    data = JSONParser().parse(request)
+
+    name = data['body']['name']
+    email = data['body']['email']
+    text = data['body']['text']
+
+    p = PropertyRequest(name=name, email=email, text=text)
+    p.save()
+
+    return HttpResponse(status=201)
+
+
 #------------------------------Search Module Views------------------------------#
 
 def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, distance):
@@ -1123,6 +1162,7 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
                     if checkIn != "null" and checkOut != "null":
                         event_ids = a.get_event_ids
                         # convert string into list
+                        print('------', event_ids, '------')
                         event_ids = event_ids.split(',')
 
                         is_clashing = False

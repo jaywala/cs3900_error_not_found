@@ -4,7 +4,7 @@ import django
 django.setup()
 
 from .models import Advertisement, Accommodation_Review
-from .models import User_Profile, Event, PropertyImage
+from .models import User_Profile, Event, PropertyImage, PropertyRequest
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -41,7 +41,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        field = ('event_id', 'ad_owner', 'ad_id', 'booker', 'start_day', 
+        field = ('event_id', 'ad_owner', 'ad_id', 'booker', 'start_day',
                  'start_day_start_time', 'end_day', 'end_day_end_time',
                  'booking_status', 'notes')
         exclude = ()
@@ -52,4 +52,12 @@ class PropertyImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyImage
         field = ('image_id', 'ad_owner', 'ad_id', 'pic')
+        exclude = ()
+
+
+class PropertyRequestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PropertyRequest
+        field = ('name', 'email', 'text')
         exclude = ()
