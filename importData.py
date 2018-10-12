@@ -119,7 +119,7 @@ def importFromCSV():
                     )
             event.save()
 
-            if count <= 2:
+            if count <= 100:
                 im_number = 0
                 filepath = 'accommodation_pics/' + str(count) + '/*.jpg'
                 for filename in glob.glob(filepath):
