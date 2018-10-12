@@ -10,11 +10,17 @@ import editprofile from '@/components/editprofile.vue'
 import review from '@/components/review.vue'
 import image from '@/components/displayimage.vue'
 import request from '@/components/requestform.vue'
+import success from '@/components/success.vue'
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   routes: [
+      {
+        path:'/success',
+        name:'success',
+        component: success,
+      },
       {
         path: '/newbook',
         name: 'newbook',

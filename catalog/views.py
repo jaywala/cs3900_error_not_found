@@ -86,7 +86,7 @@ def create_user(data):
     """
 
     email = data['body']['email']
-    user_name = data['body']['given_name']
+    user_name = data['body']['nickname']
     name = data['body']['name']
     profile_pic = data['body']['picture']
     list_of_ads = ""
@@ -231,6 +231,9 @@ def advertisement_create(request):
     data = JSONParser().parse(request)
 
     poster = data['body']['poster']
+
+    im = data['images']
+    print(im)
 
     print('-----------> inside CREATE advertisement <-----------\n', poster, \
           '\n------------------------')
@@ -1061,8 +1064,6 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 

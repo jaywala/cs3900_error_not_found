@@ -140,9 +140,9 @@
                 <div class="row">
                   <div v-for="(ad,n) in this.ads" class="col-md-4">
                     <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" :src="getPic(ad.poster,ad.ad_id)" alt="">
+                        <img class="card-img-top" :src = "this.images[n].pic" alt="">
                       <div class="card-body">
-                        <p class="card-text">Property Type · {{ad.property_type}}</p>
+                        <p class="card-text">{{ad.property_type}}</p>
                         <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
                         <p class="card-text">${{ad.base_price}} AUD per night</p>
                         <div class="d-flex justify-content-between align-items-center">
@@ -194,25 +194,32 @@ export default {
         "maxPrice": '',
       },
       ads: null,
-      images: [],
+      images: [
+        "hello",
+        "again",
+        "3",
+      ],
       map: null,
       tileLayer: null,
       layers: [],
+      parameters:null,
     }
   },
   computed: {
     datesRange () {
       return this.message['dateOne'] + "  -  " + this.message['dateTwo'];
-    }
+    },
   },
   methods: {
-    getPic(poster,id){
-      axios.get("http://127.0.0.1:8000/get/"+"image/"+ "Colleen/example/1/" )
-      .then(response => {
-        // JSON responses are automatically parsed.
-        console.log(response.data[0].pic)
-        return response.data[0].pic
-      })
+    getPic(ads){
+      console.log(ads)
+      for(ad in ads){
+        axios.get("http://127.0.0.1:8000/get/"+"image/"+ "Colleen/example/1/" )
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.images.push(response.data)
+        })
+      }
     },
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
@@ -238,7 +245,7 @@ export default {
         // alert(document.getElementById('map').value)
     },
     searchAds() {
-      console.log(this.$router.currentRoute.path)
+
       this.parameters = {};
       if (this.message['dateOne']) {
         this.parameters['dateOne'] = this.message['dateOne'];
@@ -250,7 +257,7 @@ export default {
       } else {
         this.parameters['dateTwo'] = 'null';
       }
-      if (this.message['where']) {
+      if (this.parameters['where']) {
         this.parameters['where'] = this.message['where'];
       } else {
         this.parameters['where'] = 'null';
@@ -296,10 +303,11 @@ export default {
     },
     initLayers() {},
   },
-  mounted() {
+  created() {
     this.searchAds();
     this.initMap();
     this.initLayers();
+    this.getPic(this.ads);
   },
 }
 </script>
