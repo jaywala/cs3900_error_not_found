@@ -6,8 +6,8 @@
     <md-card-header>
       <strong><div class="md-title">${{ this.message.base_price }}</div></strong>per night
     </md-card-header>
-    <md-card-content>
-      <md-datepicker v-model="bookdetail.start_day">
+    <md-card-content style="width:180px">
+      <md-datepicker v-model="bookdetail.start_day" >
         <label>Check In date</label>
       </md-datepicker>
       <md-datepicker v-model="bookdetail.end_day">

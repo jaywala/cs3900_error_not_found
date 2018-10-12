@@ -1,5 +1,5 @@
 <template>
-  <div class="content container">
+  <div>
     <h1>all the bookings</h1>
     <div v-for="book in bookings" class="col-md-4">
       <h3>{{book.title}}</h3>
