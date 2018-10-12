@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import landing from '@/components/landing.vue'
+import manage from '@/components/manage.vue'
 import newbook from '@/components/newbook.vue'
 import callback from '@/components/Callback.vue'
 import test from '@/components/test.vue'
@@ -19,7 +20,12 @@ const router = new Router({
       {
         path:'/success',
         name:'success',
-        component: success,
+        component: success
+      },
+      {
+        path: '/manage',
+        name: 'manage',
+        component: manage
       },
       {
         path: '/newbook',

@@ -44,7 +44,7 @@ urlpatterns = [
     #---------------- Poster Views ----------------#
 
     # Advertisement
-    path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
+    path('get/advertisement/user/', views.advertisement_get),
     path('post/advertisement/create/', views.advertisement_create), # in use
     path('post/advertisement/update/', views.advertisement_update),
     path('post/advertisement/delete/', views.advertisement_delete),

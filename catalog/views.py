@@ -141,29 +141,31 @@ def is_loggedIn(request):
 
 
 #------------------------------Advertisement------------------------------#
-
-def advertisement_get(request, first, second):
+def advertisement_get(request):
     """
     Give all the ads for this user.
     (Model: Advertisement)
     """
+    if 'email' in request.GET:
+        print('FOUND', request.GET['email'])
+        email = request.GET['email']
 
-    email = first + "@" + second + ".com"
+        print('-----------> inside GET advertisement <-----------\n', email, \
+            '\n------------------------')
 
-    print('-----------> inside GET advertisement <-----------\n', email, \
-          '\n------------------------')
+        try:
+            ad = Advertisement.objects.filter(poster=email)
+        except Advertisement.DoesNotExist:
+            return HttpResponse(status=404)
 
-    try:
-        ad = Advertisement.objects.filter(poster=email)
-    except Advertisement.DoesNotExist:
-        return HttpResponse(status=404)
+        serializer = AdvertisementSerializer(ad, many=True)
 
-    serializer = AdvertisementSerializer(ad, many=True)
+        print('-----------> data given to frontend <-----------\n', \
+            serializer.data, '\n------------------------')
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
-
-    return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.data, safe=False)
+    else:
+        print('FAILED')
 
 
 def advertisement_update(request):

@@ -34,12 +34,12 @@
       />
       <md-dialog :md-active.sync="showGuestsDialog">
         <md-dialog-title>Number of Guests</md-dialog-title>
-
-        <md-button style="display:inline-block;" class="md-icon-button md-raised" v-bind:disabled="message.guests <= 1? true:false" v-on:click="message.guests -= 1" >
+          
+        <md-button style="display:inline;" class="md-icon-button md-raised" v-bind:disabled="message.guests <= 1? true:false" v-on:click="message.guests -= 1" >
           -
         </md-button>
         {{message.guests}}
-        <md-button style="display:inline-block;" class="md-icon-button md-raised" v-on:click="message.guests += 1" >
+        <md-button style="display:inline;" class="md-icon-button md-raised" v-on:click="message.guests += 1" >
           <md-icon>add</md-icon>
         </md-button>
 
