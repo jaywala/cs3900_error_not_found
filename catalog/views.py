@@ -323,6 +323,8 @@ def advertisement_create(request):
             new_str_of_ads = str_of_ads + str(ad_id) + ','
         u.set_list_of_ads(new_str_of_ads)
 
+        # TODO update list_of_images formet: 1,2,3,
+
         return HttpResponse(status=201)
 
     else:
