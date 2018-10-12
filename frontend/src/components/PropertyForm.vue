@@ -135,7 +135,7 @@
     <file-base64 :multiple="true" :done="getFiles"></file-base64>
 
     <div class="text-center">
-      <img src="" alt="" :src="img.base64" v-for="img in files">
+      <img src="" width="50%" alt="" :src="img.base64" v-for="img in files">
     </div>
 
 
@@ -231,7 +231,8 @@
     methods: {
       submit(){
         this.form.poster = router.app.$auth.getUserProfile().email
-        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form})
+        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form,images:this.files})
+
       },
       getFiles(files){
         this.files = files
