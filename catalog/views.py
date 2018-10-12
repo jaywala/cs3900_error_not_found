@@ -146,6 +146,7 @@ def advertisement_get(request):
     Give all the ads for this user.
     (Model: Advertisement)
     """
+
     if 'email' in request.GET:
         print('FOUND', request.GET['email'])
         email = request.GET['email']
@@ -1050,7 +1051,7 @@ def get_single_ad(request, first, second, ad_id):
 
     print('-----------> inside GET SINGLE advertisement <-----------\n', \
           email, '\n------------------------')
-
+    '''
     try:
         ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
     except Advertisement.DoesNotExist:
@@ -1062,6 +1063,44 @@ def get_single_ad(request, first, second, ad_id):
           serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data)
+    '''
+
+    ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+    image_ids_str = ad.get_image_ids()
+    ad_id = ad.get_ad_id()
+    image_ids = []
+    counter = 0
+    for i in image_ids_str.split(','):
+        counter += 1
+        if i == '':
+            continue
+        else:
+            image_ids.append(int(i))
+
+    print('image_ids ', image_ids)
+
+
+    #a = SingleAdWithImages(email=email, ad_id=ad_id)
+    #print('here--->', a.querylist)
+
+    ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+    adserializer = AdvertisementSerializer(ad).data
+    ims = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
+    imserializer = PropertyImageSerializer(ims, many=True).data
+    querylist = [adserializer, imserializer]
+    print(querylist)
+    return JsonResponse(querylist, safe=False)
+
+    #querylist['ad'] = {'ad': ad, 'serializer_class': AdvertisementSerializer}
+    #print('HERE',querylist['ad'] )
+    '''
+    for i in image_ids:
+        im = PropertyImage.objects.get(image_id=i, ad_owner=email, ad_id=ad_id)
+        querylist['image'].append({'image': im, 'serializer_class': PropertyImageSerializer})
+
+    print(querylist)
+    return JsonResponse(querylist, safe=False)
+    '''
 
 
 def get_all_ads(request):
@@ -1079,6 +1118,8 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
+    print('-----------> data given to frontend <-----------\n', \
+          serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -1122,12 +1163,28 @@ def post_prop_request(request):
 
     return HttpResponse(status=201)
 
+
+
+class SingleAdWithImages(ObjectMultipleModelAPIView):
+
+    def __init__(self, email, ad_id):
+        self.email = email
+        self.ad_id = ad_id
+
+        querylist = [
+            {'Ad': Advertisement.objects.get(poster=self.email, ad_id=self.ad_id), 'serializer_class': AdvertisementSerializer},
+            {'image': PropertyImage.objects.filter(ad_owner=self.email, ad_id=self.ad_id), 'serializer_class': PropertyImageSerializer},
+        ]
+
+        self.querylist = querylist
 '''
-class TextAPIView(ObjectMultipleModelAPIView):
-    querylist = [
-        {'Ad': Advertisement.objects.get(email=), 'serializer_class': AdvertisementSerializer},
-        {'image': PropertyRequest.objects.filter(style='Sonnet'), 'serializer_class': PropertyImageSerializer},
-    ]
+        owner = User_Profile.objects.get(email=email)
+        owned_ads = owner.get_list_of_ads()
+        ad_ids = [int(i) for i in owned_ads.split(',')]
+        print(ad_ids)
+
+        images = {}
+        for i in ad_ids:
 '''
 
 #------------------------------Search Module Views------------------------------#
