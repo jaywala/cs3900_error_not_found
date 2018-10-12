@@ -30,7 +30,7 @@ def importFromCSV():
 
         for row in readcsv:
             count += 1
-            if count == 101:
+            if count == 100:
                 break
 
             print(count, "  " ,row[21])
