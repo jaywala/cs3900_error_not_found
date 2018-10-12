@@ -53,7 +53,6 @@ export default {
       console.log('onSlideChangeEnd', currentPage, el);
     }
   },
-
   data() {
     return {
       message: null,
@@ -63,7 +62,6 @@ export default {
       },
     }
   },
-
   mounted () {
       axios.get("http://localhost:8000/get/review/Colleen/example/1/")
       .then(response => {
@@ -75,15 +73,12 @@ export default {
            this.errors.push(e)
        })
        console.log(this.message)
-
    }
-
 /*
     mounted () {
        axios.post("http://localhost:8000/post/image/delete/", {body:this.message})
    }
 */
 }
-
 </script>
 <style src="./icon.css"></style>

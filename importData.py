@@ -3,6 +3,7 @@ import csv
 import django
 import glob
 import base64
+import random
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "capstone.settings")
 
@@ -11,8 +12,10 @@ django.setup()
 
 # Import models
 #from django.contrib.auth.models import User
-from catalog.models import User_Profile, Advertisement, PropertyImage, Accommodation_Review
+from catalog.models import User_Profile, Advertisement, PropertyImage
+from catalog.models import Accommodation_Review, Event, PropertyRequest
 
+from datetime import datetime, time
 
 def deleteData():
     pass
@@ -33,15 +36,16 @@ def importFromCSV():
             if count == 101:
                 break
 
-            print(count)
+            print(count, "  " ,row[21])
 
             user1 = User_Profile(email=(row[21]+"@example.com"), # column V
                                  user_name=row[21],
                                  name=row[21],
                                  profile_pic="",
                                  list_of_ads="1,",
-                                 list_of_rentals="",
-                                 list_of_posted_reviews="",
+                                 list_of_rentals= "(" + row[21] + "@example.com,1,1);",
+                                 # (ad_owner, ad_id, rev_id); Since this is dummy data, they reviewed their own ad
+                                 list_of_posted_reviews= "(" + row[21] + "@example.com,1,1);",
                                  )
             user1.save()
 
@@ -54,10 +58,11 @@ def importFromCSV():
                 ad_id=1,
                 poster=(row[21]+"@example.com"),
                 list_of_reviews="1,",
-                list_of_events="",
+                list_of_events="1,",
                 list_of_images="",
                 accommodation_name=row[4], # column E
-                accommodation_description=row[7], # column
+                accommodation_description=row[7], # column H
+                property_type=row[51], # column AZ
                 house_rules=row[14], # column O
                 booking_rules="no cancellation",
                 amenities=amenitiestext,
@@ -70,7 +75,6 @@ def importFromCSV():
                 zip_code=row[43], # column AR
                 latitude=float(row[48]), # column AW
                 longitude=float(row[49]), # column AX
-                property_type=row[51], # column AZ
                 )
             advertisement.save()
 
@@ -78,10 +82,42 @@ def importFromCSV():
                      rev_id=1,
                      ad_owner=(row[21]+"@example.com"),
                      ad_id=1,
+                     # Since this is dummy data, they reviewed their own ad
+                     reviewer= (row[21]+ "@example.com"),
                      rating=4,
-                     message="",
+                     message="Good holiday home",
                      )
             review.save()
+
+
+            month = random.randint(1, 12) # [1,13) non-inclusive last number
+
+            if month < 10:
+                month = "0" + str(month)
+
+            s_str = "2018-" + str(month) + "-01"
+            e_str = "2018-" + str(month) + "-05"
+
+            start_day = datetime.strptime(s_str, "%Y-%m-%d").date()
+            end_day = datetime.strptime(e_str, "%Y-%m-%d").date()
+
+            start_day_start_time = datetime.strptime("00:00:00", "%H:%M:%S").time()
+            end_day_end_time = datetime.strptime("00:00:00", "%H:%M:%S").time()
+
+            event = Event(
+                    event_id=1,
+                    ad_owner=(row[21]+"@example.com"),
+                    ad_id=1,
+                    # Since this is dummy data, the owner booked their own property
+                    booker=(row[21]+"@example.com"),
+                    start_day=start_day,
+                    start_day_start_time=start_day_start_time,
+                    end_day=end_day,
+                    end_day_end_time=end_day_end_time,
+                    booking_status="booked",
+                    notes="I'm bringing a dog =)",
+                    )
+            event.save()
 
             if count <= 2:
                 im_number = 0
@@ -101,6 +137,15 @@ def importFromCSV():
                 for i in range(1, im_number+1): # range(0,5) [0, 1, 2, 3, 4], so plus 1
                     temp_str = temp_str+ str(i) + ","
                 advertisement.set_image_ids(temp_str)
+
+    list_of_names = ['Abbey', 'Bob', 'Cathy', 'Dug', 'Erin']
+    for i in range(5):
+        p = PropertyRequest(
+                name=list_of_names[i],
+                email=list_of_names[i]+"@example.com",
+                text="I need a home. (NOTE: this is dummy data)"
+            )
+        p.save()
 
 def importImages():
     # import images

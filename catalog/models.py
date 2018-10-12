@@ -17,9 +17,15 @@ class User_Profile(models.Model):
 
     # contains the ad id's that this user owns
     list_of_ads = models.CharField(null=True, blank=True, max_length=1000)
+
     # contains the ad id's that this user has rented or is renting
+    # each rental will be identified by ad_owner, ad_id, event_id
+    # string format: (ad_owner, ad_id, event_id);(ad_owner, ad_id, event_id); etc.
     list_of_rentals = models.CharField(null=True, blank=True, max_length=1000)
+
     # contains the review id's that this user has written
+    # each review will be identified by ad_owner, ad_id, rev_id
+    # string format: (ad_owner, ad_id, rev_id);(ad_owner, ad_id, rev_id); etc.
     list_of_posted_reviews = models.CharField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
@@ -96,7 +102,7 @@ class Advertisement(models.Model):
     list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
     # contains the event id's that this ad owns
     list_of_events = models.CharField(null=True, blank=True, max_length=1000)
-    # contains the images that this ad owns
+    # contains the images id's that this ad owns
     list_of_images = models.CharField(null=True, blank=True, max_length=1000)
 
     accommodation_name = models.CharField(null=True, blank=True, max_length=1000)
@@ -298,6 +304,7 @@ class Accommodation_Review(models.Model):
     rev_id = models.IntegerField(null=False)
     ad_owner = models.CharField(null=False, max_length=1000)
     ad_id =  models.IntegerField(null=False)
+    reviewer = models.CharField(null=False, blank=False, max_length=1000)
 
     rating = models.IntegerField(null=True, blank=True)
     message = models.CharField(null=True, blank=True, max_length=1000)
@@ -306,7 +313,8 @@ class Accommodation_Review(models.Model):
     def __str__(self):
         return 'rev_id: ' + str(self.rev_id) + \
                ', ad_owner: ' + self.ad_owner + \
-               ', ad_id: ' + str(self.ad_id)
+               ', ad_id: ' + str(self.ad_id) + \
+               ', reviewer: ' + self.reviewer
 
     #--------------------------------
 
@@ -318,6 +326,9 @@ class Accommodation_Review(models.Model):
 
     def get_ad_id(self):
         return self.ad_id
+
+    def get_reviewer(self):
+        return self.reviewer
 
     def get_rating(self):
         return self.rating
@@ -340,6 +351,11 @@ class Accommodation_Review(models.Model):
     def set_ad_id(self, new_ad_id):
         u = Accommodation_Review.objects.get(id=self.id)
         u.ad_id = new_ad_id
+        u.save()
+
+    def set_reviewer(self, new_reviewer):
+        u = Accommodation_Review.objects.get(id=self.id)
+        u.reviewer = new_reviewer
         u.save()
 
     def set_rating(self, new_rating):
@@ -374,7 +390,8 @@ class Event(models.Model):
     def __str__(self):
         temp = 'event_id: ' + str(self.event_id) + \
                ', ad_owner: ' + self.ad_owner + \
-               ', ad_id: ' + str(self.ad_id)
+               ', ad_id: ' + str(self.ad_id) + \
+               ', booker: ' + self.booker
         return temp
 
     #--------------------------------
@@ -490,10 +507,13 @@ class Event(models.Model):
 
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=datetime.strptime(new_start_day, "%Y-%m-%d").date(),
             start_day_start_time=e.start_day_start_time,
             end_day=e.end_day,
@@ -510,10 +530,13 @@ class Event(models.Model):
 
     def set_start_day_start_time(self, new_start_time):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=datetime.strptime(new_start_time, "%H:%M:%S").time(),
             end_day=e.end_day,
@@ -530,10 +553,13 @@ class Event(models.Model):
 
     def set_end_day(self, new_end_day):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=e.start_day_start_time,
             end_day=datetime.strptime(new_end_day, "%Y-%m-%d").date(),
@@ -550,10 +576,13 @@ class Event(models.Model):
 
     def set_end_day_end_time(self, new_end_time):
         e = Event.objects.get(id=self.id)
+        # make a temporary Event to check if the date
+        # will clash with existing events.
         temp_e = Event(
             event_id=0,
             ad_owner="tester@test.com",
             ad_id=0,
+            booker="tester",
             start_day=e.start_day,
             start_day_start_time=e.start_day_start_time,
             end_day=e.end_day,
@@ -628,3 +657,41 @@ class PropertyImage(models.Model):
         i = PropertyImage.objects.get(id=self.id)
         i.pic = new_pic
         i.save()
+
+
+class PropertyRequest(models.Model):
+
+    name = models.CharField(null=True, blank=True, max_length=1000)
+    email = models.CharField(null=True, blank=True, max_length=1000)
+    text = models.CharField(null=True, blank=True, max_length=1000)
+
+    def __str__(self):
+        return self.name + ", " + self.email
+
+    #--------------------------------
+
+    def get_name(self):
+        return self.name
+
+    def get_email(self):
+        return self.email
+
+    def get_text(self):
+        return self.text
+
+    #--------------------------------
+
+    def set_name(self, new_name):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.name = new_name
+        r.save()
+
+    def set_email(self, new_email):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.email = new_email
+        r.save()
+
+    def set_text(self, new_text):
+        r = PropertyRequest.objects.get(id=self.id)
+        r.text = new_text
+        r.save()

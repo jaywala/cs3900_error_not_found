@@ -1,4 +1,5 @@
-"""capstone URL Configuration
+"""
+capstone URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -20,8 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 """
-# tutorial said to replace all the contents here with below
-# commented out incase we need the previous code --> gladys
+
 from django.conf.urls import url
 from django.urls import path, include
 from django.contrib import admin
@@ -45,19 +45,19 @@ urlpatterns = [
 
     # Advertisement
     path('get/advertisement/<slug:first>/<slug:second>/', views.advertisement_get),
-    path('post/advertisement/create/', views.advertisement_create),
+    path('post/advertisement/create/', views.advertisement_create), # in use
     path('post/advertisement/update/', views.advertisement_update),
     path('post/advertisement/delete/', views.advertisement_delete),
 
     # Advertisement Review
-    path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get),
+    path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get), # in use
     path('post/review/create/', views.review_create),
     path('post/review/update/', views.review_update),
     path('post/review/delete/', views.review_delete),
 
     # Advertisement Event
     path('get/event/<slug:first>/<slug:second>/<slug:ad_id>/', views.event_get),
-    path('post/event/create/', views.event_create),
+    path('post/event/create/', views.event_create), # in use
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
@@ -67,17 +67,20 @@ urlpatterns = [
     path('post/image/update/', views.image_update),
     path('post/image/delete/', views.image_delete),
 
-    #---------------- Accommodation Seeker Views ----------------#
+    #---------------- Property Seeker Views ----------------#
 
+    path('get/PropertyRequest/', views.get_prop_requests),
+    path('post/PropertyRequest/', views.post_prop_request),
 
     #---------------- General Views ----------------#
 
-    path('get/advertisement/', views.get_all_ads),
-    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
+    path('get/advertisement/', views.get_all_ads), # in use
+    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad), # in use
 
     #---------------- Search module views ----------------#
 
-    path('get/<slug:checkIn>/<slug:checkOut>/<slug:location>/<slug:nGuests>/<slug:distance>/<slug:minPrice>/<slug:maxPrice>/', views.search),
+    path('get/<slug:checkIn>/<slug:checkOut>/<location>/<slug:nGuests>/<slug:minPrice>/<slug:maxPrice>/<slug:distance>/', views.search),
+
 
     #---------------- URLs for testing ----------------#
 
