@@ -46,42 +46,32 @@ TO DO list
 (DONE) need functions to update the list_of_rentals and posted_reviews
 (DONE) change the separators for list of posted reviews and rentals to ;
 
+(DONE) - the search distance, solution: use Haversine formula (refer to python file for more details)
+(DONE) - fixed date formatting for booking accommodation
 
-Errors fixed:
-- the search distance, solution: use Haversine formula (refer to python file for more details)
-- fixed date formatting for booking accommodation
+(DONE) - when making booking, I need the email of the user booking the property,
+            something like this.auth0.username
+(DONE) - update the TO DO tags for this [views related to this won't work till fixed]
 
+(DONE) - /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
+            ==> no location search, no decimal search
+(DONE) - {backend} need to work out how to pattern match the SEARCH URL given by frontend
+
+(DONE) - when creating an ad post the image is not given to backend
+(DONE) - take images from create ad and make PropertyImages instance
 
 TODO
-- {George} when making booking, I need the email of the user booking the property,
-            something like this.auth0.username
-    - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
-
-- {George} when creating a review, I need the email of the reviewer,
-                something like this.auth0.username
-    - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
-
-(DONE) - {Joseph} /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
-            even though I have that in the search form.
-            ==> no location search, no decimal search
-
-(DONE) - {backend} need to work out how to pattern match the SEARCH URL given by frontend
+(DONE) - when creating a review, I need the email of the reviewer
+----> need to check when there is a submit button
+- {frontend} need submit review button on review view
 
 - {Gladys} test the clashing events, still don't think it works perfectly
 
-- {George & Gladys} test current views and check they work [FIRST thing TODO on Friday]
-
-- {frontend} does creating an ad give backend a base_price?
-
-- {George & Gladys} when creating an ad post the image is not given to backend
-    - need to post the image separately --> path('post/image/create/', views.image_create),
-
-- {frontend} need submit review button on review view
-
-- {backend} check data before changing db
+- {frontend} creating an ad need to give backend a base_price, also need that in the form
 
 TODO tonight
-- update email to new get system
+- check data before changing db {JAY}
+- update email to new get system {JAY}
+- email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips" {JAY}
+
 - join JSON
-- take images from create ad and make PropertyImages instance
-- {body, user} in JSON for booker, review,

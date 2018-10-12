@@ -5,8 +5,8 @@ from catalog.models import Advertisement, Accommodation_Review
 from catalog.models import Event, User_Profile, PropertyImage, PropertyRequest
 
 from catalog.serializers import AdvertisementSerializer, AccommodationReviewSerializer
-from catalog.serializers import EventSerializer, UserProfileSerializer,PropertyImageSerializer
-from catalog.serializers import PropertyRequestSerializer
+from catalog.serializers import EventSerializer, UserProfileSerializer
+from catalog.serializers import PropertyImageSerializer, PropertyRequestSerializer
 
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -165,7 +165,7 @@ def advertisement_get(request):
 
         return JsonResponse(serializer.data, safe=False)
     else:
-        print('FAILED')
+        return HttpResponse(status=404)
 
 
 def advertisement_update(request):
@@ -236,9 +236,6 @@ def advertisement_create(request):
 
     poster = data['body']['poster']
 
-    im = data['images']
-    print(im)
-
     print('-----------> inside CREATE advertisement <-----------\n', poster, \
           '\n------------------------')
 
@@ -264,10 +261,24 @@ def advertisement_create(request):
         else:
             ad_id = 1
 
+    list_of_dict_of_images = data['images']
+    id_counter = 1
+    id_counter_str = ""
+    for i in list_of_dict_of_images:
+        base64 = i['base64']
+        image = PropertyImage(image_id=id_counter,
+                                ad_owner=poster,
+                                ad_id=ad_id,
+                                pic=base64
+                                )
+        image.save()
+        id_counter_str = id_counter_str + str(id_counter) + ","
+        id_counter += 1
+
     poster = poster
     list_of_reviews = ""
     list_of_events = ""
-    list_of_images = ""
+    list_of_images = id_counter_str
     accommodation_name = data['body']['title']
     accommodation_description = data['body']['summary']
     property_type = data['body']['propertyType']
@@ -324,8 +335,6 @@ def advertisement_create(request):
         else:
             new_str_of_ads = str_of_ads + str(ad_id) + ','
         u.set_list_of_ads(new_str_of_ads)
-
-        # TODO update list_of_images formet: 1,2,3,
 
         return HttpResponse(status=201)
 
@@ -437,7 +446,7 @@ def review_create(request):
     data = JSONParser().parse(request)
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    reviewer = "me" #data['body']['reviewer'] #TODO
+    reviewer = data['user']['email']
 
     print('-----------> inside CREATE Review <-----------\n', \
           'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
@@ -514,7 +523,7 @@ def review_update(request):
     rev_id = data['body']['rev_id']
     ad_id = data['body']['ad_id']
     ad_owner = data['body']['ad_owner']
-    reviewer = "me" #data['body']['reviewer'] #TODO
+    reviewer = data['user']['email']
 
     print('-----------> inside UPDATE Review <-----------\n', \
           'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
@@ -544,7 +553,7 @@ def review_delete(request):
     rev_id = data['body']['rev_id']
     ad_id = data['body']['ad_id']
     ad_owner = data['body']['ad_owner']
-    reviewer = "me"#data['body']['reviewer'] TODO
+    reviewer = data['user']['email']
 
     print('-----------> inside DELETE Review <-----------\n', \
           'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
@@ -652,7 +661,7 @@ def event_create(request):
 
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me" #data['body']['booker'] TODO
+    booker = data['user']['email']
 
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
           ad_owner, '\n booker: ', booker, '\n------------------------')
@@ -741,7 +750,7 @@ def event_update(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me" #data['body']['booker'] TODO
+    booker = data['user']['email']
 
     print('-----------> inside UPDATE Event <-----------\n ad_owner: ', \
           ad_owner, '\n booker: ', booker, '\n------------------------')
@@ -786,7 +795,7 @@ def event_delete(request):
     event_id = data['body']['event_id']
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
-    booker = "me" #data['body']['booker'] TODO
+    booker = data['user']['email']
 
     print('-----------> inside DELETE event <-----------\n', event_id, \
           '\n------------------------')
