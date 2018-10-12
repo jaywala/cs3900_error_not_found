@@ -57,17 +57,31 @@ TODO
             something like this.auth0.username
     - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
 
-- {Joseph} /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
-            even though I have that in the search form. ==> no location search, no decimal search
-
-- {backend} need to work out how to pattern match the SEARCH URL given by frontend
-- {Gladys} test the clashing events, still don't think it works perfectly
 - {George} when creating a review, I need the email of the reviewer,
                 something like this.auth0.username
     - {gladys} update the TO DO tags for this [views related to this won't work till fixed]
+
+(DONE) - {Joseph} /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
+            even though I have that in the search form.
+            ==> no location search, no decimal search
+
+(DONE) - {backend} need to work out how to pattern match the SEARCH URL given by frontend
+
+- {Gladys} test the clashing events, still don't think it works perfectly
+
 - {George & Gladys} test current views and check they work [FIRST thing TODO on Friday]
+
 - {frontend} does creating an ad give backend a base_price?
+
 - {George & Gladys} when creating an ad post the image is not given to backend
     - need to post the image separately --> path('post/image/create/', views.image_create),
+
 - {frontend} need submit review button on review view
-- check data before changing db
+
+- {backend} check data before changing db
+
+TODO tonight
+- update email to new get system
+- join JSON
+- take images from create ad and make PropertyImages instance
+- {body, user} in JSON for booker, review,

@@ -18,6 +18,8 @@ from .haversine import haversine
 from datetime import datetime, time
 import math
 
+from drf_multiple_model.views import ObjectMultipleModelAPIView
+
 
 #------------------------------User_Profile------------------------------#
 
@@ -86,7 +88,7 @@ def create_user(data):
     """
 
     email = data['body']['email']
-    user_name = data['body']['given_name']
+    user_name = data['body']['nickname']
     name = data['body']['name']
     profile_pic = data['body']['picture']
     list_of_ads = ""
@@ -231,6 +233,8 @@ def advertisement_create(request):
     data = JSONParser().parse(request)
 
     poster = data['body']['poster']
+
+
 
     print('-----------> inside CREATE advertisement <-----------\n', poster, \
           '\n------------------------')
@@ -1106,6 +1110,13 @@ def post_prop_request(request):
 
     return HttpResponse(status=201)
 
+'''
+class TextAPIView(ObjectMultipleModelAPIView):
+    querylist = [
+        {'Ad': Advertisement.objects.get(email=), 'serializer_class': AdvertisementSerializer},
+        {'image': PropertyRequest.objects.filter(style='Sonnet'), 'serializer_class': PropertyImageSerializer},
+    ]
+'''
 
 #------------------------------Search Module Views------------------------------#
 
