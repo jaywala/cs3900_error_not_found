@@ -68,6 +68,7 @@ TODO
 - {Gladys} test the clashing events, still don't think it works perfectly
 
 - {frontend} creating an ad need to give backend a base_price, also need that in the form
+- update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
 
 TODO tonight
 - check data before changing db {JAY}

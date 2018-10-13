@@ -37,7 +37,7 @@ NOTE:
 urlpatterns = [
 
     # User Profile
-    path('get/user/<slug:first>/<slug:second>/', views.user_profile_get),
+    path('get/user/', views.user_profile_get),
     path('post/user/update/', views.user_profile_update),
     path('post/userLoggedIn/', views.is_loggedIn),
 
@@ -45,24 +45,24 @@ urlpatterns = [
 
     # Advertisement
     path('get/advertisement/user/', views.advertisement_get),
-    path('post/advertisement/create/', views.advertisement_create), 
+    path('post/advertisement/create/', views.advertisement_create),
     path('post/advertisement/update/', views.advertisement_update),
     path('post/advertisement/delete/', views.advertisement_delete),
 
     # Advertisement Review
-    path('get/review/<slug:first>/<slug:second>/<slug:ad_id>/', views.review_get),
+    path('get/review/user/', views.review_get),
     path('post/review/create/', views.review_create),
     path('post/review/update/', views.review_update),
     path('post/review/delete/', views.review_delete),
 
     # Advertisement Event
-    path('get/event/<slug:first>/<slug:second>/<slug:ad_id>/', views.event_get),
+    path('get/event/user/', views.event_get),
     path('post/event/create/', views.event_create),
     path('post/event/update/', views.event_update),
     path('post/event/delete/', views.event_delete),
 
     # Advertisement Images
-    path('get/image/<slug:first>/<slug:second>/<slug:ad_id>/', views.image_get),
+    path('get/image/user/', views.image_get),
     path('post/image/create/', views.image_create),
     path('post/image/update/', views.image_update),
     path('post/image/delete/', views.image_delete),
@@ -75,7 +75,7 @@ urlpatterns = [
     #---------------- General Views ----------------#
 
     path('get/advertisement/', views.get_all_ads),
-    path('get/advertisement/<slug:first>/<slug:second>/<int:ad_id>/', views.get_single_ad),
+    path('get/advertisement/single/', views.get_single_ad),
 
     #---------------- Search module views ----------------#
 
