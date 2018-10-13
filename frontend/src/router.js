@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import landing from '@/components/landing.vue'
+import manage from '@/components/manage.vue'
 import newbook from '@/components/newbook.vue'
 import callback from '@/components/Callback.vue'
 import test from '@/components/test.vue'
@@ -8,11 +9,24 @@ import detail from '@/components/detail.vue'
 import search from '@/components/search.vue'
 import editprofile from '@/components/editprofile.vue'
 import review from '@/components/review.vue'
+import image from '@/components/displayimage.vue'
+import request from '@/components/requestform.vue'
+import success from '@/components/success.vue'
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   routes: [
+      {
+        path:'/success',
+        name:'success',
+        component: success
+      },
+      {
+        path: '/manage',
+        name: 'manage',
+        component: manage
+      },
       {
         path: '/newbook',
         name: 'newbook',
@@ -53,6 +67,16 @@ const router = new Router({
         path: '/review',
         component: review,
         name: review
+      },
+      {
+        path: '/request',
+        component: request,
+        name:request,
+      },
+      {
+        path: '/image',
+        component: image,
+        name:image
       }
   ]
 })

@@ -129,8 +129,7 @@ class Advertisement(models.Model):
 
     def __str__(self):
         temp = 'Ad ID: ' + str(self.ad_id) + \
-               ', Poster: ' + self.poster + \
-               ', Accommodation Name: ' + self.accommodation_name
+               ', Poster: ' + self.poster 
         return temp
 
     #--------------------------------
