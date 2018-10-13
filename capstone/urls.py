@@ -79,7 +79,7 @@ urlpatterns = [
 
     #---------------- Search module views ----------------#
 
-    path('get/<slug:checkIn>/<slug:checkOut>/<location>/<slug:nGuests>/<slug:minPrice>/<slug:maxPrice>/<slug:distance>/', views.search),
+    path('get/search/', views.search),
 
 
     #---------------- URLs for testing ----------------#

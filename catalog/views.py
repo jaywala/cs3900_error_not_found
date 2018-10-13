@@ -1204,7 +1204,7 @@ def post_prop_request(request):
     p.save()
 
     return HttpResponse(status=201)
-    
+
 
 #------------------------------Search Module Views------------------------------#
 
@@ -1213,6 +1213,21 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
     Searches through all the ads and returns the ads that satisfies the parameters.
     (Model: Advertisement)
     """
+
+    if 'dateOne' in request.GET:
+        checkIn = request.GET['dateOne']
+    if 'dateTwo' in request.GET:
+        checkOut = request.GET['dateTwo']
+    if 'where' in request.GET:
+        location = request.GET['where']
+    if 'geusts' in request.GET:
+        nGuests = request.GET['geusts']
+    if 'minPrice' in request.GET:
+        minPrice = request.GET['minPrice']
+    if 'maxPrice' in request.GET:
+        maxPrice = request.GET['maxPrice']
+    if 'distance' in request.GET:
+        distance = request.GET['distance']
 
     print('-----------> inside GET search <-----------\n',
           'checkin: ', checkIn,
@@ -1224,6 +1239,7 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
           '\ndistance', distance,
           '\n'
          )
+
 
     ads = Advertisement.objects.all()
     pk_list = []

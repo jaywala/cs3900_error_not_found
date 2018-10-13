@@ -59,6 +59,7 @@ TO DO list
 
 (DONE) - when creating an ad post the image is not given to backend
 (DONE) - take images from create ad and make PropertyImages instance
+(DONE) - update email to new get system
 
 TODO
 (DONE) - when creating a review, I need the email of the reviewer
@@ -70,9 +71,8 @@ TODO
 - {frontend} creating an ad need to give backend a base_price, also need that in the form
 - update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
 
-TODO tonight
+TODO 
 - check data before changing db {JAY}
-- update email to new get system {JAY}
 - email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips" {JAY}
 
 - join JSON
