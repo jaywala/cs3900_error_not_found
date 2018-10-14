@@ -6,11 +6,11 @@
       <div v-for="ad in ads">
         <div class="card">
           <div class="card-body">
-            <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
+            <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id } }" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
             <small>{{ ad.address }}</small>
             <p>{{ ad.accommodation_description | truncate(200, '...') }}</p>
             
-            <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" ><md-button class="md-primary md-raised">View</md-button></router-link>
+            <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
             <md-button class="md-secondary md-raised">Edit</md-button>
             <div style="display: inline">
               <md-dialog-confirm
@@ -100,7 +100,7 @@ export default {
         })
     }
   },
-  beforeMount() {
+  mounted() {
     this.user = router.app.$auth.getUserProfile();
     // console.log(this.user);
 
@@ -114,23 +114,11 @@ export default {
         // JSON responses are automatically parsed.
         this.ads = response.data
         console.log(this.ads)
-        
-
-        // Fetch bookings for each advertisement.
-        var i;
-        for (i = 0; i < this.ads.length; i++) { 
-          alert('fetch')
-          this.ads_bookings.push(fetchAdEvents(i));
-        }
-
       })
       .catch(e => {
           this.errors.push(e)
       })
 
-    console.log(this.errors)
-    console.log("# of Ad Events: " + this.ads_bookings.length)
-    
   }
 }
 </script>

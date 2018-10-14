@@ -8,30 +8,38 @@
       </div>
       <div class="row">
         <div class="col-8">
-          <small>&lt;{{this.message.property_type}}&gt;</small>
+          <small>&lt;{{this.message[0].property_type}}&gt;</small>
 
           <div class="row">
             <div class="col-9">
-              <h1>{{this.message.accommodation_name}}</h1>
-              <small>{{this.message.suburb}}</small>
+              <h1>{{this.message[0].accommodation_name}}</h1>
+              <small>{{this.message[0].suburb}}</small>
               <div style="">
-                <div style="margin-right: 16px;">{{this.message.num_guests}}guests</div>
-                <div style="margin-right: 16px;">{{this.message.num_bedrooms}} bed</div>
-                <div style="margin-right: 16px;">{{this.message.num_bathrooms}} bath</div>
+                <div style="margin-right: 16px;">{{this.message[0].num_guests}}guests</div>
+                <div style="margin-right: 16px;">{{this.message[0].num_bedrooms}} bed</div>
+                <div style="margin-right: 16px;">{{this.message[0].num_bathrooms}} bath</div>
               </div>
               <br>
-              <p>{{this.message.accommodation_description}}</p>
-              <p>{{this.message.amenities}}</p>
+              <p>{{this.message[0].accommodation_description}}</p>
+              <p>{{this.message[0].amenities}}</p>
 
             </div>
 
-            <div v-for="review in reviews">
+            <div v-for="review in message[3]">
               <li>{{review.rating}}</li>
             </div>
 
             <div class="col-3">
               <p>Profile image</p>
-              <small>host name</small>
+              <Slider
+              :pagination-visible="true"
+              :pagination-clickable = "true"
+                :async-data="message[1]"
+                direction="horizontal">
+              <div v-for="img in message[1]" :key="img.id">
+                  <img :src="img.pic" alt="">
+              </div>
+            </Slider>
             </div>
           </div>
         </div>
@@ -49,12 +57,14 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
+import Slider from 'vue-plain-slider'
 
 import PropertyBookingForm from './PropertyBookingForm.vue'
 
 export default {
     components: {
         PropertyBookingForm,
+        Slider,
     },
     methods: {
         // this method calls the AuthService login() method
@@ -105,12 +115,12 @@ export default {
 
     mounted () {
         this.user = this.message.poster;
-
         axios.get("http://localhost:8000/get/advertisement/single/",
-                   {params: {email: this.user}}
+                   {params: this.$router.currentRoute.params}
                  )
         .then(response => {
             // JSON responses are automatically parsed.
+            console.log(response.data)
             this.message = response.data
         })
         .catch(e => {
