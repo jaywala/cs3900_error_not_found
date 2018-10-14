@@ -64,12 +64,8 @@ export default {
   mounted () {
 
   this.user = this.bookdetail.ad_owner;
-<<<<<<< HEAD
-=======
-
->>>>>>> 92224594498e19798f52bdd061021f6eac022157
-
-  axios.get("http://localhost:8000/get/advertisement/single/", {params: {email: this.user}})
+  console.log(this.$router.currentRoute)
+  axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})
   .then(response => {
     // JSON responses are automatically parsed.
     this.message = response.data

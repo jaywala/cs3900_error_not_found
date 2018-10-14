@@ -146,7 +146,7 @@
 
                         <div class="card-body">
                           <p class="card-text">{{ad.property_type}}</p>
-                          <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
+                          <router-link :to="{ name: 'detailpage', params: { id:ad.poster_id}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
                           <p class="card-text">${{ad.base_price}} AUD per night</p>
                           <div class="d-flex justify-content-between align-items-center">
                           </div>
