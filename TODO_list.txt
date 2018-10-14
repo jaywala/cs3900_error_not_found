@@ -60,6 +60,8 @@ TO DO list
 (DONE) - when creating an ad post the image is not given to backend
 (DONE) - take images from create ad and make PropertyImages instance
 (DONE) - update email to new get system
+(DONE) - check data before changing db
+(DONE) - change all user email to lower case in importData
 
 TODO
 (DONE) - when creating a review, I need the email of the reviewer
@@ -69,10 +71,12 @@ TODO
 - {Gladys} test the clashing events, still don't think it works perfectly
 
 - {frontend} creating an ad need to give backend a base_price, also need that in the form
-- update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
 
-TODO 
-- check data before changing db {JAY}
-- email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips" {JAY}
+- {frontend} update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
 
-- join JSON
+- {JAY} email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
+
+- {Gladys} join JSON, whenever an ad is asked for, give frontend all info related to it.
+
+- all ads and bookings
+-

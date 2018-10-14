@@ -7,7 +7,6 @@ defusedxml==0.5.0
 Django==2.1
 django-cors-headers==2.4.0
 django-rest-auth==0.9.3
-django-rest-multiple-models==2.1.1
 django-vue==0.0.1
 djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
@@ -22,6 +21,7 @@ Pillow==5.2.0
 ptyprocess==0.6.0
 pyasn1==0.4.4
 pycparser==2.18
+pycryptodome==3.4.7
 PyJWT==1.6.4
 python-bond==1.4
 python-dotenv==0.9.1

@@ -34,7 +34,7 @@
       />
       <md-dialog :md-active.sync="showGuestsDialog">
         <md-dialog-title>Number of Guests</md-dialog-title>
-          
+
         <md-button style="display:inline;" class="md-icon-button md-raised" v-bind:disabled="message.guests <= 1? true:false" v-on:click="message.guests -= 1" >
           -
         </md-button>
@@ -280,7 +280,7 @@ export default {
       }
       let queryString = "{0}/{1}/{2}/{3}/{4}/{5}/{6}/".format(this.parameters['dateOne'], this.parameters['dateTwo'], this.parameters['where'], this.parameters['guests'], this.parameters['minPrice'], this.parameters['maxPrice'], this.parameters['distance'])
       // axios.get("http://127.0.0.1:8000/get/null/null/null/null/null/null/null/")
-      axios.get("http://127.0.0.1:8000/get/"+queryString)
+      axios.get("http://127.0.0.1:8000/get/search/",{params:this.message})
       .then(response => {
         // JSON responses are automatically parsed.
         this.ads = response.data

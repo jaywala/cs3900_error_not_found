@@ -36,16 +36,18 @@ def importFromCSV():
             if count == 100:
                 break
 
-            print(count, "  " ,row[21])
+            # added a number to the end of the name to take care of duplicate users
+            email = row[21].lower() + str(count)
+            print(count, "  " , email)
 
-            user1 = User_Profile(email=(row[21].replace(" ", "")+"@example.com"), # column V
-                                 user_name=row[21],
-                                 name=row[21],
+            user1 = User_Profile(email=(email.replace(" ", "")+"@example.com"), # column V
+                                 user_name=email,
+                                 name=email,
                                  profile_pic="",
                                  list_of_ads="1,",
-                                 list_of_rentals= "(" + row[21].replace(" ", "") + "@example.com,1,1);",
+                                 list_of_rentals= "(" + email.replace(" ", "") + "@example.com,1,1);",
                                  # (ad_owner, ad_id, rev_id); Since this is dummy data, they reviewed their own ad
-                                 list_of_posted_reviews= "(" + row[21].replace(" ", "") + "@example.com,1,1);",
+                                 list_of_posted_reviews= "(" + email.replace(" ", "") + "@example.com,1,1);",
                                  )
             user1.save()
 
@@ -56,7 +58,7 @@ def importFromCSV():
             amenitiestext = amenitiestext.replace('"', '')
             advertisement = Advertisement(
                 ad_id=1,
-                poster=(row[21].replace(" ", "")+"@example.com"),
+                poster=(email.replace(" ", "")+"@example.com"),
                 list_of_reviews="1,",
                 list_of_events="1,",
                 list_of_images="",
@@ -80,10 +82,10 @@ def importFromCSV():
 
             review = Accommodation_Review(
                      rev_id=1,
-                     ad_owner=(row[21].replace(" ", "")+"@example.com"),
+                     ad_owner=(email.replace(" ", "")+"@example.com"),
                      ad_id=1,
                      # Since this is dummy data, they reviewed their own ad
-                     reviewer= (row[21].replace(" ", "")+ "@example.com"),
+                     reviewer= (email.replace(" ", "")+ "@example.com"),
                      rating=4,
                      message="Good holiday home",
                      )
@@ -106,10 +108,10 @@ def importFromCSV():
 
             event = Event(
                     event_id=1,
-                    ad_owner=(row[21].replace(" ", "")+"@example.com"),
+                    ad_owner=(email.replace(" ", "")+"@example.com"),
                     ad_id=1,
                     # Since this is dummy data, the owner booked their own property
-                    booker=(row[21].replace(" ", "")+"@example.com"),
+                    booker=(email.replace(" ", "")+"@example.com"),
                     start_day=start_day,
                     start_day_start_time=start_day_start_time,
                     end_day=end_day,
@@ -128,7 +130,7 @@ def importFromCSV():
                         encoded_string = base64.b64encode(image_file.read())
                         string = "data:image/jpeg;base64," + encoded_string.decode('UTF-8')
                     im = PropertyImage(image_id=im_number,
-                                       ad_owner=(row[21].replace(" ", "")+"@example.com"),
+                                       ad_owner=(email.replace(" ", "")+"@example.com"),
                                        ad_id=1,
                                        pic=string)
                     im.save()
@@ -138,7 +140,7 @@ def importFromCSV():
                     temp_str = temp_str+ str(i) + ","
                 advertisement.set_image_ids(temp_str)
 
-    list_of_names = ['Abbey', 'Bob', 'Cathy', 'Dug', 'Erin']
+    list_of_names = ['abbey', 'bob', 'cathy', 'dug', 'erin']
     for i in range(5):
         p = PropertyRequest(
                 name=list_of_names[i],

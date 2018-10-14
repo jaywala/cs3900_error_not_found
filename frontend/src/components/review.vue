@@ -4,6 +4,9 @@
     <div v-for="book in bookings" class="col-md-4">
       <h3>{{book.title}}</h3>
       <h4>{{book.status}}</h4>
+      <div class="" v-if="book.status == 'booked'">
+        <button type="button" name="button" @click = "cancelbooking(book.title)">cancel</button>
+      </div>
       <div v-if = "book.status == 'finished'">
         <md-radio v-model="radio" value="1">1</md-radio>
         <md-radio v-model="radio" value="2">2</md-radio>

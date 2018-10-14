@@ -79,7 +79,7 @@ export default {
         return {
             message: {
               ad_id: 1,
-              poster: "Colleen@example.com",
+              poster: null,
               list_of_reviews: "1,",
               list_of_events: "",
               list_of_images: "1,2,3,4,5,6,7,8,9,10,",
@@ -104,7 +104,11 @@ export default {
     },
 
     mounted () {
-        axios.get("http://localhost:8000/get/advertisement"+ this.$router.currentRoute.path+'/')
+        this.user = this.message.poster;
+
+        axios.get("http://localhost:8000/get/advertisement/single/",
+                   {params: {email: this.user}}
+                 )
         .then(response => {
             // JSON responses are automatically parsed.
             this.message = response.data
@@ -112,11 +116,12 @@ export default {
         .catch(e => {
             this.errors.push(e)
         })
+        /*
         axios.get("http://localhost:8000/get/review"+ this.$router.currentRoute.path+'/')
         .then(response => {
             // JSON responses are automatically parsed.
             this.reviews = response.data
-        })
+        })*/
     }
 
 }
