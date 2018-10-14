@@ -240,6 +240,7 @@ def advertisement_create(request):
 
     # Find the next ad_id for this user's ads
     u = User_Profile.objects.get(email=poster)
+    post_id = u.ad
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
         ad_id = 1 #this is the first ad this user is posting
@@ -299,6 +300,7 @@ def advertisement_create(request):
     ad = Advertisement(
             ad_id = ad_id,
             poster = poster,
+            post_id = post_id,
             list_of_reviews = list_of_reviews,
             list_of_events = list_of_events,
             list_of_images = list_of_images,
