@@ -1232,7 +1232,7 @@ def get_users_ads(request):
             eventsSerializer = EventSerializer(events, many=True).data
 
             reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
-            reviewsSerializer = Accommodation_Review(reviews, many=True).data
+            reviewsSerializer = AccommodationReviewSerializer(reviews, many=True).data
 
             temp_dict = {}
             temp_dict[key] = {
