@@ -672,7 +672,7 @@ class PropertyRequest(models.Model):
     name = models.CharField(null=True, blank=True, max_length=1000)
     email = models.CharField(null=True, blank=True, max_length=1000)
     text = models.CharField(null=True, blank=True, max_length=1000)
-    id = models.IntegerField(null=True, blank=True, max_length=1000)
+    im_id = models.IntegerField(null=True, blank=True, max_length=1000)
 
     def __str__(self):
         return self.name + ", " + self.email
@@ -689,7 +689,7 @@ class PropertyRequest(models.Model):
         return self.text
 
     def get_id(self):
-        return self.id
+        return self.im_id
 
     #--------------------------------
 
@@ -710,5 +710,5 @@ class PropertyRequest(models.Model):
 
     def set_id(self, new_id):
         r = PropertyRequest.objects.get(id=self.id)
-        r.id = new_id
+        r.im_id = new_id
         r.save()

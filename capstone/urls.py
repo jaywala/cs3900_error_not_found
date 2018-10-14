@@ -75,12 +75,11 @@ urlpatterns = [
     path('post/PropertyRequest/delete/', views.delete_prop_request),
 
 
-
     #---------------- General Views ----------------#
 
     path('get/advertisement/', views.get_all_ads),
     path('get/advertisement/single/', views.get_single_ad),
-    path('get/every/user', views.get_users_ads),
+    path('get/everythingUser/', views.get_users_ads),
 
     #---------------- Search module views ----------------#
 

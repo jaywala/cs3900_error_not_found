@@ -1277,7 +1277,7 @@ def create_prop_request(request):
     email = data['body']['email']
     text = data['body']['detail']
 
-    p = PropertyRequest(name=name, email=email, text=text)
+    p = PropertyRequest(name=name, email=email, text=text, im_id=-1)
     p.save()
 
     temp = PropertyRequest.objects.get(p.id)
@@ -1298,9 +1298,9 @@ def update_prop_request(request):
     name = data['body']['name']
     email = data['body']['email']
     text = data['body']['detail']
-    id = data['body']['id']
+    im_id = data['body']['im_id']
 
-    p = PropertyRequest.objects.get(id=id)
+    p = PropertyRequest.objects.get(im_id=im_id)
     p.set_name(name)
     p.set_email(email)
     p.set_text(text)
@@ -1310,7 +1310,12 @@ def update_prop_request(request):
 
 def delete_prop_request(request):
 
+    data = JSONParser().parse(request)
+    im_id = data['body']['im_id']
 
+    p = PropertyRequest.objects.get(im_id=im_id)
+    p.delete()
+    return HttpResponse(status=201)
 
 #------------------------------Search Module Views------------------------------#
 
@@ -1434,16 +1439,6 @@ def search(request):
     print(querylist)
     print('DONE')
     return JsonResponse(querylist, safe=False)
-
-    #print('-----------> data given to frontend <-----------\n', \
-    #      serializer.data, '\n------------------------')
-    #return JsonResponse(serializer.data, safe=False)
-
-    data = JSONParser().parse(request)
-
-    id = data['body']['id']
-    p = PropertyRequest.objects.get(id=id)
-    p.delete()
 
 
 #------------------------------Booking Module Views------------------------------#
