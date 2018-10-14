@@ -1376,7 +1376,7 @@ def bookers_bookings(request):
         ad_pks = []
         for i in list_of_bookings:
 
-            str_event = i.split(,)
+            str_event = i.split(',')
             ad_owner = str_event[0]
             ad_id = str_event[1]
             event_id = str_event[2]
