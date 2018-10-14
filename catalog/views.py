@@ -1062,13 +1062,75 @@ def get_single_ad(request):
     Gives ONE ad, identified by email and ad_id.
     (Model: Advertisement)
     """
-
+    print('inside', request.GET)
     if 'email' in request.GET and 'ad_id' in request.GET:
         email = request.GET['email']
         ad_id = request.GET['ad_id']
 
         print('-----------> inside GET SINGLE advertisement <-----------\n', \
               email, '\n------------------------')
+
+        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+        ad_id = ad.get_ad_id()
+
+        # Get image id's from the ad model
+        image_ids_str = ad.get_image_ids()
+        image_ids = []
+        counter = 0
+        for i in image_ids_str.split(','):
+            counter += 1
+            if i == '':
+                continue
+            else:
+                image_ids.append(int(i))
+        print('image_ids ', image_ids)
+
+        # Get event ids
+        event_ids_str = ad.get_event_ids()
+        event_ids = []
+        counter = 0
+        for i in event_ids_str.split(','):
+            counter += 1
+            if i == '':
+                continue
+            else:
+                event_ids.append(int(i))
+        print('event_ids ', event_ids)
+
+        # Get review ids
+        rev_ids_str = ad.get_rev_ids()
+        rev_ids = []
+        counter = 0
+        for i in rev_ids_str.split(','):
+            counter += 1
+            if i == '':
+                continue
+            else:
+                rev_ids.append(int(i))
+        print('rev_ids ', rev_ids)
+
+        # Contruct JSON with both the SINGLE ad and
+        # all it's images, events, reviews
+        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+        adSerializer = AdvertisementSerializer(ad).data
+
+        images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
+        imageSerializer = PropertyImageSerializer(images, many=True).data
+
+        event = Event.objects.filter(ad_owner=email, ad_id=ad_id)
+        eventSerializer = EventSerializer(event, many=True).data
+
+        review = Accommodation_Review.objects.filter(ad_owner=email, ad_id=ad_id)
+        reviewSerializer = AccommodationReviewSerializer(review, many=True).data
+
+        querylist = [adSerializer, imageSerializer, eventSerializer, reviewSerializer]
+
+        print(querylist)
+
+        return JsonResponse(querylist, safe=False)
+    else:
+        return HttpResponse(status=400)
+
         '''
         try:
             ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
@@ -1082,34 +1144,6 @@ def get_single_ad(request):
 
         return JsonResponse(serializer.data)
         '''
-
-        # Get image id's from the ad model
-        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
-        image_ids_str = ad.get_image_ids()
-        ad_id = ad.get_ad_id()
-        image_ids = []
-        counter = 0
-        for i in image_ids_str.split(','):
-            counter += 1
-            if i == '':
-                continue
-            else:
-                image_ids.append(int(i))
-
-        print('image_ids ', image_ids)
-
-        # Contruct JSON with both the SINGLE ad and all it's images
-        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
-        adserializer = AdvertisementSerializer(ad).data
-        ims = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
-        imserializer = PropertyImageSerializer(ims, many=True).data
-        querylist = [adserializer, imserializer]
-
-        print(querylist)
-
-        return JsonResponse(querylist, safe=False)
-    else:
-        return HttpResponse(status=400)
 
         '''
         SAMPLE output
@@ -1208,7 +1242,7 @@ def post_prop_request(request):
 
 #------------------------------Search Module Views------------------------------#
 
-def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, distance):
+def search(request):
     """
     Searches through all the ads and returns the ads that satisfies the parameters.
     (Model: Advertisement)
@@ -1319,8 +1353,54 @@ def search(request, checkIn, checkOut, location, nGuests, minPrice, maxPrice, di
 
 #------------------------------Booking Module Views------------------------------#
 
+def bookers_bookings(request):
+    """
+    Gives all the bookings that this user has.
+    (Model: Event)
+    """
 
+    print('-----------> inside bookers_bookings <-----------\n')
 
+    if 'booker' in request.GET:
+        booker = request.GET['booker']
+
+        print('BOOKER: ', booker, '\n')
+
+        u = User_Profile.objects.get(email=booker)
+
+        # string format: (ad_owner, ad_id, event_id);
+        str_of_bookings = u.get_list_of_rentals()
+        list_of_bookings = str_of_bookings.split(';')
+
+        event_pks = []
+        ad_pks = []
+        for i in list_of_bookings:
+
+            str_event = i.split(,)
+            ad_owner = str_event[0]
+            ad_id = str_event[1]
+            event_id = str_event[2]
+
+            e = Event.objects.get(event_id=event_id, ad_owner=ad_owner,
+                                  ad_id=ad_id)
+            event_pks.append(e.pk)
+
+            a = Advertisement.objects.get(ad_id=ad_id, ad_owner=ad_owner)
+            ad_pks.append(a.pk)
+
+        bookers_events = Event.objects.filter(pk__in=event_pks)
+        bookers_ads = Advertisement.objects.filter(pk__in=ad_pks)
+
+        eventSerializer = EventSerializer(bookers_events, many=True).data
+        adSerializer = AdvertisementSerializer(bookers_ads, many=True).data
+
+        querylist = [eventSerializer, adSerializer]
+
+        print(querylist)
+
+        return JsonResponse(querylist, safe=False)
+    else:
+        return HttpResponse(status=400)
 
 #------------------------------Test Views------------------------------#
 
