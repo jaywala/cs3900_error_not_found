@@ -233,7 +233,7 @@ def advertisement_create(request):
 
     data = JSONParser().parse(request)
 
-    poster = data['body']['poster']
+    poster = data['user']['email']
 
     print('-----------> inside CREATE advertisement <-----------\n',
           poster, '\n------------------------')
@@ -1221,7 +1221,7 @@ def get_users_ads(request):
 
 
         querylist = []
-        key = 0
+
         for a in ads:
             adSerializer = AdvertisementSerializer(a).data
 
@@ -1234,14 +1234,13 @@ def get_users_ads(request):
             reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
             reviewsSerializer = AccommodationReviewSerializer(reviews, many=True).data
 
-            temp_dict = {}
-            temp_dict[key] = {
+            temp_dict = {
                 'ad': adSerializer,
                 'images': imagesSerializer,
                 'events': eventsSerializer,
                 'reviews': reviewsSerializer
             }
-            key += 1
+
             querylist.append(temp_dict)
 
         print('-----------> data given to frontend <-----------\n', \
@@ -1344,7 +1343,7 @@ def delete_prop_request(request):
 
     return JsonResponse(serializer.data, safe=False, status=200)
 
-    
+
 #------------------------------Search Module Views------------------------------#
 
 def search(request):
