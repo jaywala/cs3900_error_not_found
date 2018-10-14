@@ -1276,6 +1276,7 @@ def search(request):
         minPrice = 0
     if maxPrice == "":
         maxPrice =  100000
+
     ads = Advertisement.objects.filter(num_guests__gte = nGuests,
                                        base_price__gte = minPrice,
                                        base_price__lte = maxPrice)
@@ -1316,11 +1317,13 @@ def search(request):
 
             is_clashing = False
             for i in event_ids:
+                if i == "":
+                    continue
+                i = int(i)
+                e = Event.objects.get(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
 
-                e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
-
-                checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
-                checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
+                checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
+                checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
 
                 if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
                     is_clashing = True
@@ -1341,13 +1344,24 @@ def search(request):
 
     # here we use the actual primary keys given buy the database
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
+    #adSerializer = AdvertisementSerializer(suitable_ads, many=True)
 
-    serializer = AdvertisementSerializer(suitable_ads, many=True)
+    querylist = []
+    for a in suitable_ads:
+        ad = Advertisement.objects.get(poster=a.poster, ad_id=a.ad_id)
+        adSerializer = AdvertisementSerializer(ad).data
+        images = PropertyImage.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+        imSerializer = PropertyImageSerializer(images, many=True).data
+        querylist.append(adSerializer)
+        querylist.append(imSerializer)
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
+    print(querylist)
+    print('DONE')
+    return JsonResponse(querylist, safe=False)
 
-    return JsonResponse(serializer.data, safe=False)
+    #print('-----------> data given to frontend <-----------\n', \
+    #      serializer.data, '\n------------------------')
+    #return JsonResponse(serializer.data, safe=False)
 
 
 #------------------------------Booking Module Views------------------------------#
