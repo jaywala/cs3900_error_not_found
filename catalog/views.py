@@ -18,8 +18,6 @@ from .haversine import haversine
 from datetime import datetime, time
 import math
 
-from drf_multiple_model.views import ObjectMultipleModelAPIView
-
 
 #------------------------------User_Profile------------------------------#
 
@@ -1254,8 +1252,8 @@ def search(request):
         checkOut = request.GET['dateTwo']
     if 'where' in request.GET:
         location = request.GET['where']
-    if 'geusts' in request.GET:
-        nGuests = request.GET['geusts']
+    if 'guests' in request.GET:
+        nGuests = request.GET['guests']
     if 'minPrice' in request.GET:
         minPrice = request.GET['minPrice']
     if 'maxPrice' in request.GET:

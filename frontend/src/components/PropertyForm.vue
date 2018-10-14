@@ -174,6 +174,7 @@
         poster: null,
         propertyType: 'apartment',
         address: null,
+        base_price:null,
         city: null,
         zipCode: null,
         title: null,

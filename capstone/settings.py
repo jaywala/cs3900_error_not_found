@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'corsheaders',
     'catalog',
-    'drf_multiple_model',
+
 ]
 
 MIDDLEWARE = [

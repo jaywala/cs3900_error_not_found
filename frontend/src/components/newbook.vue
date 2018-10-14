@@ -33,6 +33,7 @@ export default {
       {property_type: String,
       address: String,
       address2: String,
+      base_price: Number,
       city: String,
       zip: Number,
       name: String,
@@ -42,6 +43,26 @@ export default {
       nbathroom: Number,
       nbedroom: Number,
       nguest: Number}
+  },
+  message:{
+    ad_id: 1,
+    poster: "Colleen@example.com",
+    accommodation_name: "An Oasis in the City",
+    accommodation_description: "Quay ",
+    house_rules: "Be considerate. No showering after 2330h.",
+    booking_rules: "",
+    amenities: "TV,Kitchen,Elevator,Buzzer/wireless intercom,Heating,Washer,Smoke detector,Fire extinguisher,Essentials,Hangers,Hair dryer,Iron,Bed linens,Extra pillows and blankets,Microwave,Refrigerator,Dishwasher,Dishes and silverware,Cooking basics,Stove,Single level home,Patio or balcony,Garden or backyard",
+    base_price: 65,
+    num_guests: 1,
+    num_bedrooms: 1,
+    num_bathrooms: 0,
+    suburb: "Potts Point",
+    state: "NSW",
+    country: "Australia",
+    latitude: -33.86916827,
+    longitude: 151.2265622,
+    list_of_reviews: "",
+    list_of_events: ""
   },
   methods: {
 

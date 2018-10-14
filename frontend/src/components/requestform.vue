@@ -15,15 +15,6 @@
       </md-table-row>
     </md-table>
 
-    <md-field>
-      <label>Name</label>
-      <md-input v-model="message.rname"></md-input>
-    </md-field>
-    <md-field>
-      <label>E-mail</label>
-      <md-input v-model="message.email"></md-input>
-    </md-field>
-    <md-field>
       <label>request detail</label>
       <md-input v-model="message.detail"></md-input>
     </md-field>
