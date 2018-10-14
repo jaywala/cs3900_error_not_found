@@ -1490,7 +1490,6 @@ def bookers_bookings(request):
         list_of_bookings = str_of_bookings.split(';')
 
         event_pks = []
-        ad_pks = []
         for i in list_of_bookings:
 
             str_event = i.split(',')
@@ -1502,20 +1501,11 @@ def bookers_bookings(request):
                                   ad_id=ad_id)
             event_pks.append(e.pk)
 
-            a = Advertisement.objects.get(ad_id=ad_id, ad_owner=ad_owner)
-            ad_pks.append(a.pk)
-
         bookers_events = Event.objects.filter(pk__in=event_pks)
-        bookers_ads = Advertisement.objects.filter(pk__in=ad_pks)
 
-        eventSerializer = EventSerializer(bookers_events, many=True).data
-        adSerializer = AdvertisementSerializer(bookers_ads, many=True).data
+        eventSerializer = EventSerializer(bookers_events, many=True)
 
-        querylist = [eventSerializer, adSerializer]
-
-        print(querylist)
-
-        return JsonResponse(querylist, safe=False)
+        return JsonResponse(eventSerializer.data, safe=False)
     else:
         return HttpResponse(status=400)
 
