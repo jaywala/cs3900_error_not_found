@@ -1221,6 +1221,7 @@ def get_users_ads(request):
 
 
         querylist = []
+        key = 0
         for a in ads:
             adSerializer = AdvertisementSerializer(a).data
 
@@ -1233,15 +1234,14 @@ def get_users_ads(request):
             reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
             reviewsSerializer = Accommodation_Review(reviews, many=True).data
 
-            querylist.append(adSerializer)
-            querylist.append(imagesSerializer)
-            querylist.append(eventsSerializer)
-            querylist.append(reviewsSerializer)
-
-
+            temp_dict = {}
+            temp_dict[key] = {adSerializer, imagesSerializer, eventsSerializer,
+                              reviewsSerializer}
+            key += 1
+            querylist.append(temp_dict)
 
         print('-----------> data given to frontend <-----------\n', \
-              querylist[0], '\n------------------------')
+              querylist, '\n------------------------')
 
         return JsonResponse(querylist, safe=False)
     else:
