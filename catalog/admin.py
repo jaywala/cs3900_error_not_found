@@ -20,6 +20,7 @@ class AdvertisementAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Ad ID', {'fields': ['ad_id']}),
         ('Poster', {'fields': ['poster']}),
+        ('Poster_ID', {'fields': ['poster_id']}),
         ('Accommodation Review IDs', {'fields': ['list_of_reviews']}),
         ('Event IDs', {'fields': ['list_of_events']}),
         ('Image IDs', {'fields': ['list_of_images']}),

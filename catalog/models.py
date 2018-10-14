@@ -97,6 +97,7 @@ class Advertisement(models.Model):
     # ad_id & poster makes the unique identier for an Ad
     ad_id = models.IntegerField(null=False, blank=False)
     poster = models.CharField(null=False, blank=False, max_length=1000)
+    poster_id = models.IntegerField(null=False, blank=False)
 
     # contains the ad review id's that this ad owns
     list_of_reviews = models.CharField(null=True, blank=True, max_length=1000)
@@ -129,7 +130,7 @@ class Advertisement(models.Model):
 
     def __str__(self):
         temp = 'Ad ID: ' + str(self.ad_id) + \
-               ', Poster: ' + self.poster 
+               ', Poster: ' + self.poster
         return temp
 
     #--------------------------------
@@ -139,6 +140,9 @@ class Advertisement(models.Model):
 
     def get_poster(self):
         return self.poster
+
+    def get_poster_id(self):
+        return self.poster_id
 
     def get_rev_ids(self):
         return self.list_of_reviews
@@ -204,6 +208,11 @@ class Advertisement(models.Model):
     def set_poster(self, new_poster):
         a = Advertisement.objects.get(id=self.id)
         a.poster = new_poster
+        a.save()
+
+    def set_poster_id(self, new_poster_id):
+        a = Advertisement.objects.get(id=self.id)
+        a.poster_id = new_poster_id
         a.save()
 
     def set_rev_ids(self, new_list_of_rev):
