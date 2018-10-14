@@ -680,7 +680,8 @@ def event_create(request):
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
           poster_id, '\n booker: ', booker, '\n------------------------')
 
-    u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+    u = Advertisement.objects.get(ad_id=ad_id, poster_id=poster_id)
+    ad_owner = u.get_poster()
 
     # Find the next event id for this event
     str_of_id = u.get_event_ids()
@@ -698,15 +699,15 @@ def event_create(request):
         new_id = max_id + 1
         event_id = new_id
 
-    checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-    checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
+    checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    checkout = data['detail']['end_day'].split('T')  # only want 2018-09-30
 
     start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
-    notes = "number of guests " + str(data['body']['guest'])
+    notes = "number of guests " + str(data['detail']['guest'])
 
     event = Event(
             event_id=event_id,
