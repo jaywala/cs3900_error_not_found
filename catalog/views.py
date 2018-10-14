@@ -1317,7 +1317,14 @@ def update_prop_request(request):
     p.set_email(email)
     p.set_text(text)
 
-    return HttpResponse(status=201)
+    try:
+        a = PropertyRequest.objects.all()
+    except PropertyRequest.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyRequestSerializer(a, many=True)
+
+    return JsonResponse(serializer.data, safe=False, status=200)
 
 
 def delete_prop_request(request):
@@ -1327,8 +1334,17 @@ def delete_prop_request(request):
 
     p = PropertyRequest.objects.get(pk=id)
     p.delete()
-    return HttpResponse(status=201)
 
+    try:
+        a = PropertyRequest.objects.all()
+    except PropertyRequest.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyRequestSerializer(a, many=True)
+
+    return JsonResponse(serializer.data, safe=False, status=200)
+
+    
 #------------------------------Search Module Views------------------------------#
 
 def search(request):
