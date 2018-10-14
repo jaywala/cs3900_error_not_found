@@ -1251,8 +1251,8 @@ def search(request):
         checkOut = request.GET['dateTwo']
     if 'where' in request.GET:
         location = request.GET['where']
-    if 'geusts' in request.GET:
-        nGuests = request.GET['geusts']
+    if 'guests' in request.GET:
+        nGuests = request.GET['guests']
     if 'minPrice' in request.GET:
         minPrice = request.GET['minPrice']
     if 'maxPrice' in request.GET:
@@ -1271,71 +1271,68 @@ def search(request):
           '\n'
          )
 
-
-    ads = Advertisement.objects.all()
+    ads = Advertisement.objects.filter(num_guests__lte = nGuests,
+                                       base_price__gte = minPrice,
+                                       base_price__lte = maxPrice)
     pk_list = []
 
     for a in ads:
-        # if null then this ad is still qualified for search
-        if nGuests == "null" or a.num_guests >= int(nGuests):
-            if minPrice == "null" or a.base_price >= float(minPrice):
-                if maxPrice == "null" or a.base_price <= float(maxPrice):
 
-                    search_distance = None
-                    if location != "null":
+        search_distance = None
+        if location != "null":
 
-                        search_latitude, search_longitude = position(location)
-                        search_loc = (search_longitude, search_latitude)
+            search_latitude, search_longitude = position(location)
+            search_loc = (search_longitude, search_latitude)
 
-                        ads_latitude = a.get_latitude()
-                        ads_longitude = a.get_longitude()
-                        ads_loc = (ads_longitude, ads_latitude)
+            ads_latitude = a.get_latitude()
+            ads_longitude = a.get_longitude()
+            ads_loc = (ads_longitude, ads_latitude)
 
-                        if distance != "null":
-                            search_distance = float(distance)
-                        else:
-                            # if no distance given, default search is 10 km
-                            search_distance = 10
+            if distance != "null":
+                search_distance = float(distance)
+            else:
+                # if no distance given, default search is 10 km
+                search_distance = 10
 
 
-                        # calculates the distance between two long/lat
-                        # coordnate pairs in km.
-                        dist_apart = haversine(ads_loc, search_loc)
+            # calculates the distance between two long/lat
+            # coordnate pairs in km.
+            dist_apart = haversine(ads_loc, search_loc)
 
-                    if search_distance != None:
-                        if dist_apart > search_distance: # too far away
-                            continue # don't add this ad to search results
+        if search_distance != None:
+            if dist_apart > search_distance: # too far away
+                continue # don't add this ad to search results
 
-                    is_clashing = None
-                    if checkIn != "null" and checkOut != "null":
-                        event_ids = a.get_event_ids()
-                        # convert string into list
-                        event_ids = event_ids.split(',')
+        is_clashing = None
+        if checkIn != "null" and checkOut != "null":
+            event_ids = a.get_event_ids()
+            # convert string into list
+            event_ids = event_ids.split(',')
 
-                        is_clashing = False
-                        for i in event_ids:
+            is_clashing = False
+            for i in event_ids:
 
-                            e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
+                e = Event.objects.filter(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
 
-                            checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
-                            checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
+                checkIn = datetime.strptime(checkIn, "%Y-%m-%d").date()
+                checkOut = datetime.strptime(checkOut, "%Y-%m-%d").date()
 
-                            if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
-                                is_clashing = True
-                            elif checkIn == e.get_start_day() or checkIn == e.get_end_day():
-                                is_clashing = True
-                            elif checkOut >= e.get_start_day() and checkOut <= e.get_end_day():
-                                is_clashing = True
-                            elif checkOut == e.get_start_day() or checkOut == e.get_end_day():
-                                is_clashing = True
+                if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
+                    is_clashing = True
+                elif checkIn == e.get_start_day() or checkIn == e.get_end_day():
+                    is_clashing = True
+                elif checkOut >= e.get_start_day() and checkOut <= e.get_end_day():
+                    is_clashing = True
+                elif checkOut == e.get_start_day() or checkOut == e.get_end_day():
+                    is_clashing = True
 
-                        if not is_clashing:
-                            # if it's not clashing then is_clashing would equal False
-                            # so not is_clashing equals true
-                            pk_list.append(a.pk)
+            if not is_clashing:
+                # if it's not clashing then is_clashing would equal False
+                # so not is_clashing equals true
+                pk_list.append(a.pk)
 
-                    if is_clashing == None: # checkIn & checkOut was not given
-                        pk_list.append(a.pk)
+        if is_clashing == None: # checkIn & checkOut was not given
+            pk_list.append(a.pk)
 
     # here we use the actual primary keys given buy the database
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
