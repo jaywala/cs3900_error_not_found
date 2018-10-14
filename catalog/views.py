@@ -1061,14 +1061,14 @@ def get_single_ad(request):
     (Model: Advertisement)
     """
     print('inside', request.GET)
-    if 'email' in request.GET and 'ad_id' in request.GET:
-        email = request.GET['email']
-        ad_id = request.GET['ad_id']
+    if 'id' in request.GET: #and 'ad_id' in request.GET:
+        poster_id = request.GET['id']
+        #ad_id = request.GET['ad_id']
 
         print('-----------> inside GET SINGLE advertisement <-----------\n', \
-              email, '\n------------------------')
+              poster_id, '\n------------------------')
 
-        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+        ad = Advertisement.objects.get(poster_id=poster_id)
         ad_id = ad.get_ad_id()
 
         # Get image id's from the ad model
@@ -1109,19 +1109,16 @@ def get_single_ad(request):
 
         # Contruct JSON with both the SINGLE ad and
         # all it's images, events, reviews
-        ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
+        ad = Advertisement.objects.get(poster_id=poster_id)
         adSerializer = AdvertisementSerializer(ad).data
 
-        images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
+        images = PropertyImage.objects.filter(ad_owner=ad.poster, ad_id=ad.ad_id)
         imageSerializer = PropertyImageSerializer(images, many=True).data
 
-        event = Event.objects.filter(ad_owner=email, ad_id=ad_id)
-        eventSerializer = EventSerializer(event, many=True).data
-
-        review = Accommodation_Review.objects.filter(ad_owner=email, ad_id=ad_id)
+        review = Accommodation_Review.objects.filter(ad_owner=ad.poster, ad_id=ad.ad_id)
         reviewSerializer = AccommodationReviewSerializer(review, many=True).data
 
-        querylist = [adSerializer, imageSerializer, eventSerializer, reviewSerializer]
+        querylist = [adSerializer, imageSerializer, reviewSerializer]
 
         print(querylist)
 
