@@ -1235,8 +1235,12 @@ def get_users_ads(request):
             reviewsSerializer = Accommodation_Review(reviews, many=True).data
 
             temp_dict = {}
-            temp_dict[key] = {adSerializer, imagesSerializer, eventsSerializer,
-                              reviewsSerializer}
+            temp_dict[key] = {
+                'ad': adSerializer,
+                'images': imagesSerializer,
+                'events': eventsSerializer,
+                'reviews': reviewsSerializer
+            }
             key += 1
             querylist.append(temp_dict)
 
