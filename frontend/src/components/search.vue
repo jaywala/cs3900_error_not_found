@@ -134,20 +134,36 @@
         <div class="col-md-12">
           <md-content class="md-scrollbar">
             <div id="ads" v-if="this.ads">
-              <h2>{{ this.ads.length }} Search Results</h2>
+              <h2>{{ this.ads.length/2 + 1 }} Search Results</h2>
 
               <div class="album py-5 bg-light"> <!-- Listings -->
                 <div class="row">
                   <div v-for="(ad,n) in this.ads" class="col-md-4">
-                    <div class="card mb-4 box-shadow">
-                        <img class="card-img-top" :src = "this.images[n].pic" alt="">
-                      <div class="card-body">
-                        <p class="card-text">{{ad.property_type}}</p>
-                        <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
-                        <p class="card-text">${{ad.base_price}} AUD per night</p>
-                        <div class="d-flex justify-content-between align-items-center">
+                    {{n%2}}
+                    <div v-if="n%2 == 0"class="">
+
+
+                      <div class="card mb-4 box-shadow">
+
+                        <div class="card-body">
+                          <p class="card-text">{{ad.property_type}}</p>
+                          <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
+                          <p class="card-text">${{ad.base_price}} AUD per night</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                          </div>
                         </div>
                       </div>
+                  </div>
+                    <div v-if="n%2 == 1"class="">
+                      <Slider
+                      :pagination-visible="true"
+                      :pagination-clickable = "true"
+                        :async-data="ad"
+                        direction="horizontal">
+                      <div v-for="img in ad" :key="img.id">
+                          <img :src="img.pic" alt="">
+                      </div>
+                    </Slider>
                     </div>
                   </div>
                 </div>
@@ -172,11 +188,13 @@ import router from '../router'
 import axios from 'axios'
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import format from 'date-fns/format'
+import Slider from 'vue-plain-slider'
 //import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
 
 export default {
   components: {
     VueGoogleAutocomplete,
+    Slider,
   },
   data() {
     return {
@@ -211,16 +229,6 @@ export default {
     },
   },
   methods: {
-    getPic(ads){
-      console.log(ads)
-      for(ad in ads){
-        axios.get("http://127.0.0.1:8000/get/"+"image/"+ "Colleen/example/1/" )
-        .then(response => {
-          // JSON responses are automatically parsed.
-          this.images.push(response.data)
-        })
-      }
-    },
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
@@ -283,6 +291,7 @@ export default {
       axios.get("http://127.0.0.1:8000/get/search/",{params:this.message})
       .then(response => {
         // JSON responses are automatically parsed.
+        console.log(response.data)
         this.ads = response.data
       })
       .catch(e => {
@@ -307,7 +316,6 @@ export default {
     this.searchAds();
     this.initMap();
     this.initLayers();
-    this.getPic(this.ads);
   },
 }
 </script>
