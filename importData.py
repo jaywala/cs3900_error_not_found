@@ -59,7 +59,7 @@ def importFromCSV():
             advertisement = Advertisement(
                 ad_id=1,
                 poster=(email.replace(" ", "")+"@example.com"),
-                poster_id=user1.id, 
+                poster_id=user1.id,
                 list_of_reviews="1,",
                 list_of_events="1,",
                 list_of_images="",

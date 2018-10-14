@@ -680,7 +680,8 @@ def event_create(request):
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
           poster_id, '\n booker: ', booker, '\n------------------------')
 
-    u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+    u = Advertisement.objects.get(ad_id=ad_id, poster_id=poster_id)
+    ad_owner = u.get_poster()
 
     # Find the next event id for this event
     str_of_id = u.get_event_ids()
@@ -698,15 +699,15 @@ def event_create(request):
         new_id = max_id + 1
         event_id = new_id
 
-    checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-    checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
+    checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    checkout = data['detail']['end_day'].split('T')  # only want 2018-09-30
 
     start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
-    notes = "number of guests " + str(data['body']['guest'])
+    notes = "number of guests " + str(data['detail']['guest'])
 
     event = Event(
             event_id=event_id,
@@ -1198,6 +1199,53 @@ def get_all_ads(request):
 
     return JsonResponse(serializer.data, safe=False)
 
+
+def get_users_ads(request):
+    """
+    Gets all the ads, images, events, and reviews for this user.
+    """
+
+    print("params give: ", request.GET, "\n")
+
+    if 'email' in request.GET:
+        email = request.GET['email']
+
+        print('-----------> inside GET all user\'s ads and \
+              everything related to advertisement <-----------\n',
+              email, '\n------------------------')
+
+        try:
+            ads = Advertisement.objects.filter(poster=email)
+        except Advertisement.DoesNotExist:
+            return HttpResponse(status=404)
+
+
+        querylist = []
+        for a in ads:
+            adSerializer = AdvertisementSerializer(a).data
+
+            images = PropertyImage.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            imagesSerializer = PropertyImageSerializer(images, many=True).data
+
+            events = Event.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            eventsSerializer = EventSerializer(events, many=True).data
+
+            reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            reviewsSerializer = Accommodation_Review(reviews, many=True).data
+
+            querylist.append(adSerializer)
+            querylist.append(imagesSerializer)
+            querylist.append(eventsSerializer)
+            querylist.append(reviewsSerializer)
+
+
+
+        print('-----------> data given to frontend <-----------\n', \
+              querylist[0], '\n------------------------')
+
+        return JsonResponse(querylist, safe=False)
+    else:
+        return HttpResponse(status=404)
 
 
 def get_prop_requests(request):
