@@ -1199,6 +1199,9 @@ def get_all_ads(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+def
+
+
 def get_prop_requests(request):
     """
     Gets all property requests.
