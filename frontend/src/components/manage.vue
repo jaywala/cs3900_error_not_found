@@ -10,9 +10,20 @@
             <small>{{ ad.address }}</small>
             <p>{{ ad.accommodation_description | truncate(200, '...') }}</p>
             
-            <md-button class="md-primary md-raised" onclick=location.href="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}">View</md-button>
+            <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" ><md-button class="md-primary md-raised">View</md-button></router-link>
             <md-button class="md-secondary md-raised">Edit</md-button>
-            <md-button class="md-accent md-raised">Delete</md-button>
+            <div style="display: inline">
+              <md-dialog-confirm
+                :md-active.sync="delete_dialog_active"
+                md-title="Are you sure you want to delete this property listing?"
+                md-content="This action cannot be undone."
+                md-confirm-text="Yes"
+                md-cancel-text="No"
+                @md-confirm="deleteAd(ad)" />
+
+              <md-button class="md-accent md-raised" @click="delete_dialog_active = true">Delete</md-button>
+            </div>
+            
           </div>
         </div>
       </div> <!-- End of ad -->
@@ -47,19 +58,51 @@ export default {
   components: {},
   data() {
     return {
+      errors: [],
       ads: [],
+      ads_bookings: [],
       user: null,
+      delete_dialog_active: false,
     }
   },
   computed: {},
   methods: {
+    deleteAd: function(ad) {
+      axios.post("http://localhost:8000/post/advertisement/delete/",
+        {
+          body: {
+            poster: this.user.email,
+            ad_id: ad.ad_id
+          }
+        }
+      )
+      // Refresh page.
+      location.reload();
+    },
 
+    fetchAdEvents: function(ad_id) {
+      // Fetch bookings for each advertisement.
+      alert('fetching...')
+      axios.get("http://localhost:8000/get/event/user/",
+        {
+          params: {
+            email: this.user.email,
+            ad_id: ad_id,
+          }
+        })
+        .then(response => {
+            // JSON responses are automatically parsed.
+            console.log(response.data)
+            return response.data
+        })
+        .catch(e => {
+            this.errors.push(e)
+        })
+    }
   },
-  mounted() {
+  beforeMount() {
     this.user = router.app.$auth.getUserProfile();
     // console.log(this.user);
-
-
 
     axios.get("http://localhost:8000/get/advertisement/user/",
           {
@@ -68,13 +111,26 @@ export default {
         }
       })
       .then(response => {
-          // JSON responses are automatically parsed.
-          this.ads = response.data
-          console.log(this.ads)
+        // JSON responses are automatically parsed.
+        this.ads = response.data
+        console.log(this.ads)
+        
+
+        // Fetch bookings for each advertisement.
+        var i;
+        for (i = 0; i < this.ads.length; i++) { 
+          alert('fetch')
+          this.ads_bookings.push(fetchAdEvents(i));
+        }
+
       })
       .catch(e => {
           this.errors.push(e)
       })
+
+    console.log(this.errors)
+    console.log("# of Ad Events: " + this.ads_bookings.length)
+    
   }
 }
 </script>

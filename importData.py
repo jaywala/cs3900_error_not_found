@@ -40,9 +40,15 @@ def importFromCSV():
             email = row[21].lower() + str(count)
             print(count, "  " , email)
 
+<<<<<<< Updated upstream
             user1 = User_Profile(email=(email.replace(" ", "")+"@example.com"), # column V
                                  user_name=email,
                                  name=email,
+=======
+            user1 = User_Profile(email=((row[21].replace(" ", "")+"@example.com").lower()), # column V
+                                 user_name=row[21],
+                                 name=row[21],
+>>>>>>> Stashed changes
                                  profile_pic="",
                                  list_of_ads="1,",
                                  list_of_rentals= "(" + email.replace(" ", "") + "@example.com,1,1);",
