@@ -1287,7 +1287,14 @@ def create_prop_request(request):
     #temp = PropertyRequest.objects.get(p.id)
     #p.set_id(temp.id)
 
-    return HttpResponse(status=201)
+    try:
+        a = PropertyRequest.objects.all()
+    except PropertyRequest.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = PropertyRequestSerializer(a, many=True)
+
+    return JsonResponse(serializer.data, safe=False, status=200)
 
 
 def update_prop_request(request):
