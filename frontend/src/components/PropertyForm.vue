@@ -231,8 +231,9 @@
     methods: {
       submit(){
         this.form.poster = router.app.$auth.getUserProfile().email
-        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form,images:this.files})
 
+        axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form,images:this.files,user:router.app.$auth.getUserProfile()})
+        this.$router.push({ name: 'success' })
       },
       getFiles(files){
         this.files = files

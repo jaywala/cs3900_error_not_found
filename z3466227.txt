@@ -56,3 +56,5 @@ Made PropertyImage views.
 Week 11
 Made search views function for search module.
 Fixed Events validity issues.
+Incorporated booker user type into models.
+wrote a send email function.

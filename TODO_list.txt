@@ -1,4 +1,4 @@
-TODO list
+TO DO list
 
 1. write the API
     (DONE) - determine URL for each GET and POST
@@ -43,4 +43,36 @@ TODO list
 
 1. user profile needs a list_of_rentals (event_id) —> the places you are renting, have rented
 2. user profile need a list of posted_reviews (rev_id) —> the reviews that you wrote for a rented place
-TODO need functions to update the list_of_rentals and posted_reviews
+(DONE) need functions to update the list_of_rentals and posted_reviews
+(DONE) change the separators for list of posted reviews and rentals to ;
+
+(DONE) - the search distance, solution: use Haversine formula (refer to python file for more details)
+(DONE) - fixed date formatting for booking accommodation
+
+(DONE) - when making booking, I need the email of the user booking the property,
+            something like this.auth0.username
+(DONE) - update the TO DO tags for this [views related to this won't work till fixed]
+
+(DONE) - /get/2018-10-10/2018-10-18/null/2/50/100.50/3/ --> not giving location,
+            ==> no location search, no decimal search
+(DONE) - {backend} need to work out how to pattern match the SEARCH URL given by frontend
+
+(DONE) - when creating an ad post the image is not given to backend
+(DONE) - take images from create ad and make PropertyImages instance
+(DONE) - update email to new get system
+
+TODO
+(DONE) - when creating a review, I need the email of the reviewer
+----> need to check when there is a submit button
+- {frontend} need submit review button on review view
+
+- {Gladys} test the clashing events, still don't think it works perfectly
+
+- {frontend} creating an ad need to give backend a base_price, also need that in the form
+- update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
+
+TODO 
+- check data before changing db {JAY}
+- email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips" {JAY}
+
+- join JSON
