@@ -18,9 +18,6 @@ from .haversine import haversine
 from datetime import datetime, time
 import math
 
-from drf_multiple_model.views import ObjectMultipleModelAPIView
-
-
 #------------------------------User_Profile------------------------------#
 
 def user_profile_get(request):
