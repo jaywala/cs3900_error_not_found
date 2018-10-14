@@ -139,7 +139,6 @@
               <div class="album py-5 bg-light"> <!-- Listings -->
                 <div class="row">
                   <div v-for="(ad,n) in this.ads" class="col-md-4">
-                    {{n%2}}
                     <div v-if="n%2 == 0"class="">
 
 
