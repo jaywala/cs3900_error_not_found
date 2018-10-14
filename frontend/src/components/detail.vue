@@ -25,7 +25,7 @@
 
             </div>
 
-            <div v-for="review in message[2]">
+            <div v-for="review in message[3]">
               <li>{{review.rating}}</li>
             </div>
 
@@ -115,7 +115,6 @@ export default {
 
     mounted () {
         this.user = this.message.poster;
-        console.log(this.$router.currentRoute.params)
         axios.get("http://localhost:8000/get/advertisement/single/",
                    {params: this.$router.currentRoute.params}
                  )

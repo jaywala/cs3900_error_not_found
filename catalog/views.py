@@ -1070,7 +1070,7 @@ def get_single_ad(request):
 
         ad = Advertisement.objects.get(poster_id=poster_id, ad_id=ad_id)
         ad_id = ad.get_ad_id()
-
+        email = ad.get_poster()
 
         # Get image id's from the ad model
         image_ids_str = ad.get_image_ids()
@@ -1116,8 +1116,8 @@ def get_single_ad(request):
         images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
         imageSerializer = PropertyImageSerializer(images, many=True).data
 
-        event = Event.objects.filter(ad_owner=email, ad_id=ad_id)
-        eventSerializer = EventSerializer(event, many=True).data
+        events = Event.objects.filter(ad_owner=email, ad_id=ad_id)
+        eventSerializer = EventSerializer(events, many=True).data
 
         review = Accommodation_Review.objects.filter(ad_owner=email, ad_id=ad_id)
         reviewSerializer = AccommodationReviewSerializer(review, many=True).data
@@ -1237,7 +1237,6 @@ def post_prop_request(request):
     p.save()
 
     return HttpResponse(status=201)
-
 
 #------------------------------Search Module Views------------------------------#
 
