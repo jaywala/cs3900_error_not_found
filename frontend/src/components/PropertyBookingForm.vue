@@ -26,6 +26,7 @@
           <md-option value="8">8+</md-option>
         </md-select>
       </md-field>
+      {{this.bookdetail}}
       <md-card-actions>
         <md-button type="submit" class="md-primary" @click = "makebook()">Book</md-button>
       </md-card-actions>
@@ -44,7 +45,7 @@ export default {
   name: 'LabeledDatepicker',
   methods: {
     makebook(){
-      axios.post("http://localhost:8000/post/event/create/",{body:this.$router.currentRoute.params,user:router.app.$auth.getUserProfile(),detail:this.bookdetail})
+      axios.post("http://localhost:8000/post/event/create/",{body:this.bookdetail,user:router.app.$auth.getUserProfile()})
     }
   },
   data: () => ({
@@ -52,6 +53,9 @@ export default {
       start_day:null,
       end_day:null,
       guest:null,
+      ad_owner: null,
+      ad_id: null,
+
     },
 
     message: null

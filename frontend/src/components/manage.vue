@@ -9,7 +9,7 @@
             <router-link :to="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
             <small>{{ ad.address }}</small>
             <p>{{ ad.accommodation_description | truncate(200, '...') }}</p>
-            
+
             <md-button class="md-primary md-raised" onclick=location.href="{ name: 'detailpage', params: { id:ad.ad_id, first:ad.poster.split('@')[0], last:ad.poster.split('@')[1].split('.')[0]}}">View</md-button>
             <md-button class="md-secondary md-raised">Edit</md-button>
             <md-button class="md-accent md-raised">Delete</md-button>

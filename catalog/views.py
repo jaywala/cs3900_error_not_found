@@ -1200,6 +1200,54 @@ def get_all_ads(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+def get_users_ads(request):
+    """
+    Gets all the ads, images, events, and reviews for this user.
+    """
+
+    print("params give: ", request.GET, "\n")
+
+    if 'email' in request.GET:
+        email = request.GET['email']
+
+        print('-----------> inside GET all user\'s ads and \
+              everything related to advertisement <-----------\n',
+              email, '\n------------------------')
+
+        try:
+            ads = Advertisement.objects.filter(poster=email)
+        except Advertisement.DoesNotExist:
+            return HttpResponse(status=404)
+
+
+        querylist = []
+        for a in ads:
+            adSerializer = AdvertisementSerializer(a).data
+
+            images = PropertyImage.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            imagesSerializer = PropertyImageSerializer(images, many=True).data
+
+            events = Event.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            eventsSerializer = EventSerializer(events, many=True).data
+
+            reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
+            reviewsSerializer = Accommodation_Review(reviews, many=True).data
+
+            querylist.append(adSerializer)
+            querylist.append(imagesSerializer)
+            querylist.append(eventsSerializer)
+            querylist.append(reviewsSerializer)
+
+
+
+        print('-----------> data given to frontend <-----------\n', \
+              querylist[0], '\n------------------------')
+
+        return JsonResponse(querylist, safe=False)
+    else:
+        return HttpResponse(status=404)
+
+
 def get_prop_requests(request):
     """
     Gets all property requests.
