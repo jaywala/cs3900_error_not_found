@@ -70,7 +70,11 @@ urlpatterns = [
     #---------------- Property Seeker Views ----------------#
 
     path('get/PropertyRequest/', views.get_prop_requests),
-    path('post/PropertyRequest/', views.post_prop_request),
+    path('post/PropertyRequest/create/', views.create_prop_request),
+    path('post/PropertyRequest/update/', views.update_prop_request),
+    path('post/PropertyRequest/delete/', views.delete_prop_request),
+
+
 
     #---------------- General Views ----------------#
 

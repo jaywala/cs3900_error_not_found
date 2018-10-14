@@ -1269,7 +1269,24 @@ def get_prop_requests(request):
     return JsonResponse(serializer.data, safe=False)
 
 
-def post_prop_request(request):
+def create_prop_request(request):
+
+    data = JSONParser().parse(request)
+
+    name = data['body']['name']
+    email = data['body']['email']
+    text = data['body']['detail']
+
+    p = PropertyRequest(name=name, email=email, text=text)
+    p.save()
+
+    temp = PropertyRequest.objects.get(p.id)
+    p.set_id(temp.id)
+
+    return HttpResponse(status=201)
+
+
+def update_prop_request(request):
     """
     Posts a property request.
     """
@@ -1281,11 +1298,19 @@ def post_prop_request(request):
     name = data['body']['name']
     email = data['body']['email']
     text = data['body']['detail']
+    id = data['body']['id']
 
-    p = PropertyRequest(name=name, email=email, text=text)
-    p.save()
+    p = PropertyRequest.objects.get(id=id)
+    p.set_name(name)
+    p.set_email(email)
+    p.set_text(text)
 
     return HttpResponse(status=201)
+
+
+def delete_prop_request(request):
+
+
 
 #------------------------------Search Module Views------------------------------#
 
@@ -1413,6 +1438,12 @@ def search(request):
     #print('-----------> data given to frontend <-----------\n', \
     #      serializer.data, '\n------------------------')
     #return JsonResponse(serializer.data, safe=False)
+
+    data = JSONParser().parse(request)
+
+    id = data['body']['id']
+    p = PropertyRequest.objects.get(id=id)
+    p.delete()
 
 
 #------------------------------Booking Module Views------------------------------#
