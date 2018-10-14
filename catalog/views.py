@@ -240,7 +240,7 @@ def advertisement_create(request):
 
     # Find the next ad_id for this user's ads
     u = User_Profile.objects.get(email=poster)
-    post_id = u.ad
+    post_id = u.id
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
         ad_id = 1 #this is the first ad this user is posting
@@ -642,7 +642,7 @@ def event_get(request):
     """
 
     if 'email' in request.GET and 'ad_id' in request.GET:
-        ad_owner = request.GET['email']
+        poster = request.GET['email']
         ad_id = request.GET['ad_id']
 
         print('-----------> inside GET Event <-----------\n', poster, \
@@ -672,13 +672,13 @@ def event_create(request):
 
     data = JSONParser().parse(request)
 
-    ad_owner = data['body']['ad_owner']
+    poster_id = data['body']['poster_id']
     ad_id = data['body']['ad_id']
 
     booker = data['user']['email']
 
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
-          ad_owner, '\n booker: ', booker, '\n------------------------')
+          poster_id, '\n booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
 
