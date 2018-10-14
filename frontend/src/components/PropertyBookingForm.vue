@@ -66,8 +66,6 @@ export default {
   .then(response => {
     // JSON responses are automatically parsed.
     this.message = response.data
-    this.bookdetail.ad_owner = this.message.poster
-    this.bookdetail.ad_id = this.message.ad_id
   })
   .catch(e => {
     this.errors.push(e)
