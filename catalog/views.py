@@ -672,13 +672,13 @@ def event_create(request):
 
     data = JSONParser().parse(request)
 
-    ad_owner = data['body']['ad_owner']
+    poster_id = data['body']['poster_id']
     ad_id = data['body']['ad_id']
 
     booker = data['user']['email']
 
     print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
-          ad_owner, '\n booker: ', booker, '\n------------------------')
+          poster_id, '\n booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
 
