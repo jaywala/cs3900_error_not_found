@@ -1281,11 +1281,11 @@ def create_prop_request(request):
     email = data['body']['email']
     text = data['body']['detail']
 
-    p = PropertyRequest(name=name, email=email, text=text, im_id=-1)
+    p = PropertyRequest(name=name, email=email, text=text)
     p.save()
 
-    temp = PropertyRequest.objects.get(p.id)
-    p.set_id(temp.id)
+    #temp = PropertyRequest.objects.get(p.id)
+    #p.set_id(temp.id)
 
     return HttpResponse(status=201)
 
@@ -1302,9 +1302,10 @@ def update_prop_request(request):
     name = data['body']['name']
     email = data['body']['email']
     text = data['body']['detail']
-    im_id = data['body']['im_id']
+    id = data['body']['id']
+    #im_id = data['body']['im_id']
 
-    p = PropertyRequest.objects.get(im_id=im_id)
+    p = PropertyRequest.objects.get(pk=id)
     p.set_name(name)
     p.set_email(email)
     p.set_text(text)
@@ -1315,9 +1316,9 @@ def update_prop_request(request):
 def delete_prop_request(request):
 
     data = JSONParser().parse(request)
-    im_id = data['body']['im_id']
+    id = data['body']['id']
 
-    p = PropertyRequest.objects.get(im_id=im_id)
+    p = PropertyRequest.objects.get(pk=id)
     p.delete()
     return HttpResponse(status=201)
 
