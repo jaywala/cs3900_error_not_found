@@ -1270,7 +1270,13 @@ def search(request):
           '\n'
          )
 
-    ads = Advertisement.objects.filter(num_guests__lte = nGuests,
+    if nGuests == "":
+        nGuests = 0
+    if minPrice == "":
+        minPrice = 0
+    if maxPrice == "":
+        maxPrice =  100000
+    ads = Advertisement.objects.filter(num_guests__gte = nGuests,
                                        base_price__gte = minPrice,
                                        base_price__lte = maxPrice)
     pk_list = []
@@ -1278,7 +1284,7 @@ def search(request):
     for a in ads:
 
         search_distance = None
-        if location != "null":
+        if location != "null" and location != "":
 
             search_latitude, search_longitude = position(location)
             search_loc = (search_longitude, search_latitude)
@@ -1287,7 +1293,7 @@ def search(request):
             ads_longitude = a.get_longitude()
             ads_loc = (ads_longitude, ads_latitude)
 
-            if distance != "null":
+            if distance != "null" and distance != "":
                 search_distance = float(distance)
             else:
                 # if no distance given, default search is 10 km
@@ -1303,7 +1309,7 @@ def search(request):
                 continue # don't add this ad to search results
 
         is_clashing = None
-        if checkIn != "null" and checkOut != "null":
+        if checkIn != "null" and checkOut != "null" and checkIn != "" and checkOut != "":
             event_ids = a.get_event_ids()
             # convert string into list
             event_ids = event_ids.split(',')
