@@ -145,7 +145,7 @@ def advertisement_get(request):
     Give all the ads for this user.
     (Model: Advertisement)
     """
-
+    print(request.GET)
     if 'email' in request.GET:
         email = request.GET['email']
 
