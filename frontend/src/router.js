@@ -48,7 +48,7 @@ const router = new Router({
         component: test
       },
       {
-          path: '/detail/:id',
+          path: '/detail/:poster_id/:ad_id',
           component: detail,
           name: 'detailpage'
 

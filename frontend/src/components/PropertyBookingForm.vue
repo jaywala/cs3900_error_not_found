@@ -4,7 +4,7 @@
 <div class="PropertyBookingForm" style="">
   <md-card>
     <md-card-header>
-      <strong><div class="md-title">${{ this.message.base_price }}</div></strong>per night
+      <strong><div class="md-title">${{ this.message[0].base_price }}</div></strong>per night
     </md-card-header>
     <md-card-content >
       <md-datepicker v-model="bookdetail.start_day" >
