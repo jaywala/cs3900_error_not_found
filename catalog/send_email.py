@@ -1,12 +1,12 @@
 import smtplib
 
 def host_email(host,property_name,dates,user):
-    email = "Hi {},\n\n This is a confirmation email to notify your property, {} has been booked for the dates, {} by {}\n\nBest Regards\nfrom the NotAirBnB Team".format(host,property_name,dates,user)
+    email = "Hi {},\n\n This is a confirmation email to notify your property, {} has been booked for the dates, {} by {}\n\nBest Regards\n NotAirBnB Team".format(host,property_name,dates,user)
     print(email)
     return email
 
 def booker_email(user,property_name,dates):
-    email = "Hi {},\n\n This is a email to confirm your booking of {} for the dates, {}\n\nBest Regards\nfrom the NotAirBnB Team".format(user,property_name,dates)
+    email = "Hi {},\n\n This is a email to confirm your booking of {} for the dates, {}\n\nBest Regards\n NotAirBnB Team".format(user,property_name,dates)
     print(email)
     return email
 

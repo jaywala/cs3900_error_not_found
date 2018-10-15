@@ -714,11 +714,11 @@ def event_create(request):
         event_id = new_id
 
     checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-    checkout = data['detail']['end_day'].split('T')  # only want 2018-09-30
+    checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
 
     start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-    end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
+    end_day = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
     notes = "number of guests " + str(data['detail']['guest'])
@@ -764,7 +764,11 @@ def event_create(request):
 
         # send emails
         booked_period = str(checkIn) + " - " + str(checkOut)
-        h_email = host_email(poster_name, property_name, booked_period, booker_name) #HERE
+        h_email = host_email(poster_name, property_name, booked_period, booker_name)
+        send_email(ad_owner, h_email)
+
+        b_email = booker_email(booker_name, property_name, booked_period)
+        send_email(booker, b_email)
 
         return HttpResponse(status=201)
     else:
@@ -796,11 +800,11 @@ def event_update(request):
         event = event[0]
 
         checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-        checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
+        checkOut = data['body']['end_day'].split('T')  # only want 2018-09-30
 
         start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
         start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-        end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
+        end_day = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
         end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
         booking_status = "booked"
         notes = "number of guests " + str(data['body']['guest'])
@@ -1418,16 +1422,21 @@ def search(request):
 
     # here we use the actual primary keys given buy the database
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
-    #adSerializer = AdvertisementSerializer(suitable_ads, many=True)
+
 
     querylist = []
     for a in suitable_ads:
-        ad = Advertisement.objects.get(poster=a.poster, ad_id=a.ad_id)
-        adSerializer = AdvertisementSerializer(ad).data
+        adSerializer = AdvertisementSerializer(a).data
+
         images = PropertyImage.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
-        imSerializer = PropertyImageSerializer(images, many=True).data
-        querylist.append(adSerializer)
-        querylist.append(imSerializer)
+        imagesSerializer = PropertyImageSerializer(images, many=True).data
+
+        temp_dict = {
+            'ad': adSerializer,
+            'images': imagesSerializer,
+        }
+
+        querylist.append(temp_dict)
 
     #print(querylist)
     print('DONE SEARCHING')
