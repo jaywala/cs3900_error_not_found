@@ -8,3 +8,46 @@
 
 
 take all the params then filter it out
+
+status codes
+
+200 OK
+201 Created
+
+400 Bad Request  --> didn't give backend enough info
+404 Not Found --> backend didn't find thing
+
+
+
+'''
+SAMPLE output from get_single_ad
+[   {'ad_id': 1,
+    'poster': 'Stuart@example.com',
+    'list_of_reviews': '1,',
+    'list_of_events': None,
+    'list_of_images': '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,',
+    'accommodation_name': 'Sydney City & Harbour at the door',
+    'accommodation_description': "Come stay with Vinh & Stuart ... reserve",
+    'property_type': 'Townhouse',
+    'house_rules': 'We look forward ...',
+    'booking_rules': 'no cancellation',
+    'amenities': 'TV,Internet,Wifi,Air conditioning',
+    'base_price': 98.0,
+    'num_guests': 2,
+    'num_bedrooms': 1,
+    'num_bathrooms': 1.0,
+    'address': 'Pyrmont',
+    'city': 'Pyrmont, Australia',
+    'zip_code': '2009',
+    'latitude': -33.86515255,
+    'longitude': 151.1918959
+    },
+    [   OrderedDict([('id', 11),
+                      ('image_id', 1),
+                      ('ad_owner', 'Stuart@example.com'),
+                      ('ad_id', 1),
+                      ('pic', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAYCqq2muYpGTyT//2Q==.....')]),
+        OrderedDict([('id',.....')])
+    ]
+]
+'''

@@ -72,6 +72,8 @@ TODO
 
 - {frontend} pass backend the lat & long for location search (it's times out in the backend)
 
+- {both ends} check request module works (dumb feature), delete & update
+
 - {Gladys} test the clashing events, still don't think it works perfectly
 
 - {gladys} write script that runs in the background that constantly checks if events have passed
