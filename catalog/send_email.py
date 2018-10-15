@@ -41,7 +41,7 @@ def booker_email(user,property_name,dates): #TODO change the link when ready
            &nbsp; &nbsp; &nbsp; &nbsp; This is an email to confirm your booking of, <strong>{property_name}</strong><br>
            &nbsp; &nbsp; &nbsp; &nbsp; for the dates <strong>{dates}</strong>.<br>
            &nbsp; &nbsp; &nbsp; &nbsp; <br>
-           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/manage/">here</a></strong> to manage your bookings.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/trips/">here</a></strong> to manage your bookings.<br>
            &nbsp; &nbsp; &nbsp; &nbsp; <br>
 
            Best Regards,<br>

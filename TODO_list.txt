@@ -68,6 +68,10 @@ TO DO list
 (DONE) - pass backend the lat & long for location search (it's times out in the backend)
 (DONE) - integrate emailing
 (DONE) - email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
+(DONE) - test the clashing events
+(DONE) - write script that runs in the background that constantly checks if events have passed
+                        if passed, change the status from booked to finished
+(DONE) - tell me URL to myTrips page
 
 TODO
 - {frontend} when creating a review, backend needs: --> URL: 'post/review/create/'
@@ -91,14 +95,6 @@ TODO
             1. ad_owner, email of ad owner --> data['body']['ad_owner']
             2. ad_id, id of ad --> data['body']['ad_id']
 
-
-- {frontend} tell me URL to myTrips page
-
 - {both ends} make & check request module works (dumb feature) for update
-
-- DONE TODO test it {Gladys} test the clashing events, still don't think it works perfectly
-
-- DONE TODO test it {gladys} write script that runs in the background that constantly checks if events have passed
-                        if passed, change the status from booked to finished
 
 - {are we allowing the deletion of events???} only delete event if the status is booked, don't allow delete if status is finished

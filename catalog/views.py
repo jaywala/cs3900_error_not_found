@@ -714,17 +714,26 @@ def event_create(request):
         event_id = new_id
 
     checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-    checkIn = checkIn[0]
+    checkIn = datetime.strptime(checkIn[0], "%Y-%m-%d").date()
     checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
-    checkOut = [0]
+    checkOut = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
 
-
-    start_day =  datetime.strptime(checkIn, "%Y-%m-%d").date()
+    start_day = checkIn
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-    end_day = datetime.strptime(checkOut, "%Y-%m-%d").date()
+    end_day = checkOut
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
     notes = "number of guests " + str(data['detail']['guest'])
+
+    today_date = datetime.today()
+    today_date = str(today_date).split()
+    today_date = datetime.strptime(today_date[0], "%Y-%m-%d").date()
+    if checkIn < today_date: # can't book in the pass
+        print('Check in date is in the past.')
+        return HttpResponse(status=400)
+    elif checkIn > checkOut:
+        print('Check out date is before check in date.')
+        return HttpResponse(status=400)
 
     # is_clashing = True means there is a clash so invalid booking dates
     is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner)
@@ -783,6 +792,7 @@ def event_create(request):
         else:
             return HttpResponse(status=400)
     else:
+        print('Overlapping Dates')
         return HttpResponse(status=400)
 
 
@@ -811,17 +821,27 @@ def event_update(request):
         event = event[0]
 
         checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-        checkIn = checkIn[0]
+        checkIn = datetime.strptime(checkIn[0], "%Y-%m-%d").date()
         checkOut = data['body']['end_day'].split('T')  # only want 2018-09-30
-        checkOut = checkOut[0]
+        checkOut = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
+
+        today_date = datetime.today()
+        today_date = str(today_date).split()
+        today_date = datetime.strptime(today_date[0], "%Y-%m-%d").date()
+        if checkIn < today_date: # can't book in the pass
+            print('Check in date is in the past.')
+            return HttpResponse(status=400)
+        elif checkIn > checkOut:
+            print('Check out date is before check in date.')
+            return HttpResponse(status=400)
 
         # is_clashing = True means there is a clash so invalid booking dates
         is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner, event_id=int(event_id))
 
         if not is_clashing:
-            start_day =  datetime.strptime(checkIn, "%Y-%m-%d").date()
+            start_day = checkIn
             start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-            end_day = datetime.strptime(checkOut, "%Y-%m-%d").date()
+            end_day = checkOut
             end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
             booking_status = "booked"
             notes = "number of guests " + str(data['body']['guest'])
@@ -846,14 +866,15 @@ def event_update(request):
             booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' has changed details'
             h_email = host_email(poster_name, property_name, booked_period, booker_name)
-            send_email(ad_owner, h_email, subject)
+            #send_email(ad_owner, h_email, subject)
 
             subject = 'Confirmation of changes to booking accommodation: ' + property_name
             b_email = booker_email(booker_name, property_name, booked_period)
-            send_email(booker, b_email, subject)
+            #send_email(booker, b_email, subject)
 
             return HttpResponse(status=200)
         else:
+            print('Overlapping Dates')
             return HttpResponse(status=400)
     else:
         return HttpResponse(status=400)
