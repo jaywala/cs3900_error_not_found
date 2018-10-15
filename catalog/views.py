@@ -233,14 +233,15 @@ def advertisement_create(request):
 
     data = JSONParser().parse(request)
 
-    poster = data['body']['poster']
+    poster = data['user']['email']
 
     print('-----------> inside CREATE advertisement <-----------\n',
           poster, '\n------------------------')
 
     # Find the next ad_id for this user's ads
     u = User_Profile.objects.get(email=poster)
-    post_id = u.id
+    #print(u.id)
+    poster_id = u.id
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
         ad_id = 1 #this is the first ad this user is posting
@@ -300,7 +301,7 @@ def advertisement_create(request):
     ad = Advertisement(
             ad_id = ad_id,
             poster = poster,
-            post_id = post_id,
+            poster_id = poster_id,
             list_of_reviews = list_of_reviews,
             list_of_events = list_of_events,
             list_of_images = list_of_images,
@@ -1344,7 +1345,7 @@ def delete_prop_request(request):
 
     return JsonResponse(serializer.data, safe=False, status=200)
 
-    
+
 #------------------------------Search Module Views------------------------------#
 
 def search(request):
