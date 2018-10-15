@@ -17,6 +17,7 @@ from .geo import position
 from .haversine import haversine
 from datetime import datetime, time
 import math
+
 #------------------------------User_Profile------------------------------#
 
 def user_profile_get(request):
@@ -140,6 +141,7 @@ def is_loggedIn(request):
 
 
 #------------------------------Advertisement------------------------------#
+
 def advertisement_get(request):
     """
     Give all the ads for this user.
@@ -202,7 +204,7 @@ def advertisement_update(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    lat, long = position(address)
+    lat, long = 0, 0 #position(address)
     latitude = lat
     longitude = long
 
@@ -240,7 +242,7 @@ def advertisement_create(request):
 
     # Find the next ad_id for this user's ads
     u = User_Profile.objects.get(email=poster)
-    post_id = u.id
+    poster_id = u.id
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
         ad_id = 1 #this is the first ad this user is posting
@@ -293,14 +295,14 @@ def advertisement_create(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    lat, long = position(address)
-    latitude = lat
-    longitude = long
+    #lat, long = position(address)
+    latitude = 0 #lat
+    longitude = 0 #long
 
     ad = Advertisement(
             ad_id = ad_id,
             poster = poster,
-            post_id = post_id,
+            poster_id = poster_id,
             list_of_reviews = list_of_reviews,
             list_of_events = list_of_events,
             list_of_images = list_of_images,
@@ -1194,8 +1196,8 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
+    #print('-----------> data given to frontend <-----------\n', \
+    #      serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -1210,8 +1212,7 @@ def get_users_ads(request):
     if 'email' in request.GET:
         email = request.GET['email']
 
-        print('-----------> inside GET all user\'s ads and \
-              everything related to advertisement <-----------\n',
+        print('-----------> inside GET get_users_ads\n',
               email, '\n------------------------')
 
         try:
@@ -1395,7 +1396,7 @@ def search(request):
         search_distance = None
         if location != "null" and location != "":
 
-            search_latitude, search_longitude = position(location)
+            search_latitude, search_longitude = 0, 0 #position(location)
             search_loc = (search_longitude, search_latitude)
 
             ads_latitude = a.get_latitude()
@@ -1463,8 +1464,8 @@ def search(request):
         querylist.append(adSerializer)
         querylist.append(imSerializer)
 
-    print(querylist)
-    print('DONE')
+    #print(querylist)
+    print('DONE SEARCHING')
     return JsonResponse(querylist, safe=False)
 
 
@@ -1508,6 +1509,7 @@ def bookers_bookings(request):
         return JsonResponse(eventSerializer.data, safe=False)
     else:
         return HttpResponse(status=400)
+
 
 #------------------------------Test Views------------------------------#
 

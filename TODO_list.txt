@@ -62,6 +62,7 @@ TO DO list
 (DONE) - update email to new get system
 (DONE) - check data before changing db
 (DONE) - change all user email to lower case in importData
+(DONE) - join JSON, whenever an ad is asked for, give frontend all info related to it.
 
 TODO
 (DONE) - when creating a review, I need the email of the reviewer
@@ -76,6 +77,9 @@ TODO
 
 - {JAY} email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
 
-- {Gladys} join JSON, whenever an ad is asked for, give frontend all info related to it.
-
 - {gladys} event when over need to change status, booked to finished to reviewed
+
+- {frontend} pass backend the lat & long for location search (it's times out in the backend)
+
+- {gladys} write script that runs int he background that constantly checks if events have passed
+  if passed, change the status of the booking
