@@ -142,7 +142,7 @@
                     <div class="card mb-4 box-shadow">
                       <div class="card-body">
                         <p class="card-text">{{advert.ad.property_type}}</p>
-                        <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id}}" > <h4 class="card-text">{{advert.ad.accommodation_name}}</h4></router-link>
+                        <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id}}" > <h5 class="card-text">{{advert.ad.accommodation_name}}</h5></router-link>
                         <p class="card-text">${{advert.ad.base_price}} AUD per night</p>
                         <div class="d-flex justify-content-between align-items-center">
                         </div>
@@ -153,7 +153,7 @@
                         :async-data="ad"
                         direction="horizontal">
                       <div v-for="img in advert.images" :key="img.id">
-                          <img :src="img.pic"style="width:100%" alt="">
+                          <img :src="img.pic"style="height:200px" alt="">
                       </div>
                     </Slider>
                       </div>
