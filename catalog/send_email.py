@@ -9,15 +9,19 @@ def host_email(host,property_name,dates,user):
     message = """\
     <html>
       <head></head>
-      <body>
-        <p>Hi {host}<br>
-           This is a confirmation email to notify your property, "{property_name}"<br>
-           has been booked for the dates, {dates} by {user}.<br>
-
-           Click here to <a href="http://localhost:8080/manage/">manage your bookings</a>.<br>
+      <body style="border:3px; border-style:solid; border-color:#3081EA; padding: 1em;">
+        <p ><font face="Trebuchet MS" color="#474B50">
+           Hi {host}<br>
+           <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; This is a confirmation email to notify your property, <strong>{property_name}</strong><br>
+           &nbsp; &nbsp; &nbsp; &nbsp; has been booked for the dates, <strong>{dates}</strong> by <strong>{user}</strong>.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/manage/">here</a></strong> to manage your bookings.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
 
            Best Regards,<br>
-           NotAirBnB Team
+           <font color="#3081EA">NotAirBnB Team</font>
+           </font>
         </p>
       </body>
     </html>
@@ -30,15 +34,19 @@ def booker_email(user,property_name,dates): #TODO change the link when ready
     message = """\
     <html>
       <head></head>
-      <body>
-        <p>Hi {user}<br>
-           This is an email to confirm your booking of "{property_name}"<br>
-           for the dates {dates}.<br>
-
-           Click here to <a href="http://localhost:8080/manage/">manage your bookings</a>.<br>
+      <body style="border:3px; border-style:solid; border-color:#3081EA; padding: 1em;">
+        <p ><font face="Trebuchet MS" color="#474B50">
+           Hi {user}<br>
+           <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; This is an email to confirm your booking of, <strong>{property_name}</strong><br>
+           &nbsp; &nbsp; &nbsp; &nbsp; for the dates <strong>{dates}</strong>.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/manage/">here</a></strong> to manage your bookings.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
 
            Best Regards,<br>
-           NotAirBnB Team
+           <font color="#3081EA">NotAirBnB Team</font>
+           </font>
         </p>
       </body>
     </html>

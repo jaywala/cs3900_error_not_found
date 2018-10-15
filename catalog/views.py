@@ -770,7 +770,7 @@ def event_create(request):
             u.set_list_of_rentals(new_str_of_rentals)
 
             # send emails
-            booked_period = str(checkIn) + " - " + str(checkOut)
+            booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' just got booked'
             h_email = host_email(poster_name, property_name, booked_period, booker_name)
             send_email(ad_owner, h_email, subject)
@@ -843,7 +843,7 @@ def event_update(request):
             prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
             property_name = prop.get_accommodation_name()
 
-            booked_period = str(checkIn) + " - " + str(checkOut)
+            booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' has changed details'
             h_email = host_email(poster_name, property_name, booked_period, booker_name)
             send_email(ad_owner, h_email, subject)
