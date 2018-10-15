@@ -49,7 +49,6 @@ import axios from 'axios'
         this.message.email = this.getProfile().email
         this.request.push(this.message)
         axios.post("http://localhost:8000/post/PropertyRequest/create/",{body: this.message})
-        axios.get("http://localhost:8000/get/PropertyRequest/")
         .then(response => {
           // JSON responses are automatically parsed.
           console.log(response.data)
@@ -60,8 +59,12 @@ import axios from 'axios'
         return router.app.$auth.getUserProfile()
       },
       deleter(r){
-        console.log(this.request.indexOf(r))
-        this.request.splice(this.request.indexOf(r), 1 );
+        axios.post("http://localhost:8000/post/PropertyRequest/delete/",{body: r})
+        .then(response => {
+          // JSON responses are automatically parsed.
+          console.log(response.data)
+          this.request = response.data
+        })
       }
     },
     mounted () {

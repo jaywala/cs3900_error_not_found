@@ -5,7 +5,7 @@ def host_email(host,property_name,dates,user):
     print(email)
     return email
 
-def user_email(user,property_name,dates):
+def booker_email(user,property_name,dates):
     email = "Hi {},\n\n This is a email to confirm your booking of {} for the dates, {}\n\nBest Regards\nfrom the NotAirBnB Team".format(user,property_name,dates)
     print(email)
     return email
@@ -41,5 +41,5 @@ def send_email(to_addr, message, given_subject=''):
 
 if __name__ == '__main__':
     host_email("_jeff_","_property_","_dates_","_user_")
-    user_email("_user_","_property_","_dates_")
+    booker_email("_user_","_property_","_dates_")
     # send_email(to_addr='gladyschanmail@gmail.com', message='hello there', given_subject='test mail')
