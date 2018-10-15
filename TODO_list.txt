@@ -101,4 +101,4 @@ TODO
 - DONE TODO test it {gladys} write script that runs in the background that constantly checks if events have passed
                         if passed, change the status from booked to finished
 
-- {if i have time} only delete event if the status is booked, don't allow delete if status is finished
+- {are we allowing the deletion of events???} only delete event if the status is booked, don't allow delete if status is finished
