@@ -209,6 +209,8 @@ export default {
         "distance": '',
         "minPrice": '',
         "maxPrice": '',
+        "lat": '',
+        "lng": '',
       },
       ads: null,
       images: [
@@ -247,8 +249,9 @@ export default {
     */
     getAddressData: function (addressData, placeResultData, id) {
         this.message.where = placeResultData.formatted_address
-
-        // console.log(placeResultData)
+        this.message.lat = placeResultData.geometry.location.lat();
+        this.message.lng = placeResultData.geometry.location.lng();
+        console.log(placeResultData)
         // alert(document.getElementById('map').value)
     },
     searchAds() {

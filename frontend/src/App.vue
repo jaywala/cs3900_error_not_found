@@ -3,7 +3,7 @@
         <!-- Bootstrap core CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 
-        
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 
         <!-- Custom styles for this template -->
         <link href="./components/album.css" rel="stylesheet">
@@ -34,30 +34,28 @@
                 <strong>NotAirbnb</strong>
               </a>
 
-              <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-              </div>
-              </form>
+              <div class="navbar-right">
+                <i class="fas fa-search fa-2x"></i>
+                <b-dropdown id="ddown1" variant="link" size="lg" no-caret>
+                  <template slot="button-content">
+                    <i class="fas fa-chevron-circle-down fa-2x"></i><span class="sr-only">Search</span>
+                  </template>
+                
+                  <router-link to="/search" v-if="authenticated()" tag="b-dropdown-item">Search</router-link>
+                  <router-link to="/manage/" v-if="authenticated()" tag="b-dropdown-item">Manage properties</router-link>
+                  <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">Add property</router-link>
+                  <router-link to="/review" v-if="authenticated()" tag = "b-dropdown-item">review bookings</router-link>
+                  <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
 
-              <div>
-                  <b-dropdown id="ddown1" text="Dropdown Button" class="m-md-2">
-                      <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated()" @click="login()">
-                          Log In
-                      </b-dropdown-item>
-                      <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated()" @click="logout()">
-                          Log Out
-                      </b-dropdown-item>
+                  <b-dropdown-divider></b-dropdown-divider>
 
-                      <b-dropdown-divider></b-dropdown-divider>
-                      <router-link to="/search" v-if="authenticated()" tag="b-dropdown-item">Search</router-link>
-                      <router-link to="/manage/" v-if="authenticated()" tag="b-dropdown-item">Manage properties</router-link>
-                      <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">Add property</router-link>
-                      <router-link to="/review" v-if="authenticated()" tag = "b-dropdown-item">review bookings</router-link>
-                      <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
-
-
-                  </b-dropdown>
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated()" @click="login()">
+                    Log In
+                  </b-dropdown-item>
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated()" @click="logout()">
+                    Log Out
+                  </b-dropdown-item>
+                </b-dropdown>
               </div>
             </div>
           </div>
@@ -96,6 +94,11 @@ if (!String.prototype.format) {
 
 export default {
   name: 'App',
+  data() {
+    return {
+      user: null,
+    }
+  },
   methods: {
     // this method calls the AuthService login() method
     login () {
@@ -108,6 +111,10 @@ export default {
     logout(){
       router.app.$auth.logout()
     }
+  },
+  mounted() {
+    this.user = router.app.$auth.getUserProfile();
+    console.log(this.user);
   }
 }
 </script>
