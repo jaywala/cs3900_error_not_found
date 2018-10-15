@@ -87,7 +87,7 @@
 
               <b-nav-item href="/search/"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></b-nav-item>
 
-              <b-nav-item href="/search/">Trips</b-nav-item>
+              <b-nav-item href="/trips/">Trips</b-nav-item>
               <b-nav-item href="/help/">Help</b-nav-item>
 
               <b-nav-item-dropdown right no-caret>
@@ -123,8 +123,8 @@
           <p class="float-right">
             <a href="#">Back to top</a>
           </p>
-          <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-          <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+          
+          <p>Developed by Gladys Chan, Zihan Qiu, Jay Motwani and Joseph Hilsberg as part of <a href="http://legacy.handbook.unsw.edu.au/undergraduate/courses/2018/COMP3900.html">COMP3900</a></p>
         </div>
       </header>
     <br>
