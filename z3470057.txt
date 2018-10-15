@@ -42,3 +42,5 @@ Week 11
 - Programmed and stylized the search/filter component and fully integrated it with the backend server.
 - Researched potentia cloud deployment options. (Heroku, AWS, Etc.)
 
+Week 12
+- Developed and connected the front-end for the management webpage where hosts can manage their property listings.

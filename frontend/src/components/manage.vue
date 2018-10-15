@@ -19,7 +19,7 @@
                 md-content="This action cannot be undone."
                 md-confirm-text="Yes"
                 md-cancel-text="No"
-                @md-confirm="deleteAd(ad)" />
+                @md-confirm="deleteAd(advert.ad.ad_id)" />
 
               <md-button class="md-accent md-raised" @click="delete_dialog_active = true">Delete</md-button>
             </div>
@@ -71,12 +71,12 @@ export default {
   },
   computed: {},
   methods: {
-    deleteAd: function(ad) {
+    deleteAd: function(ad_id) {
       axios.post("http://localhost:8000/post/advertisement/delete/",
         {
           body: {
             poster: this.user.email,
-            ad_id: ad.ad_id
+            ad_id: ad_id
           }
         }
       )
