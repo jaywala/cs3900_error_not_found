@@ -64,15 +64,16 @@ TO DO list
 (DONE) - change all user email to lower case in importData
 (DONE) - join JSON, whenever an ad is asked for, give frontend all info related to it.
 (DONE) - update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
+(DONE) - creating an ad need to give backend a base_price, also need that in the form
 
 TODO
 - {frontend} when creating a review, I need the email of the reviewer, current person logged in
 
-- {frontend} creating an ad need to give backend a base_price, also need that in the form
-
 - {frontend} pass backend the lat & long for location search (it's times out in the backend)
 
-- {both ends} check request module works (dumb feature), delete & update
+- {both ends} make & check request module works (dumb feature) for update
+
+- {gladys} integrate emailing
 
 - {Gladys} test the clashing events, still don't think it works perfectly
 

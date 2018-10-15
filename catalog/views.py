@@ -15,6 +15,7 @@ from django.db.models import Max
 
 from .geo import position
 from .haversine import haversine
+from . send_email import host_email, booker_email, send_email
 from datetime import datetime, time
 import math
 
@@ -197,7 +198,7 @@ def advertisement_update(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = data['body']['base_price'] 
+    base_price = data['body']['base_price']
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
@@ -296,9 +297,9 @@ def advertisement_create(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    #lat, long = position(address)
-    latitude = 0 #lat
-    longitude = 0 #long
+    lat, long = position(address)
+    latitude = lat
+    longitude = long
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -752,6 +753,9 @@ def event_create(request):
             new_str_of_rentals = str_of_rentals + \
                 '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
         u.set_list_of_rentals(new_str_of_rentals)
+
+        # send emails
+        #h_email = host_email()
 
         return HttpResponse(status=201)
     else:
