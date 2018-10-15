@@ -78,5 +78,4 @@ TODO
 
 - {Gladys} join JSON, whenever an ad is asked for, give frontend all info related to it.
 
-- all ads and bookings
--
+- {gladys} event when over need to change status, booked to finished to reviewed
