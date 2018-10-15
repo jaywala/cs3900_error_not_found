@@ -1,45 +1,87 @@
+
 import smtplib
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
 def host_email(host,property_name,dates,user):
-    email = "Hi {},\n\n This is a confirmation email to notify your property, {} has been booked for the dates, {} by {}\n\nBest Regards\n NotAirBnB Team".format(host,property_name,dates,user)
-    print(email)
-    return email
+    message = """\
+    <html>
+      <head></head>
+      <body>
+        <p>Hi {host}<br>
+           This is a confirmation email to notify your property, "{property_name}"<br>
+           has been booked for the dates, {dates} by {user}.<br>
 
-def booker_email(user,property_name,dates):
-    email = "Hi {},\n\n This is a email to confirm your booking of {} for the dates, {}\n\nBest Regards\n NotAirBnB Team".format(user,property_name,dates)
-    print(email)
-    return email
+           Click here to <a href="http://localhost:8080/manage/">manage your bookings</a>.<br>
 
-def send_email(to_addr, message, given_subject=''):
+           Best Regards,<br>
+           NotAirBnB Team
+        </p>
+      </body>
+    </html>
+    """.format(host=host, property_name=property_name, dates=dates, user=user)
 
-    gmail_user = 'comp3900.2018@gmail.com'
-    gmail_password = '123Hello123'
+    return message
 
-    sent_from = gmail_user
-    to = [to_addr]
-    subject = given_subject
-    body = message
 
-    email_text = """\
-    From: %s
-    To: %s
-    Subject: %s
+def booker_email(user,property_name,dates): #TODO change the link when ready
+    message = """\
+    <html>
+      <head></head>
+      <body>
+        <p>Hi {user}<br>
+           This is an email to confirm your booking of "{property_name}"<br>
+           for the dates {dates}.<br>
 
-    %s
-    """ % (sent_from, ", ".join(to), subject, body)
+           Click here to <a href="http://localhost:8080/manage/">manage your bookings</a>.<br>
+
+           Best Regards,<br>
+           NotAirBnB Team
+        </p>
+      </body>
+    </html>
+    """.format(user=user, property_name=property_name, dates=dates)
+
+    return message
+
+
+def send_email(to_addr, message, subject):
+    # me == my email address
+    # you == recipient's email address
+    me = "comp3900.2018@gmail.com"
+    you = to_addr
+
+    # Create message container - the correct MIME type is multipart/alternative.
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = me
+    msg['To'] = you
+
+    # Create the body of the message (a plain-text and an HTML version).
+    #text = "Hi!\nHow are you?\nHere is the link you wanted:\nhttp://www.python.org"
+    html = message
+
+    # Record the MIME types of both parts - text/plain and text/html.
+    #part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+
+    # Attach parts into message container.
+    # According to RFC 2046, the last part of a multipart message, in this case
+    # the HTML message, is best and preferred.
+    #msg.attach(part1)
+    msg.attach(part2)
 
     try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.ehlo()
-        server.login(gmail_user, gmail_password)
-        server.sendmail(sent_from, to, email_text)
-        server.close()
+        # Send the message via local SMTP server.
+        mail = smtplib.SMTP('smtp.gmail.com', 587)
+        mail.ehlo()
+        mail.starttls()
+        mail.login(me, '123Hello123')
+        mail.sendmail(me, you, msg.as_string())
+        mail.quit()
 
         print('Email sent!')
     except:
         print('Something went wrong...')
-
-if __name__ == '__main__':
-    host_email("_jeff_","_property_","_dates_","_user_")
-    booker_email("_user_","_property_","_dates_")
-    # send_email(to_addr='gladyschanmail@gmail.com', message='hello there', given_subject='test mail')

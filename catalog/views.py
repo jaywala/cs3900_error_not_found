@@ -15,7 +15,7 @@ from django.db.models import Max
 
 from .geo import position
 from .haversine import haversine
-from . send_email import host_email, booker_email, send_email
+from .send_email import host_email, booker_email, send_email
 from datetime import datetime, time
 import math
 
@@ -763,12 +763,14 @@ def event_create(request):
         u.set_list_of_rentals(new_str_of_rentals)
 
         # send emails
-        booked_period = str(checkIn) + " - " + str(checkOut)
+        booked_period = str(checkIn[0]) + " - " + str(checkOut[0])
+        subject = 'Property ' + property_name + ' just got booked'
         h_email = host_email(poster_name, property_name, booked_period, booker_name)
-        send_email(ad_owner, h_email)
+        send_email(ad_owner, h_email, subject)
 
+        subject = 'Confirmation of booking accommodation: ' + property_name
         b_email = booker_email(booker_name, property_name, booked_period)
-        send_email(booker, b_email)
+        send_email(booker, b_email, subject)
 
         return HttpResponse(status=201)
     else:
@@ -815,6 +817,25 @@ def event_update(request):
         event.set_end_day_end_time(end_day_end_time)
         event.set_booking_status(booking_status)
         event.set_notes(notes)
+
+        # send emails
+        booker_profile = User_Profile.objects.get(email=booker)
+        booker_name = booker_profile.get_name()
+
+        owner_profile = User_Profile.objects.get(email=ad_owner)
+        poster_name = owner_profile.get_name()
+
+        prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
+        property_name = prop.get_accommodation_name()
+
+        booked_period = str(checkIn[0]) + " - " + str(checkOut[0])
+        subject = 'Property ' + property_name + ' has changed details'
+        h_email = host_email(poster_name, property_name, booked_period, booker_name)
+        send_email(ad_owner, h_email, subject)
+
+        subject = 'Confirmation of changes to booking accommodation: ' + property_name
+        b_email = booker_email(booker_name, property_name, booked_period)
+        send_email(booker, b_email, subject)
 
         return HttpResponse(status=200)
     else:
