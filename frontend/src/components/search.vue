@@ -134,36 +134,31 @@
         <div class="col-md-12">
           <md-content class="md-scrollbar">
             <div id="ads" v-if="this.ads">
-              <h2>{{ this.ads.length/2 + 1 }} Search Results</h2>
+              <h2>{{ this.ads.length }} Search Results</h2>
 
               <div class="album py-5 bg-light"> <!-- Listings -->
                 <div class="row">
-                  <div v-for="(ad,n) in this.ads" class="col-md-4">
-                    <div v-if="n%2 == 0"class="">
-
-
-                      <div class="card mb-4 box-shadow">
-
-                        <div class="card-body">
-                          <p class="card-text">{{ad.property_type}}</p>
-                          <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
-                          <p class="card-text">${{ad.base_price}} AUD per night</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                          </div>
+                  <div v-for="advert in this.ads" class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                      <div class="card-body">
+                        <p class="card-text">{{advert.ad.property_type}}</p>
+                        <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id}}" > <h4 class="card-text">{{advert.ad.accommodation_name}}</h4></router-link>
+                        <p class="card-text">${{advert.ad.base_price}} AUD per night</p>
+                        <div class="d-flex justify-content-between align-items-center">
                         </div>
-                      </div>
-                  </div>
-                    <div v-if="n%2 == 1"class="">
-                      <Slider
+
+                    <Slider
                       :pagination-visible="true"
                       :pagination-clickable = "true"
                         :async-data="ad"
                         direction="horizontal">
-                      <div v-for="img in ad" :key="img.id">
-                          <img :src="img.pic" alt="">
+                      <div v-for="img in advert.images" :key="img.id">
+                          <img :src="img.pic"style="width:100%" alt="">
                       </div>
                     </Slider>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div> <!-- End of Listings -->
@@ -294,6 +289,7 @@ export default {
       axios.get("http://127.0.0.1:8000/get/search/",{params:this.message})
       .then(response => {
         // JSON responses are automatically parsed.
+        console.log("response data: ")
         console.log(response.data)
         this.ads = response.data
       })

@@ -93,7 +93,7 @@
               <b-nav-item-dropdown right no-caret>
                 <!-- Using button-content slot -->
                 <template slot="button-content">
-                  <div v-if="authenticated()">
+                  <div v-if="user">
                     <em>{{ user.email }}</em>
                   </div>
                   <div v-else>
