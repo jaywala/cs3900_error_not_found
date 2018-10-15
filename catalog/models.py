@@ -404,63 +404,6 @@ class Event(models.Model):
 
     #--------------------------------
 
-    def check_overlap(self, fixed_start_day, fixed_start_day_start_time, fixed_end_day, fixed_end_day_end_time,
-                      new_start_day, new_start_day_start_time, new_end_day, new_end_day_end_time, event):
-        overlap = False
-        if self.event_id != event.event_id and self.ad_id != event.ad_id and self.ad_owner != event.ad_owner:
-            if fixed_start_day == new_end_day or fixed_end_day == new_start_day:
-                if fixed_start_day_start_time <= new_end_day_end_time or fixed_end_day_end_time >= new_end_day_end_time:
-                    overlap = True
-            elif fixed_start_day == new_start_day or fixed_end_day == new_end_day:
-                overlap = True
-            elif (fixed_start_day >= new_start_day and fixed_end_day <= new_end_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_end_day):
-                overlap = True
-            elif (fixed_start_day >= new_start_day and fixed_end_day <= new_start_day) or (fixed_start_day <= new_start_day and fixed_end_day >= new_start_day):
-                overlap = True
-
-        return overlap
-
-    def get_absolute_url(self):
-        url = reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
-        return u'<a href="%s">%s</a>' % (url, str(self.start_day))
-
-    def clean(self):
-        if self.start_day > self.end_day:
-            raise ValidationError('Ending day, ' + str(self.end_day) + ', must be after starting day ' + str(self.start_day))
-        if self.start_day == self.end_day and self.start_day_start_time >= self.end_day_end_time:
-            raise ValidationError('Ending time, ' + str(self.end_day_end_time) + ', must be after starting time ' + str(self.start_day_start_time
-            ) + ', since it\'s on the same day')
-
-        events = Event.objects.all()
-        if events.exists():
-            for event in events:
-                if self.check_overlap(event.start_day, event.start_day_start_time, event.end_day, event.end_day_end_time,
-                                      self.start_day, self.start_day_start_time, self.end_day, self.end_day_end_time
-                                      , event) and event.id != self.id:
-                    raise ValidationError(
-                         'There is an overlap with another event: ' + 'the new event --> self ' + str(self.notes
-                         ) + ', ' + 'old event --> event ' + str(event.notes) )
-                        #'There is an overlap with another event: ' + str(event.start_day) + ', ' + str(
-                        #    event.start_day_start_time) + '-' + str(event.end_day) + ', ' + str(event.end_day_end_time))
-
-    def check_validity(self, pk_actual_event):
-
-        if self.start_day > self.end_day:
-            return False
-        if self.start_day == self.end_day and self.start_day_start_time >= self.end_day_end_time:
-            return False
-
-        events = Event.objects.all()
-        if events.exists():
-            for event in events:
-                if self.check_overlap(event.start_day, event.start_day_start_time, event.end_day, event.end_day_end_time,
-                                      self.start_day, self.start_day_start_time, self.end_day, self.end_day_end_time
-                                      , event) and event.id != self.id and event.id != pk_actual_event:
-                    return False
-        return True
-
-    #--------------------------------
-
     def get_event_id(self):
         return self.event_id
 
@@ -515,95 +458,24 @@ class Event(models.Model):
 
     def set_start_day(self, new_start_day):
         e = Event.objects.get(id=self.id)
-        # make a temporary Event to check if the date
-        # will clash with existing events.
-        temp_e = Event(
-            event_id=0,
-            ad_owner="tester@test.com",
-            ad_id=0,
-            booker="tester",
-            start_day=datetime.strptime(new_start_day, "%Y-%m-%d").date(),
-            start_day_start_time=e.start_day_start_time,
-            end_day=e.end_day,
-            end_day_end_time=e.end_day_end_time,
-            booking_status=e.booking_status,
-            notes=e.notes
-            )
-        pk_actual_event = e.pk
-        if temp_e.check_validity(pk_actual_event) == True:
-            e.start_day = new_start_day
-            e.save()
-        else:
-            return False
+        e.start_day = new_start_day
+        e.save()
+
 
     def set_start_day_start_time(self, new_start_time):
         e = Event.objects.get(id=self.id)
-        # make a temporary Event to check if the date
-        # will clash with existing events.
-        temp_e = Event(
-            event_id=0,
-            ad_owner="tester@test.com",
-            ad_id=0,
-            booker="tester",
-            start_day=e.start_day,
-            start_day_start_time=datetime.strptime(new_start_time, "%H:%M:%S").time(),
-            end_day=e.end_day,
-            end_day_end_time=e.end_day_end_time,
-            booking_status=e.booking_status,
-            notes=e.notes
-            )
-        pk_actual_event = e.pk
-        if temp_e.check_validity(pk_actual_event) == True:
-            e.start_day_start_time = new_start_time
-            e.save()
-        else:
-            return False
+        e.start_day_start_time = new_start_time
+        e.save()
 
     def set_end_day(self, new_end_day):
         e = Event.objects.get(id=self.id)
-        # make a temporary Event to check if the date
-        # will clash with existing events.
-        temp_e = Event(
-            event_id=0,
-            ad_owner="tester@test.com",
-            ad_id=0,
-            booker="tester",
-            start_day=e.start_day,
-            start_day_start_time=e.start_day_start_time,
-            end_day=datetime.strptime(new_end_day, "%Y-%m-%d").date(),
-            end_day_end_time=e.end_day_end_time,
-            booking_status=e.booking_status,
-            notes=e.notes
-            )
-        pk_actual_event = e.pk
-        if temp_e.check_validity(pk_actual_event) == True:
-            e.end_day = new_end_day
-            e.save()
-        else:
-            return False
+        e.end_day = new_end_day
+        e.save()
 
     def set_end_day_end_time(self, new_end_time):
         e = Event.objects.get(id=self.id)
-        # make a temporary Event to check if the date
-        # will clash with existing events.
-        temp_e = Event(
-            event_id=0,
-            ad_owner="tester@test.com",
-            ad_id=0,
-            booker="tester",
-            start_day=e.start_day,
-            start_day_start_time=e.start_day_start_time,
-            end_day=e.end_day,
-            end_day_end_time=datetime.strptime(new_end_time, "%H:%M:%S").time(),
-            booking_status=e.booking_status,
-            notes=e.notes
-            )
-        pk_actual_event = e.pk
-        if temp_e.check_validity(pk_actual_event) == True:
-            e.end_day_end_time = new_end_time
-            e.save()
-        else:
-            return False
+        e.end_day_end_time = new_end_time
+        e.save()
 
     def set_booking_status(self, new_booking_status):
         e = Event.objects.get(id=self.id)

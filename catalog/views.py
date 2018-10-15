@@ -714,65 +714,74 @@ def event_create(request):
         event_id = new_id
 
     checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    checkIn = checkIn[0]
     checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
+    checkOut = [0]
 
-    start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+
+    start_day =  datetime.strptime(checkIn, "%Y-%m-%d").date()
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-    end_day = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
+    end_day = datetime.strptime(checkOut, "%Y-%m-%d").date()
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
     notes = "number of guests " + str(data['detail']['guest'])
 
-    event = Event(
-            event_id=event_id,
-            ad_owner=ad_owner,
-            ad_id=ad_id,
-            booker=booker,
-            start_day=start_day,
-            start_day_start_time=start_day_start_time,
-            end_day=end_day,
-            end_day_end_time=end_day_end_time,
-            booking_status=booking_status,
-            notes=notes
-            )
-    event.save()
+    # is_clashing = True means there is a clash so invalid booking dates
+    is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner)
 
-    temp_event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
+    if not is_clashing:
+        event = Event(
+                event_id=event_id,
+                ad_owner=ad_owner,
+                ad_id=ad_id,
+                booker=booker,
+                start_day=start_day,
+                start_day_start_time=start_day_start_time,
+                end_day=end_day,
+                end_day_end_time=end_day_end_time,
+                booking_status=booking_status,
+                notes=notes
+                )
+        event.save()
 
-    if temp_event.exists() and len(temp_event) == 1:
+        temp_event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
 
-        # update ad's list_of_events
-        a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
-        str_of_event_ids = a.get_event_ids()
-        if str_of_event_ids == None or str_of_event_ids == "":
-            new_str_of_events = str(event_id) + ',' # first review for this ad
+        if temp_event.exists() and len(temp_event) == 1:
+
+            # update ad's list_of_events
+            a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+            str_of_event_ids = a.get_event_ids()
+            if str_of_event_ids == None or str_of_event_ids == "":
+                new_str_of_events = str(event_id) + ',' # first review for this ad
+            else:
+                new_str_of_events = str_of_event_ids + str(event_id) + ','
+            a.set_event_ids(new_str_of_events)
+
+            # update user profile list_of_rentals
+            u = User_Profile.objects.get(email=booker)
+            str_of_rentals = u.get_list_of_rentals()
+            # string format: (ad_owner, ad_id, event_id);
+            if str_of_rentals == None or str_of_rentals == "":
+                # first rental for this booker
+                new_str_of_rentals = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
+            else:
+                new_str_of_rentals = str_of_rentals + \
+                    '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
+            u.set_list_of_rentals(new_str_of_rentals)
+
+            # send emails
+            booked_period = str(checkIn) + " - " + str(checkOut)
+            subject = 'Property ' + property_name + ' just got booked'
+            h_email = host_email(poster_name, property_name, booked_period, booker_name)
+            send_email(ad_owner, h_email, subject)
+
+            subject = 'Confirmation of booking accommodation: ' + property_name
+            b_email = booker_email(booker_name, property_name, booked_period)
+            send_email(booker, b_email, subject)
+
+            return HttpResponse(status=201)
         else:
-            new_str_of_events = str_of_event_ids + str(event_id) + ','
-        a.set_event_ids(new_str_of_events)
-
-        # update user profile list_of_rentals
-        u = User_Profile.objects.get(email=booker)
-        str_of_rentals = u.get_list_of_rentals()
-        # string format: (ad_owner, ad_id, event_id);
-        if str_of_rentals == None or str_of_rentals == "":
-            # first rental for this booker
-            new_str_of_rentals = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
-        else:
-            new_str_of_rentals = str_of_rentals + \
-                '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
-        u.set_list_of_rentals(new_str_of_rentals)
-
-        # send emails
-        booked_period = str(checkIn[0]) + " - " + str(checkOut[0])
-        subject = 'Property ' + property_name + ' just got booked'
-        h_email = host_email(poster_name, property_name, booked_period, booker_name)
-        send_email(ad_owner, h_email, subject)
-
-        subject = 'Confirmation of booking accommodation: ' + property_name
-        b_email = booker_email(booker_name, property_name, booked_period)
-        send_email(booker, b_email, subject)
-
-        return HttpResponse(status=201)
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=400)
 
@@ -802,42 +811,50 @@ def event_update(request):
         event = event[0]
 
         checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+        checkIn = checkIn[0]
         checkOut = data['body']['end_day'].split('T')  # only want 2018-09-30
+        checkOut = checkOut[0]
 
-        start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
-        start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-        end_day = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
-        end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-        booking_status = "booked"
-        notes = "number of guests " + str(data['body']['guest'])
+        # is_clashing = True means there is a clash so invalid booking dates
+        is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner, event_id=int(event_id))
 
-        event.set_start_day(start_day)
-        event.set_start_day_start_time(start_day_start_time)
-        event.set_end_day(end_day)
-        event.set_end_day_end_time(end_day_end_time)
-        event.set_booking_status(booking_status)
-        event.set_notes(notes)
+        if not is_clashing:
+            start_day =  datetime.strptime(checkIn, "%Y-%m-%d").date()
+            start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+            end_day = datetime.strptime(checkOut, "%Y-%m-%d").date()
+            end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+            booking_status = "booked"
+            notes = "number of guests " + str(data['body']['guest'])
 
-        # send emails
-        booker_profile = User_Profile.objects.get(email=booker)
-        booker_name = booker_profile.get_name()
+            event.set_start_day(start_day)
+            event.set_start_day_start_time(start_day_start_time)
+            event.set_end_day(end_day)
+            event.set_end_day_end_time(end_day_end_time)
+            event.set_booking_status(booking_status)
+            event.set_notes(notes)
 
-        owner_profile = User_Profile.objects.get(email=ad_owner)
-        poster_name = owner_profile.get_name()
+            # send emails
+            booker_profile = User_Profile.objects.get(email=booker)
+            booker_name = booker_profile.get_name()
 
-        prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
-        property_name = prop.get_accommodation_name()
+            owner_profile = User_Profile.objects.get(email=ad_owner)
+            poster_name = owner_profile.get_name()
 
-        booked_period = str(checkIn[0]) + " - " + str(checkOut[0])
-        subject = 'Property ' + property_name + ' has changed details'
-        h_email = host_email(poster_name, property_name, booked_period, booker_name)
-        send_email(ad_owner, h_email, subject)
+            prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
+            property_name = prop.get_accommodation_name()
 
-        subject = 'Confirmation of changes to booking accommodation: ' + property_name
-        b_email = booker_email(booker_name, property_name, booked_period)
-        send_email(booker, b_email, subject)
+            booked_period = str(checkIn) + " - " + str(checkOut)
+            subject = 'Property ' + property_name + ' has changed details'
+            h_email = host_email(poster_name, property_name, booked_period, booker_name)
+            send_email(ad_owner, h_email, subject)
 
-        return HttpResponse(status=200)
+            subject = 'Confirmation of changes to booking accommodation: ' + property_name
+            b_email = booker_email(booker_name, property_name, booked_period)
+            send_email(booker, b_email, subject)
+
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=400)
 
@@ -1410,32 +1427,17 @@ def search(request):
 
         is_clashing = None
         if checkIn != "null" and checkOut != "null" and checkIn != "" and checkOut != "":
-            event_ids = a.get_event_ids()
-            # convert string into list
-            event_ids = event_ids.split(',')
 
-            is_clashing = False
-            for i in event_ids:
-                if i == "":
-                    continue
-                i = int(i)
-                e = Event.objects.get(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
-
-                checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
-                checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
-
-                if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
-                    is_clashing = True
-                elif checkIn == e.get_start_day() or checkIn == e.get_end_day():
-                    is_clashing = True
-                elif checkOut >= e.get_start_day() and checkOut <= e.get_end_day():
-                    is_clashing = True
-                elif checkOut == e.get_start_day() or checkOut == e.get_end_day():
-                    is_clashing = True
-
+            checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
+            checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
+            ad_id = a.ad_id
+            ad_owner = a.poster
+            is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner)
+            # check_overlap returns True if there is a clash of events
+            # so we only add event if is_clash returns False
+            # not False = True, which means we go into if statement
+            # and add event
             if not is_clashing:
-                # if it's not clashing then is_clashing would equal False
-                # so not is_clashing equals true
                 pk_list.append(a.pk)
 
         if is_clashing == None: # checkIn & checkOut was not given
@@ -1504,6 +1506,48 @@ def bookers_bookings(request):
         return JsonResponse(eventSerializer.data, safe=False)
     else:
         return HttpResponse(status=400)
+
+
+#------------------------------ Event Validity Functions ------------------------------#
+
+def check_overlap(checkIn, checkOut, ad_id, ad_owner, event_id = None):
+    """
+    checkIn and checkOut MUST be of type "datetime.date".
+    checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
+    checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
+
+    Given two dates representing an event/booking,
+    this function will check if it overlaps with existing events/bookings
+    for this advertisement.
+    """
+
+    is_clashing = False
+    events = Event.objects.filter(ad_id=ad_id, ad_owner=ad_owner)
+    for e in events:
+        if event_id == e.get_event_id():
+            # when updating event we don't want to check it against itself
+            continue
+        else:
+            start = e.get_start_day()
+            end   = e.get_end_day()
+            if checkIn == start or checkIn == end or \
+               checkOut == start or checkOut == end:
+                is_clashing = True
+                break
+            elif start < checkIn and checkOut < end:
+                is_clashing = True
+                break
+            elif checkIn < start and end < checkOut:
+                is_clashing = True
+                break
+            elif start < checkIn and checkIn < end and end < checkOut:
+                is_clashing = True
+                break
+            elif checkIn < start and start < checkOut and checkOut < end:
+                is_clashing = True
+                break
+
+    return is_clashing
 
 
 #------------------------------Test Views------------------------------#
