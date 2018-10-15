@@ -689,6 +689,14 @@ def event_create(request):
     u = Advertisement.objects.get(ad_id=ad_id, poster_id=poster_id)
     ad_owner = u.get_poster()
 
+    # for email
+    user_profile = User_Profile.objects.get(email=ad_owner)
+    poster_name = user_profile.get_name()
+    property_name = u.get_accommodation_name()
+
+    booker_user_profile = User_Profile.objects.get(email=booker)
+    booker_name = booker_user_profile.get_name()
+
     # Find the next event id for this event
     str_of_id = u.get_event_ids()
     if str_of_id == None or str_of_id == "":
@@ -755,7 +763,8 @@ def event_create(request):
         u.set_list_of_rentals(new_str_of_rentals)
 
         # send emails
-        #h_email = host_email()
+        booked_period = str(checkIn) + " - " + str(checkOut)
+        h_email = host_email(poster_name, property_name, booked_period, booker_name) #HERE
 
         return HttpResponse(status=201)
     else:
@@ -1317,6 +1326,10 @@ def search(request):
         maxPrice = request.GET['maxPrice']
     if 'distance' in request.GET:
         distance = request.GET['distance']
+    if 'lat' in request.GET:
+        lat = request.GET['lat']
+    if 'lng' in request.GET:
+        long = request.GET['lng']
 
     print('-----------> inside GET search <-----------\n',
           'checkIn: ', checkIn,
@@ -1326,6 +1339,8 @@ def search(request):
           '\nminPrice: ', minPrice,
           '\nmaxPrice: ', maxPrice,
           '\ndistance', distance,
+          '\nlat', lat,
+          '\nlong', long,
           '\n'
          )
 
@@ -1344,14 +1359,14 @@ def search(request):
     for a in ads:
 
         search_distance = None
-        if location != "null" and location != "":
+        if lat != "null" and lat != "" and long != "null" and long != "":
 
-            search_latitude, search_longitude = 0, 0 #position(location)
-            search_loc = (search_longitude, search_latitude)
+            search_latitude, search_longitude = lat, long
+            search_loc = (float(search_longitude), float(search_latitude))
 
             ads_latitude = a.get_latitude()
             ads_longitude = a.get_longitude()
-            ads_loc = (ads_longitude, ads_latitude)
+            ads_loc = (float(ads_longitude), float(ads_latitude))
 
             if distance != "null" and distance != "":
                 search_distance = float(distance)
