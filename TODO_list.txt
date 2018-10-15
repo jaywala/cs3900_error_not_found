@@ -62,21 +62,21 @@ TO DO list
 (DONE) - update email to new get system
 (DONE) - check data before changing db
 (DONE) - change all user email to lower case in importData
+(DONE) - join JSON, whenever an ad is asked for, give frontend all info related to it.
+(DONE) - update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
 
 TODO
-(DONE) - when creating a review, I need the email of the reviewer
-----> need to check when there is a submit button
-- {frontend} need submit review button on review view
-
-- {Gladys} test the clashing events, still don't think it works perfectly
+- {frontend} when creating a review, I need the email of the reviewer, current person logged in
 
 - {frontend} creating an ad need to give backend a base_price, also need that in the form
 
-- {frontend} update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
+- {frontend} pass backend the lat & long for location search (it's times out in the backend)
 
-- {JAY} email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
+- {Gladys} test the clashing events, still don't think it works perfectly
 
-- {Gladys} join JSON, whenever an ad is asked for, give frontend all info related to it.
+- {gladys} write script that runs in the background that constantly checks if events have passed
+  if passed, change the status of the booking
 
-- all ads and bookings
--
+- {gladys} event when over need to change status, booked to finished to reviewed
+
+- {backend} email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"

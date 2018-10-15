@@ -85,6 +85,9 @@ urlpatterns = [
 
     path('get/search/', views.search),
 
+    #---------------- Booking Module Views ----------------#
+
+    path('get/bookersBooking/', views.bookers_bookings),
 
     #---------------- URLs for testing ----------------#
 

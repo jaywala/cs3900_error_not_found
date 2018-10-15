@@ -3,14 +3,14 @@
     <h1>Your Properties</h1>
     <div v-if="ads">
 
-      <div v-for="ad in ads">
+      <div v-for="advert in ads">
         <div class="card">
           <div class="card-body">
-            <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id } }" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
-            <small>{{ ad.address }}</small>
-            <p>{{ ad.accommodation_description | truncate(200, '...') }}</p>
+            <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" > <h4 class="card-text">{{advert.ad.accommodation_name}}</h4></router-link>
+            <small>{{ advert.ad.address }}</small>
+            <p>{{ advert.ad.accommodation_description | truncate(200, '...') }}</p>
             
-            <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
+            <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
             <md-button class="md-secondary md-raised">Edit</md-button>
             <div style="display: inline">
               <md-dialog-confirm
@@ -19,12 +19,23 @@
                 md-content="This action cannot be undone."
                 md-confirm-text="Yes"
                 md-cancel-text="No"
-                @md-confirm="deleteAd(ad)" />
+                @md-confirm="deleteAd(advert.ad.ad_id)" />
 
               <md-button class="md-accent md-raised" @click="delete_dialog_active = true">Delete</md-button>
             </div>
             
           </div>
+
+          <!-- Bookings -->
+          <div v-for="event in advert.events">
+            <div class="alert alert-success" role="alert">
+              <h5 class="alert heading"><span class="badge badge-secondary">Booked</span> {{ event.booker }}</h5>
+              <p>{{ event.start_day }} - {{ event.end_day }}</p>
+              <hr>
+              <p><strong>Notes: </strong>{{ event.notes }}</p>
+            </div>
+          </div>
+
         </div>
       </div> <!-- End of ad -->
 
@@ -34,13 +45,6 @@
         <div class="card-body">
           <h3>List your first property Today!</h3>
         </div>
-      </div>
-    </div>
-
-    <h1>Your Bookings</h1>
-    <div class="card">
-      <div class="card-body">
-        This is some text within a card body.
       </div>
     </div>
 
@@ -67,12 +71,12 @@ export default {
   },
   computed: {},
   methods: {
-    deleteAd: function(ad) {
+    deleteAd: function(ad_id) {
       axios.post("http://localhost:8000/post/advertisement/delete/",
         {
           body: {
             poster: this.user.email,
-            ad_id: ad.ad_id
+            ad_id: ad_id
           }
         }
       )
@@ -104,7 +108,7 @@ export default {
     this.user = router.app.$auth.getUserProfile();
     // console.log(this.user);
 
-    axios.get("http://localhost:8000/get/advertisement/user/",
+    axios.get("http://localhost:8000/get/everythingUser/",
           {
         params: {
           email: this.user.email

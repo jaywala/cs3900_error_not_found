@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="PropertyForm container content">
     <form novalidate class="md-layout" @submit.prevent="validateUser">
       <md-card class="md-layout-item md-size-100 md-small-size-200">
@@ -11,6 +11,13 @@
           <div class="md-caption">Property & Location information.</div>
 
           <div>
+            <md-field :class="getValidationClass('price')">
+              <label for="price">Price</label>
+              <md-input required name="price" id="price" v-model="form.base_price" :disabled="sending"/>
+            </md-field>
+          </div>
+
+          <div>
             <md-radio v-model="form.propertyType" value="apartment">Apartment </md-radio>
             <md-radio v-model="form.propertyType" value="house">House</md-radio>
           </div>
@@ -18,7 +25,7 @@
           <md-field :class="getValidationClass('address')">
             <vue-google-autocomplete required
                 classname="md-input form-control"
-                placeholder="Address"
+                placeholder="Address *"
                 name="address"
                 id="map"
                 v-model="form.address"
@@ -42,8 +49,8 @@
 
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('zipCode')">
-                <label for="zip-code">ZIP Code</label>
-                <md-input required type="number" name="zip-code" id="zip-code" autocomplete="zip-code" v-model="form.zipCode" :disabled="sending" />
+                <label for="zipCode">ZIP Code</label>
+                <md-input required type="number" name="zipCode" id="zipCode" autocomplete="zip-code" v-model="form.zipCode" :disabled="sending" />
                 <span class="md-error" v-if="!$v.form.zipCode.required">The zip code is required</span>
                 <span class="md-error" v-else-if="!$v.form.zipCode.minlength">Invalid ZIP Code</span>
                 <span class="md-error" v-else-if="!$v.form.zipCode.maxlength">Invalid ZIP Code</span>
@@ -192,6 +199,9 @@
     }),
     validations: {
       form: {
+        base_price: {
+          required
+        },
         address: {
           required
         },
@@ -250,6 +260,7 @@
       },
       clearForm () {
         this.$v.$reset()
+        this.form.base_price = null
         this.form.address == null
         this.form.propertyType = 'apartment'
         this.form.city = null
@@ -290,6 +301,7 @@
           this.form.address = placeResultData.formatted_address
           this.form.city = placeResultData.address_components[2]['long_name']
           this.form.zipCode = placeResultData.address_components[6]['long_name']
+          console.log(placeResultData)
 
           // console.log(placeResultData)
           // alert(document.getElementById('map').value)

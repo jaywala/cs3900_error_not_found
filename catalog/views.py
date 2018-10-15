@@ -17,6 +17,7 @@ from .geo import position
 from .haversine import haversine
 from datetime import datetime, time
 import math
+
 #------------------------------User_Profile------------------------------#
 
 def user_profile_get(request):
@@ -140,6 +141,7 @@ def is_loggedIn(request):
 
 
 #------------------------------Advertisement------------------------------#
+
 def advertisement_get(request):
     """
     Give all the ads for this user.
@@ -202,7 +204,7 @@ def advertisement_update(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    lat, long = position(address)
+    lat, long = 0, 0 #position(address)
     latitude = lat
     longitude = long
 
@@ -294,9 +296,9 @@ def advertisement_create(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    lat, long = position(address)
-    latitude = lat
-    longitude = long
+    #lat, long = position(address)
+    latitude = 0 #lat
+    longitude = 0 #long
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -1195,8 +1197,8 @@ def get_all_ads(request):
 
     serializer = AdvertisementSerializer(a, many=True)
 
-    print('-----------> data given to frontend <-----------\n', \
-          serializer.data, '\n------------------------')
+    #print('-----------> data given to frontend <-----------\n', \
+    #      serializer.data, '\n------------------------')
 
     return JsonResponse(serializer.data, safe=False)
 
@@ -1211,8 +1213,7 @@ def get_users_ads(request):
     if 'email' in request.GET:
         email = request.GET['email']
 
-        print('-----------> inside GET all user\'s ads and \
-              everything related to advertisement <-----------\n',
+        print('-----------> inside GET get_users_ads\n',
               email, '\n------------------------')
 
         try:
@@ -1222,7 +1223,7 @@ def get_users_ads(request):
 
 
         querylist = []
-        key = 0
+
         for a in ads:
             adSerializer = AdvertisementSerializer(a).data
 
@@ -1235,14 +1236,13 @@ def get_users_ads(request):
             reviews = Accommodation_Review.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
             reviewsSerializer = AccommodationReviewSerializer(reviews, many=True).data
 
-            temp_dict = {}
-            temp_dict[key] = {
+            temp_dict = {
                 'ad': adSerializer,
                 'images': imagesSerializer,
                 'events': eventsSerializer,
                 'reviews': reviewsSerializer
             }
-            key += 1
+
             querylist.append(temp_dict)
 
         print('-----------> data given to frontend <-----------\n', \
@@ -1397,7 +1397,7 @@ def search(request):
         search_distance = None
         if location != "null" and location != "":
 
-            search_latitude, search_longitude = position(location)
+            search_latitude, search_longitude = 0, 0 #position(location)
             search_loc = (search_longitude, search_latitude)
 
             ads_latitude = a.get_latitude()
@@ -1465,8 +1465,8 @@ def search(request):
         querylist.append(adSerializer)
         querylist.append(imSerializer)
 
-    print(querylist)
-    print('DONE')
+    #print(querylist)
+    print('DONE SEARCHING')
     return JsonResponse(querylist, safe=False)
 
 
@@ -1492,7 +1492,6 @@ def bookers_bookings(request):
         list_of_bookings = str_of_bookings.split(';')
 
         event_pks = []
-        ad_pks = []
         for i in list_of_bookings:
 
             str_event = i.split(',')
@@ -1504,22 +1503,14 @@ def bookers_bookings(request):
                                   ad_id=ad_id)
             event_pks.append(e.pk)
 
-            a = Advertisement.objects.get(ad_id=ad_id, ad_owner=ad_owner)
-            ad_pks.append(a.pk)
-
         bookers_events = Event.objects.filter(pk__in=event_pks)
-        bookers_ads = Advertisement.objects.filter(pk__in=ad_pks)
 
-        eventSerializer = EventSerializer(bookers_events, many=True).data
-        adSerializer = AdvertisementSerializer(bookers_ads, many=True).data
+        eventSerializer = EventSerializer(bookers_events, many=True)
 
-        querylist = [eventSerializer, adSerializer]
-
-        print(querylist)
-
-        return JsonResponse(querylist, safe=False)
+        return JsonResponse(eventSerializer.data, safe=False)
     else:
         return HttpResponse(status=400)
+
 
 #------------------------------Test Views------------------------------#
 
