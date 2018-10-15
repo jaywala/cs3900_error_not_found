@@ -197,7 +197,7 @@ def advertisement_update(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price'] TODO frontend need to give me one
+    base_price = data['body']['base_price'] 
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
@@ -288,7 +288,7 @@ def advertisement_create(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price'] # TODO frontend need to give me one
+    base_price = data['body']['base_price']
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
