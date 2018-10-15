@@ -8,7 +8,7 @@
         <!-- Custom styles for this template -->
         <link href="./components/album.css" rel="stylesheet">
 
-        <header>
+        <header hidden>
           <div class="collapse bg-dark" id="navbarHeader">
             <div class="container">
               <div class="row">
@@ -30,13 +30,16 @@
           <div class="navbar navbar-dark navbar-static-top bg-dark box-shadow" style="position: fixed; width: 100%;">
             <div class="container d-flex justify-content-between" >
               <a href="/" class="navbar-brand d-flex align-items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                <strong>NotAirbnb</strong>
+                <i class="fas fa-home fa-2x fa-flip-vertical"></i>
+                <strong>&nbsp;NotAirbnb</strong>
               </a>
 
               <div class="navbar-right">
-                <i class="fas fa-search fa-2x"></i>
-                <b-dropdown id="ddown1" variant="link" size="lg" no-caret>
+                
+                <a class="align-items-center">
+                  <i class="fas fa-search fa-2x"></i>
+                </a>
+                <b-dropdown id="ddown1" variant="link" no-caret>
                   <template slot="button-content">
                     <i class="fas fa-chevron-circle-down fa-2x"></i><span class="sr-only">Search</span>
                   </template>
@@ -57,9 +60,63 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
+              
             </div>
           </div>
         </header>
+
+
+        <b-navbar class="navbar-static-top" toggleable="md" type="dark" variant="info" style="position: fixed; width: 100%;">
+
+          <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+              <a href="/" class="navbar-brand d-flex align-items-center">
+                <i class="fas fa-home fa-2x fa-flip-vertical" style="color:#7B414C"></i>
+                <strong style="color:#7B414C">&nbsp;NotAirbnb</strong>
+              </a>
+
+          <b-collapse is-nav id="nav_collapse">
+
+            <b-navbar-nav>
+              <b-nav-item href="/" style="color:antiquewhite">Link</b-nav-item>
+              <b-nav-item href="#" style="color:antiquewhite" disabled>Disabled</b-nav-item>
+            </b-navbar-nav>
+
+            <!-- Right aligned nav items -->
+            <b-navbar-nav class="ml-auto">
+
+              <b-nav-item href="/search/"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></b-nav-item>
+
+              <b-nav-item href="/search/">Trips</b-nav-item>
+              <b-nav-item href="/help/">Help</b-nav-item>
+
+              <b-nav-item-dropdown right no-caret>
+                <!-- Using button-content slot -->
+                <template slot="button-content">
+                  <div v-if="authenticated()">
+                    <em>{{ user.email }}</em>
+                  </div>
+                  <div v-else>
+                    <em>User</em>
+                  </div>
+                </template>
+
+                  <router-link to="/manage/" v-if="authenticated()" tag="b-dropdown-item">Manage properties</router-link>
+                  <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">Add property</router-link>
+                  <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
+
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated()" @click="login()">
+                    Log In
+                  </b-dropdown-item>
+                  <b-dropdown-item class="btn btn-primary btn-margin" v-if="authenticated()" @click="logout()">
+                    Log Out
+                  </b-dropdown-item>
+              </b-nav-item-dropdown>
+            </b-navbar-nav>
+
+          </b-collapse>
+        </b-navbar>
       <router-view></router-view>
       <br>
         <div class="container">
