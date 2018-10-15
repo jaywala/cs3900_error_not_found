@@ -191,6 +191,7 @@ import Slider from 'vue-plain-slider'
 //import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
 
 export default {
+  name: 'search',
   components: {
     VueGoogleAutocomplete,
     Slider,
@@ -251,8 +252,8 @@ export default {
         this.message.where = placeResultData.formatted_address
         this.message.lat = placeResultData.geometry.location.lat();
         this.message.lng = placeResultData.geometry.location.lng();
-        console.log(placeResultData)
-        // alert(document.getElementById('map').value)
+        console.log(this.message)
+        
     },
     searchAds() {
 
