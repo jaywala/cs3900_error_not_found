@@ -78,8 +78,7 @@
           <b-collapse is-nav id="nav_collapse">
 
             <b-navbar-nav>
-              <b-nav-item href="/" style="color:antiquewhite">Link</b-nav-item>
-              <b-nav-item href="#" style="color:antiquewhite" disabled>Disabled</b-nav-item>
+
             </b-navbar-nav>
 
             <!-- Right aligned nav items -->
