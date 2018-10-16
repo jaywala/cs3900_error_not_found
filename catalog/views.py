@@ -1536,9 +1536,21 @@ def bookers_bookings(request):
 
         bookers_events = Event.objects.filter(pk__in=event_pks)
 
-        eventSerializer = EventSerializer(bookers_events, many=True)
+        querylist = []
+        for ev in bookers_events:
 
-        return JsonResponse(eventSerializer.data, safe=False)
+            ad = Advertisement.objects.get(ad_owner=ev.ad_owner, ad_id=ev.ad_id)
+            adSerializer = AdvertisementSerializer(ad).data
+            eventSerializer = EventSerializer(ev).data
+
+            temp_dict = {
+                'ad': adSerializer,
+                'event': eventSerializer,
+            }
+
+            querylist.append(temp_dict)
+
+        return JsonResponse(querylist, safe=False)
     else:
         return HttpResponse(status=400)
 
