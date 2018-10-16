@@ -21,7 +21,6 @@ from datetime import datetime, time
 import math
 import subprocess
 import os
-import pandas as pd
 
 #------------------------------User_Profile (booker, poster) ------------------------------#
 
