@@ -110,7 +110,7 @@ export default {
   },
   data: () => ({
     todays_date: null,
-    occupied_dates: ['2018-08-08'],
+    occupied_dates: [],
     showSuccess: false,
     showWarning: false,
     showError: false,

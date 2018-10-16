@@ -1835,18 +1835,19 @@ def get_occupied_dates(request):
     if 'poster_id' in request.GET and 'ad_id' in request.GET:
         poster_id = request.GET['poster_id']
         ad_id = request.GET['ad_id']
+        print(poster_id, ad_id)
 
         try:
-            u = User_Profile.objects.get(pk=2)
+            u = User_Profile.objects.get(pk=poster_id)
             poster = u.email
-            event = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
+            events = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
         except Event.DoesNotExist:
             return HttpResponse(status=404)
 
         d1 = datetime.today()
         occupied_dates = []
 
-        for e in event:
+        for e in events:
             day = e.get_start_day()
             checkOut = e.get_end_day()
             while day != checkOut:
