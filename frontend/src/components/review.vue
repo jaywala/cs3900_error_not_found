@@ -26,7 +26,7 @@
               <md-radio v-model="reviews[n].radio" value="1" hidden>1</md-radio>
               <md-textarea v-model="reviews[n].textarea" value = "dommm" hidden></md-textarea>
           </div>
-          <div v-if = "book.event.booking_status == 'booked'">
+          <div v-if = "book.event.booking_status == 'finished'">
             <md-radio v-model="reviews[n].radio" value="1">1</md-radio>
             <md-radio v-model="reviews[n].radio" value="2">2</md-radio>
             <md-radio v-model="reviews[n].radio" value="3">3</md-radio>
@@ -38,12 +38,12 @@
           </md-field>
           </div>
           <div class="">
-              <md-button class="md-raised" @click = "submit(n)">Submit</md-button>
+              <md-button class="md-raised" @click = "submit(n) v-if = "book.event.booking_status == 'finished'" ">Submit</md-button>
           </div>
         </md-card-content>
         <md-card-actions>
           <router-link :to="{ name: 'detailpage', params: { poster_id:book.ad.poster_id, ad_id:book.ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
-          <md-button class=" md-raised" type="button" name="button" @click = "cancelbooking(n)">cancel</md-button>
+          <md-button v-if="book.event.booking_status == 'booked'" class=" md-raised" type="button" name="button" @click = "cancelbooking(n)">cancel</md-button>
         </md-card-actions>
       </md-ripple>
     </md-card>
