@@ -1,5 +1,11 @@
 <template >
   <div id="app" class="container content" style = "margin-top: 100px">
+  <b-alert variant="success"
+        dismissible
+        :show="showDismissibleAlert"
+        @dismissed="showDismissibleAlert=false">
+    Successfully Updated!
+  </b-alert>
   <md-field>
       <label>Given name</label>
       <md-input v-model="message.given_name"></md-input>
@@ -39,10 +45,13 @@ export default {
     },
     submit(){
       axios.post('http://localhost:8000/post/user/update/',{body:this.message})
+      this.showDismissibleAlert = true;
+      
     }
   },
   data () {
     return {
+      showDismissibleAlert: false,
       message: {
         "given_name": "George",
         "family_name": "Q",

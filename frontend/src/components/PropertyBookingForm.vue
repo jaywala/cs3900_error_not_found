@@ -2,6 +2,18 @@
 
 
 <div class="PropertyBookingForm" style="">
+  <b-alert variant="success"
+    dismissible
+    :show="showSuccess"
+    @dismissed="showSuccess=false">
+    Your booking has been accepted!
+  </b-alert>
+  <b-alert variant="danger"
+    dismissible
+    :show="showError"
+    @dismissed="showError=false">
+    Your booking could not be accepted!
+  </b-alert>
   <md-card>
     <md-card-header>
       <strong><div class="md-title">${{ this.message[0].base_price }}</div></strong>per night
@@ -45,14 +57,19 @@ export default {
   methods: {
     makebook(){
       axios.post("http://localhost:8000/post/event/create/",{body:this.$router.currentRoute.params,user:router.app.$auth.getUserProfile(),detail:this.bookdetail})
+      .then( 
+        (response) => { this.showSuccess = true; },
+        (error) => { this.showError = true; }
+      );
     }
   },
   data: () => ({
-    bookdetail:{
-      start_day:null,
-      end_day:null,
-      guest:null,
-
+    showSuccess: false,
+    showError: false,
+    bookdetail : {
+      start_day : null,
+      end_day : null,
+      guest : null,
     },
 
     message: null
