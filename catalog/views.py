@@ -8,6 +8,7 @@ from catalog.serializers import AdvertisementSerializer, AccommodationReviewSeri
 from catalog.serializers import EventSerializer, UserProfileSerializer
 from catalog.serializers import PropertyImageSerializer, PropertyRequestSerializer
 
+
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 
@@ -457,9 +458,10 @@ def review_create(request):
     """
 
     data = JSONParser().parse(request)
+    print(data)
 
-    ad_owner = data['body']['ad_owner']
-    ad_id = data['body']['ad_id']
+    ad_owner = data['event']['ad']['poster']
+    ad_id = data['event']['ad']['ad_id']
 
     reviewer = data['user']['email']
 
@@ -485,7 +487,7 @@ def review_create(request):
         rev_id = new_id
 
     rating = data['body']['rating']
-    message = data['body']['message']
+    message = data['body']['textarea']
 
     review = Accommodation_Review(
             rev_id=rev_id,
@@ -516,10 +518,10 @@ def review_create(request):
         # string format: (ad_owner, ad_id, review_id);
         if str_of_posted_reviews == None or str_of_posted_reviews == "":
             # first posted review for this user
-            new_str_of_posted_revs = '(' + ad_owner + ',' + str(ad_id) + ',' + str(review_id) + ');'
+            new_str_of_posted_revs = '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ');'
         else:
             new_str_of_posted_revs = str_of_posted_reviews + \
-                '(' + ad_owner + ',' + str(ad_id) + ',' + str(review_id) + ');'
+                '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ');'
         u.set_list_of_posted_reviews(new_str_of_posted_revs)
 
         return HttpResponse(status=201)
@@ -569,6 +571,7 @@ def review_delete(request):
     """
 
     data = JSONParser().parse(request)
+    print('-->', data)
 
     rev_id = data['body']['rev_id']
     ad_id = data['body']['ad_id']
@@ -619,7 +622,7 @@ def review_delete(request):
             str_list_of_posted_revs = str_of_posted_revs.split(';')
             new_list = []
             # string format: (ad_owner, ad_id, rev_id);
-            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ');'
+            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ')'
             for i in str_list_of_posted_revs:
                 if i == '':
                     continue
@@ -910,9 +913,9 @@ def event_delete(request):
 
     data = JSONParser().parse(request)
 
-    event_id = data['body']['event_id']
-    ad_owner = data['body']['ad_owner']
-    ad_id = data['body']['ad_id']
+    event_id = data['body']['event']['event_id']
+    ad_owner = data['body']['ad']['poster']
+    ad_id = data['body']['ad']['ad_id']
 
     booker = data['user']['email']
 
@@ -920,7 +923,7 @@ def event_delete(request):
           '\n------------------------')
 
     event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
-
+    print('event-->', event)
     if event.exists() and len(event) == 1:
 
         event.delete()
@@ -957,11 +960,14 @@ def event_delete(request):
             str_list_of_rentals = str_of_rentals.split(';')
             new_list = []
             # string format: (ad_owner, ad_id, event_id);
-            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
+            print('list of rentals-->', str_list_of_rentals)
+            str_to_delete = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ')'
+            print('str to delete-->', str_to_delete)
             for i in str_list_of_rentals:
                 if i == '':
                     continue
                 elif i == str_to_delete:
+                    print('deleting event')
                     # delete the rental so we don't add to list
                     continue
                 else:
@@ -971,13 +977,53 @@ def event_delete(request):
             for i in new_list:
                 new_list_of_rentals = new_list_of_rentals + i + ';'
 
+        print('new list rentals -->',new_list_of_rentals)
         a.set_list_of_rentals(new_list_of_rentals)
-
 
         print('-----------> If deleted this is an empty list ', event,
               '\n------------------------')
 
-        return HttpResponse(status=200)
+        # This is bookers bookings ----
+
+        u = User_Profile.objects.get(email=booker)
+
+        # string format: (ad_owner, ad_id, event_id);
+        str_of_bookings = u.get_list_of_rentals()
+        list_of_bookings = str_of_bookings.split(';')
+
+        event_pks = []
+        for i in list_of_bookings:
+
+            if i == "" or i == "null":
+                continue
+
+            str_event = i.split(',')
+            ad_owner = str_event[0].replace('(', "")
+            ad_id = str_event[1]
+            event_id = str_event[2].replace(")", "")
+            print('here-->', ad_owner, ad_id, event_id)
+            e = Event.objects.get(event_id=int(event_id), ad_owner=ad_owner,
+                                  ad_id=int(ad_id))
+            event_pks.append(e.pk)
+
+        bookers_events = Event.objects.filter(pk__in=event_pks)
+
+        querylist = []
+        for ev in bookers_events:
+
+            ad = Advertisement.objects.get(poster=ev.ad_owner, ad_id=ev.ad_id)
+            adSerializer = AdvertisementSerializer(ad).data
+            eventSerializer = EventSerializer(ev).data
+
+            temp_dict = {
+                'ad': adSerializer,
+                'event': eventSerializer,
+            }
+
+            querylist.append(temp_dict)
+
+        return JsonResponse(querylist, safe=False)
+
     else:
         return HttpResponse(status=400)
 
@@ -1541,7 +1587,7 @@ def bookers_bookings(request):
             ad_owner = str_event[0].replace('(', "")
             ad_id = str_event[1]
             event_id = str_event[2].replace(")", "")
-
+            print('here-->', ad_owner, ad_id, event_id)
             e = Event.objects.get(event_id=int(event_id), ad_owner=ad_owner,
                                   ad_id=int(ad_id))
             event_pks.append(e.pk)

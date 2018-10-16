@@ -168,7 +168,6 @@ export default {
   },
   mounted() {
     this.user = router.app.$auth.getUserProfile();
-    console.log(this.user);
   }
 }
 </script>
