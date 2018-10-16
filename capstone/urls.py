@@ -28,12 +28,6 @@ from django.contrib import admin
 
 from catalog import views
 
-'''
-NOTE:
-
-    - first refers to the part of the email before the @ sign
-    - second refers to the part of the email after the @ sign
-'''
 
 urlpatterns = [
 
@@ -81,7 +75,6 @@ urlpatterns = [
     path('get/advertisement/', views.get_all_ads),
     path('get/advertisement/single/', views.get_single_ad),
     path('get/everythingUser/', views.get_users_ads),
-    path('get/occupiedDates/',views.get_occupied_dates),
 
     #---------------- Search module views ----------------#
 
