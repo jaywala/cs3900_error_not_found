@@ -1,5 +1,7 @@
 
 import smtplib
+import subprocess
+import sys
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -93,3 +95,37 @@ def send_email(to_addr, message, subject):
         print('Email sent!')
     except:
         print('Something went wrong...')
+
+if __name__ == '__main__':
+
+    # Booker args
+    #['send_email.py', 'booker', 'booker_name', 'property_name',
+    # 'booked_period', 'booker', 'subject']
+
+    # Host args
+    #['send_email.py', 'host', 'poster_name', 'property_name',
+    # 'booked_period', 'booker_name', 'ad_owner', 'subject']
+
+    # tells me if I'm emailing the host or booker
+    if sys.argv[1] == 'booker':
+
+        booker_name = sys.argv[2]
+        property_name = sys.argv[3]
+        booked_period = sys.argv[4]
+        booker = sys.argv[5]
+        subject = sys.argv[6]
+
+        b_email = booker_email(booker_name, property_name, booked_period)
+        send_email(booker, b_email, subject)
+
+    elif sys.argv[1] == 'host':
+
+        poster_name = sys.argv[2]
+        property_name = sys.argv[3]
+        booked_period = sys.argv[4]
+        booker_name = sys.argv[5]
+        ad_owner = sys.argv[6]
+        subject = sys.argv[7]
+
+        h_email = host_email(poster_name, property_name, booked_period, booker_name)
+        send_email(ad_owner, h_email, subject)

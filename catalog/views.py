@@ -18,6 +18,8 @@ from .haversine import haversine
 from .send_email import host_email, booker_email, send_email
 from datetime import datetime, time
 import math
+import subprocess
+import os
 
 #------------------------------User_Profile (booker, poster) ------------------------------#
 
@@ -795,20 +797,33 @@ def event_create(request):
             booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' just got booked'
 
-            ''''
+            current_path = os.path.dirname(os.path.abspath(__file__))
+            run_path = current_path + '/send_email.py'
             try:
-                temp_var = subprocess.run(['python3', function_name + '/' + test_cases_name + '.py', str(i)])
+                temp_var = subprocess.run(['python3', run_path, 'host',
+                poster_name, property_name, booked_period, booker_name,
+                ad_owner, subject])
+
             except subprocess.CalledProcessError as e:
                 print(e.stdout)
-            '''
+                print('could not send email')
+                return HttpResponse(status=400)
 
-
-            h_email = host_email(poster_name, property_name, booked_period, booker_name)
-            send_email(ad_owner, h_email, subject)
+            #h_email = host_email(poster_name, property_name, booked_period, booker_name)
+            #send_email(ad_owner, h_email, subject)
 
             subject = 'Confirmation of booking accommodation: ' + property_name
-            b_email = booker_email(booker_name, property_name, booked_period)
-            send_email(booker, b_email, subject)
+            try:
+                temp_var = subprocess.run(['python3', run_path, 'booker',
+                booker_name, property_name, booked_period, booker, subject])
+
+            except subprocess.CalledProcessError as e:
+                print(e.stdout)
+                print('could not send email')
+                return HttpResponse(status=400)
+
+            #b_email = booker_email(booker_name, property_name, booked_period)
+            #send_email(booker, b_email, subject)
 
             return HttpResponse(status=201)
         else:

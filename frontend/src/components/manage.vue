@@ -3,7 +3,7 @@
     <h1>Your Properties</h1>
     <div v-if="ads">
 
-      <div v-for="advert in ads">
+      <div v-for="(advert,index) in ads">
         <div class="card">
           <div class="card-body">
             <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" > <h4 class="card-text">{{advert.ad.accommodation_name}}</h4></router-link>
@@ -20,7 +20,7 @@
                 md-content="This action cannot be undone."
                 md-confirm-text="Yes"
                 md-cancel-text="No"
-                @md-confirm="deleteAd()" />
+                @md-confirm="deleteAd(index)" />
 
               <md-button class="md-accent md-raised" @click="showDialog(advert.ad)">Delete</md-button>
             </div>
@@ -77,7 +77,7 @@ export default {
       this.delete_dialog_ad_focus = ad
       this.delete_dialog_active = true
     },
-    deleteAd: function() {
+    deleteAd: function(ad_index) {
       axios.post("http://localhost:8000/post/advertisement/delete/",
         {
           body: {
@@ -86,8 +86,8 @@ export default {
           }
         }
       )
-      // Refresh page.
-      location.reload();
+      // Delete the index
+      this.ads.splice(ad_index, 1)
     },
 
     fetchAdEvents: function(ad_id) {
