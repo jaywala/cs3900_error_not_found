@@ -16,74 +16,84 @@ import editfinish from '@/components/editfinish.vue'
 Vue.use(Router)
 
 const router = new Router({
+  //router in history mode which will act like normal MPA
   mode: 'history',
+  //all the routes
   routes: [
+      //successful page
       {
         path:'/successedit',
         name:'successedit',
         component:editfinish,
       },
+      //successful page
       {
         path:'/success',
         name:'success',
         component: success
       },
+      //manage own property
       {
         path: '/manage',
         name: 'manage',
         component: manage
       },
+      //add new property
       {
         path: '/newbook',
         name: 'newbook',
         component: newbook
       },
+      //main search page
       {
           path: '/',
           name:'home',
           component: landing
       },
+      //used to handle auth0 redir after login
       {
         path: '/callback',
         name:'callback',
         component: callback
       },
-      {
+      //used for test
+      /*{
         path: '/test',
         name: 'test',
         component: test
-      },
+      },*/
+      //detail page of a specific property
       {
           path: '/detail/:poster_id/:ad_id',
           component: detail,
           name: 'detailpage'
 
       },
+      // main search page
       {
         path: '/search',
         component: search,
         name: search
       },
+      // edit users profile
       {
         path: '/editprofile',
         component: editprofile,
         name: editprofile
       },
+      //review all the booking
       {
         path: '/review',
         component: review,
         name: review
       },
+      //page for request a specific property
       {
         path: '/request',
         component: request,
         name:request,
       },
-      {
-        path: '/image',
-        component: image,
-        name:image
-      }
+      
   ]
 })
 
