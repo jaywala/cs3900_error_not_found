@@ -794,6 +794,15 @@ def event_create(request):
             # send emails
             booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' just got booked'
+
+            ''''
+            try:
+                temp_var = subprocess.run(['python3', function_name + '/' + test_cases_name + '.py', str(i)])
+            except subprocess.CalledProcessError as e:
+                print(e.stdout)
+            '''
+
+
             h_email = host_email(poster_name, property_name, booked_period, booker_name)
             send_email(ad_owner, h_email, subject)
 
@@ -1539,7 +1548,7 @@ def bookers_bookings(request):
         querylist = []
         for ev in bookers_events:
 
-            ad = Advertisement.objects.get(ad_owner=ev.ad_owner, ad_id=ev.ad_id)
+            ad = Advertisement.objects.get(poster=ev.ad_owner, ad_id=ev.ad_id)
             adSerializer = AdvertisementSerializer(ad).data
             eventSerializer = EventSerializer(ev).data
 
