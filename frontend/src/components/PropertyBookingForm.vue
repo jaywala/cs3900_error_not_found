@@ -41,6 +41,7 @@
       <md-card-actions>
         <md-button type="submit" class="md-primary md-raised" style="width:100%" @click = "makebook()">Book</md-button>
       </md-card-actions>
+      {{bookdetail}}
     </md-card-content>
   </md-card>
 </div>
@@ -57,7 +58,7 @@ export default {
   methods: {
     makebook(){
       axios.post("http://localhost:8000/post/event/create/",{body:this.$router.currentRoute.params,user:router.app.$auth.getUserProfile(),detail:this.bookdetail})
-      .then( 
+      .then(
         (response) => { this.showSuccess = true; },
         (error) => { this.showError = true; }
       );
@@ -76,7 +77,10 @@ export default {
   }),
 
   mounted () {
-
+    var event1 = new Date('18 October 2018 14:48 UTC');
+    var event2 = new Date();
+    this.bookdetail.start_day = event2.toISOString()
+    this.bookdetail.end_day = event1.toISOString()
   this.user = this.bookdetail.ad_owner;
   console.log(this.$router.currentRoute)
   axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})
