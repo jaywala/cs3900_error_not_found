@@ -17,7 +17,7 @@ from django.db.models import Max
 from .geo import position
 from .haversine import haversine
 from .send_email import host_email, booker_email, send_email
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 import math
 import subprocess
 import os
@@ -1832,28 +1832,31 @@ def get_occupied_dates(request):
     Gets 3 months of avaiable dates for a propertyself.
     """
 
-    if 'email' in request.GET and 'ad_id' in request.GET:
-        poster = request.GET['email']
+    if 'poster_id' in request.GET and 'ad_id' in request.GET:
+        poster_id = request.GET['poster_id']
         ad_id = request.GET['ad_id']
 
         try:
+            u = User_Profile.objects.get(pk=2)
+            poster = u.email
             event = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
         except Event.DoesNotExist:
             return HttpResponse(status=404)
 
         d1 = datetime.today()
+        occupied_dates = []
 
         for e in event:
             day = e.get_start_day()
             checkOut = e.get_end_day()
             while day != checkOut:
                 occupied_dates.append(day)
-                day = day + datetime.timedelta(1)
+                day = day + timedelta(1)
             occupied_dates.append(checkOut)
 
 
 
-        return JsonResponse(available_dates, safe=False)
+        return JsonResponse(occupied_dates, safe=False)
     else:
         return HttpResponse(status=400)
 
