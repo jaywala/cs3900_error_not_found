@@ -68,10 +68,11 @@ export default {
 
   mounted () {
 
-      axios.get()
+      axios.get('http://localhost:8000/get/bookersBooking/',{params:{booker:router.app.$auth.getUserProfile().email}})
        .then(response => {
            // JSON responses are automatically parsed.
-           this.message = response.data
+           console.log(response.data)
+           this.bookings = response.data
        })
        .catch(e => {
            this.errors.push(e)

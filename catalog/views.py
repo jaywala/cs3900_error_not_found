@@ -1516,13 +1516,16 @@ def bookers_bookings(request):
         event_pks = []
         for i in list_of_bookings:
 
-            str_event = i.split(',')
-            ad_owner = str_event[0]
-            ad_id = str_event[1]
-            event_id = str_event[2]
+            if i == "" or i == "null":
+                continue
 
-            e = Event.objects.get(event_id=event_id, ad_owner=ad_owner,
-                                  ad_id=ad_id)
+            str_event = i.split(',')
+            ad_owner = str_event[0].replace('(', "")
+            ad_id = str_event[1]
+            event_id = str_event[2].replace(")", "")
+
+            e = Event.objects.get(event_id=int(event_id), ad_owner=ad_owner,
+                                  ad_id=int(ad_id))
             event_pks.append(e.pk)
 
         bookers_events = Event.objects.filter(pk__in=event_pks)
