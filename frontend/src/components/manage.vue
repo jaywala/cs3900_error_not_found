@@ -12,6 +12,7 @@
             
             <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
             <md-button class="md-secondary md-raised">Edit</md-button>
+            
             <div style="display: inline">
               <md-dialog-confirm
                 :md-active.sync="delete_dialog_active"
@@ -19,9 +20,9 @@
                 md-content="This action cannot be undone."
                 md-confirm-text="Yes"
                 md-cancel-text="No"
-                @md-confirm="deleteAd(advert.ad.ad_id)" />
+                @md-confirm="deleteAd()" />
 
-              <md-button class="md-accent md-raised" @click="delete_dialog_active = true">Delete</md-button>
+              <md-button class="md-accent md-raised" @click="showDialog(advert.ad)">Delete</md-button>
             </div>
             
           </div>
@@ -67,16 +68,21 @@ export default {
       ads_bookings: [],
       user: null,
       delete_dialog_active: false,
+      delete_dialog_ad_focus: null,
     }
   },
   computed: {},
   methods: {
-    deleteAd: function(ad_id) {
+    showDialog: function(ad) {
+      this.delete_dialog_ad_focus = ad
+      this.delete_dialog_active = true
+    },
+    deleteAd: function() {
       axios.post("http://localhost:8000/post/advertisement/delete/",
         {
           body: {
             poster: this.user.email,
-            ad_id: ad_id
+            ad_id: this.delete_dialog_ad_focus.ad_id
           }
         }
       )
