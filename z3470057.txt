@@ -40,7 +40,13 @@ Week 10
 
 Week 11
 - Programmed and stylized the search/filter component and fully integrated it with the backend server.
-- Researched potentia cloud deployment options. (Heroku, AWS, Etc.)
+- Researched google maps view implementation in javascript and Vue.js
 
 Week 12
 - Developed and connected the front-end for the management webpage where hosts can manage their property listings.
+- Re-designed the navbar.
+- Revamped the search page and fitted a reactive, dynamic google maps view.
+- Produced DatePicker for booking form that disables dates that are booked out already + progress alert system.
+- Review/ratings aggregator and display on properties details page.
+- Ability for deletion of propertly listing on management webpage.
+- Cleaned up hyperlinks to utilise router-links optimized for SPA's.
