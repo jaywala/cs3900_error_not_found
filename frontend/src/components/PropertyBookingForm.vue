@@ -8,6 +8,12 @@
     @dismissed="showSuccess=false">
     Your booking has been accepted!
   </b-alert>
+
+  <b-alert variant="warning"
+    :show="showWarning">
+    Please wait while your booking is processed.
+  </b-alert>
+
   <b-alert variant="danger"
     dismissible
     :show="showError"
@@ -80,10 +86,11 @@ export default {
   name: 'LabeledDatepicker',
   methods: {
     makebook(){
+      this.showWarning = true;
       axios.post("http://localhost:8000/post/event/create/",{body:this.$router.currentRoute.params,user:router.app.$auth.getUserProfile(),detail:this.bookdetail})
       .then(
-        (response) => { this.showSuccess = true; },
-        (error) => { this.showError = true; }
+        (response) => { this.showSuccess = true; this.showWarning = false;},
+        (error) => { this.showError = true; this.showWarning = false;}
       );
     },
 
@@ -100,6 +107,7 @@ export default {
   },
   data: () => ({
     showSuccess: false,
+    showWarning: false,
     showError: false,
     bookdetail : {
       "dateFormat": '',
