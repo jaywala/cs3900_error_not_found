@@ -70,13 +70,13 @@ def user_profile_update(request):
           '\n------------------------')
 
     new_email = data['body']['email']
-    new_user_name = data['body']['nickname']
-    new_name = data['body']['name']
+    new_given_name = data['body']['given_name']
+    new_family_name = data['body']['family_name']
     new_profile_pic = data['body']['picture']
 
     user.set_email(new_email)
-    user.set_user_name(new_user_name)
-    user.set_name(new_name)
+    user.set_given_name(new_given_name)
+    user.set_family_name(new_family_name)
     user.set_profile_pic(new_profile_pic)
 
     return HttpResponse(status=200)
@@ -89,16 +89,16 @@ def create_user(data):
     """
 
     email = data['body']['email']
-    user_name = data['body']['nickname']
-    name = data['body']['name']
+    given_name = data['body']['given_name']
+    family_name = data['body']['family_name']
     profile_pic = data['body']['picture']
     list_of_ads = ""
     list_of_rentals = ""
     list_of_posted_reviews = ""
 
     u = User_Profile(email=email,
-                     user_name=user_name,
-                     name=name,
+                     given_name=given_name,
+                     family_name=family_name,
                      profile_pic=profile_pic,
                      list_of_ads=list_of_ads,
                      list_of_rentals=list_of_rentals,
@@ -691,11 +691,11 @@ def event_create(request):
 
     # for email
     user_profile = User_Profile.objects.get(email=ad_owner)
-    poster_name = user_profile.get_name()
+    poster_name = user_profile.get_given_name()
     property_name = u.get_accommodation_name()
 
     booker_user_profile = User_Profile.objects.get(email=booker)
-    booker_name = booker_user_profile.get_name()
+    booker_name = booker_user_profile.get_given_name()
 
     # Find the next event id for this event
     str_of_id = u.get_event_ids()
@@ -855,10 +855,10 @@ def event_update(request):
 
             # send emails
             booker_profile = User_Profile.objects.get(email=booker)
-            booker_name = booker_profile.get_name()
+            booker_name = booker_profile.get_given_name()
 
             owner_profile = User_Profile.objects.get(email=ad_owner)
-            poster_name = owner_profile.get_name()
+            poster_name = owner_profile.get_given_name()
 
             prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
             property_name = prop.get_accommodation_name()

@@ -7,8 +7,8 @@ from .models import User_Profile, Event, PropertyRequest
 class UserAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['email']}),
-        (None, {'fields': ['user_name']}),
-        (None, {'fields': ['name']}),
+        (None, {'fields': ['given_name']}),
+        (None, {'fields': ['family_name']}),
         (None, {'fields': ['profile_pic']}),
         (None, {'fields': ['list_of_ads']}),
         (None, {'fields': ['list_of_rentals']}),

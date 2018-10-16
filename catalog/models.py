@@ -11,8 +11,8 @@ class User_Profile(models.Model):
     # email makes the unique identier for a User Profile
     email = models.CharField(null=False, blank=False, max_length=1000)
 
-    user_name = models.CharField(null=True, blank=True, max_length=1000)
-    name = models.CharField(null=True, blank=True, max_length=1000)
+    given_name = models.CharField(null=True, blank=True, max_length=1000)
+    family_name = models.CharField(null=True, blank=True, max_length=1000)
     profile_pic = models.CharField(null=True, blank=True, max_length=1000)
 
     # contains the ad id's that this user owns
@@ -36,11 +36,11 @@ class User_Profile(models.Model):
     def get_email(self):
         return self.email
 
-    def get_user_name(self):
-        return self.user_name
+    def get_given_name(self):
+        return self.given_name
 
-    def get_name(self):
-        return self.name
+    def get_family_name(self):
+        return self.family_name
 
     def get_profile_pic(self):
         return self.profile_pic
@@ -61,14 +61,14 @@ class User_Profile(models.Model):
         u.email = new_email
         u.save()
 
-    def set_user_name(self, new_user_name):
+    def set_given_name(self, new_given_name):
         u = User_Profile.objects.get(id=self.id)
-        u.user_name = new_user_name
+        u.given_name = new_given_name
         u.save()
 
-    def set_name(self, new_name):
+    def set_family_name(self, new_family_name):
         u = User_Profile.objects.get(id=self.id)
-        u.name = new_name
+        u.family_name = new_family_name
         u.save()
 
     def set_profile_pic(self, new_pic):
