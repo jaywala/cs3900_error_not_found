@@ -41,8 +41,8 @@ def importFromCSV():
             print(count, "  " , email)
 
             user1 = User_Profile(email=(email.replace(" ", "")+"@example.com"), # column V
-                                 user_name=email,
-                                 name=email,
+                                 given_name=row[21],
+                                 family_name=row[21],
                                  profile_pic="",
                                  list_of_ads="1,",
                                  list_of_rentals= "(" + email.replace(" ", "") + "@example.com,1,1);",

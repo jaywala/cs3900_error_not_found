@@ -12,11 +12,17 @@ import review from '@/components/review.vue'
 import image from '@/components/displayimage.vue'
 import request from '@/components/requestform.vue'
 import success from '@/components/success.vue'
+import editfinish from '@/components/editfinish.vue'
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   routes: [
+      {
+        path:'/successedit',
+        name:'successedit',
+        component:editfinish,
+      },
       {
         path:'/success',
         name:'success',
@@ -86,12 +92,6 @@ router.beforeEach((to, from, next) => {
   if(to.name == 'callback') { // check if "to"-route is "callback" and allow access
     next()
   } else if(to.name == 'home'){
-    next()
-  }
-  else if(to.path == '/detail/*'){
-    next()
-  }
-  else if(to.path == '/detail'){
     next()
   }else if (router.app.$auth.isAuthenticated()) { // if authenticated allow access
     next()
