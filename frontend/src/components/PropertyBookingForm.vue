@@ -85,6 +85,7 @@ import format from 'date-fns/format'
 export default {
   name: 'LabeledDatepicker',
   methods: {
+    //create a booking
     makebook(){
       this.showWarning = true;
       axios.post("http://localhost:8000/post/event/create/",{body:this.$router.currentRoute.params,user:router.app.$auth.getUserProfile(),detail:this.bookdetail})
@@ -93,7 +94,7 @@ export default {
         (error) => { this.showError = true; this.showWarning = false;}
       );
     },
-
+    //format the date selected
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
@@ -115,7 +116,7 @@ export default {
       end_day : null,
       guest : null,
     },
-    
+
 
     message: null
   }),
@@ -127,7 +128,7 @@ export default {
 
   mounted () {
   this.user = this.bookdetail.ad_owner;
-  console.log(this.$router.currentRoute)
+  //console.log(this.$router.currentRoute)
   axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})
   .then(response => {
     // JSON responses are automatically parsed.

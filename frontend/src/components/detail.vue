@@ -19,7 +19,7 @@
                   <div style="margin-right: 16px;">{{this.message[0].num_guests}} <i class="fas fa-users"></i></div>
                   <div style="margin-right: 16px;">{{this.message[0].num_bedrooms}} <i class="fas fa-bed"></i></div>
                   <div style="margin-right: 16px;">{{this.message[0].num_bathrooms}} <i class="fas fa-bath"></i></div>
-                </div>    
+                </div>
               </div>
 
               <div class="row">
@@ -48,7 +48,7 @@
                 <p>{{this.message[0].amenities}}</p>
               </div>
               <hr>
-              
+
               <h5>Ratings</h5>
               <small>{{this.avg_rating}}</small>
               <div v-for="n in avg_rating" style="display: inline">
@@ -148,10 +148,13 @@ export default {
     },
 
     mounted () {
+
         this.user = this.message.poster;
+        //get the advertisement from backend
         axios.get("http://localhost:8000/get/advertisement/single/",
                    {params: this.$router.currentRoute.params}
                  )
+        //assign response data to front end data
         .then(response => {
             // JSON responses are automatically parsed.
             console.log(response.data)
@@ -165,12 +168,12 @@ export default {
           for (i=0; i<ratings.length; i++) {
             total += ratings[i].rating
           }
-
+          //calculate average rating
           if (ratings.length != 0) {
             this.avg_rating = Math.round(total / ratings.length);
             this.inverse_rating = 5 - this.avg_rating
           }
-            
+
         })
         .catch(e => {
             this.errors.push(e)

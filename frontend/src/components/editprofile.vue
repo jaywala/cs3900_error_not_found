@@ -43,10 +43,11 @@ export default {
     token(){
       return router.app.$auth.getAuthToken()
     },
+    // submit changing
     submit(){
       axios.post('http://localhost:8000/post/user/update/',{body:this.message})
       this.showDismissibleAlert = true;
-      
+
     }
   },
   data () {

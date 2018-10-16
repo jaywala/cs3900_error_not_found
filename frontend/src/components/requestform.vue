@@ -44,6 +44,7 @@ import axios from 'axios'
       },
     }),
     methods: {
+      //submit a request
       submit() {
         this.message.name = this.getProfile().nickname
         this.message.email = this.getProfile().email
@@ -57,9 +58,11 @@ import axios from 'axios'
           this.message.detail = null
         }, 150)
       },
+      //get user profile
       getProfile(){
         return router.app.$auth.getUserProfile()
       },
+      // delete request
       deleter(r){
         axios.post("http://localhost:8000/post/PropertyRequest/delete/",{body: r})
         .then(response => {

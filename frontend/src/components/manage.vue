@@ -9,10 +9,10 @@
             <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" > <h4 class="card-text">{{advert.ad.accommodation_name}}</h4></router-link>
             <small>{{ advert.ad.address }}</small>
             <p>{{ advert.ad.accommodation_description | truncate(200, '...') }}</p>
-            
+
             <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
             <md-button class="md-secondary md-raised">Edit</md-button>
-            
+
             <div style="display: inline">
               <md-dialog-confirm
                 :md-active.sync="delete_dialog_active"
@@ -24,7 +24,7 @@
 
               <md-button class="md-accent md-raised" @click="showDialog(advert.ad)">Delete</md-button>
             </div>
-            
+
           </div>
 
           <!-- Bookings -->
@@ -77,6 +77,7 @@ export default {
       this.delete_dialog_ad_focus = ad
       this.delete_dialog_active = true
     },
+    //delete an advertisement
     deleteAd: function(ad_index) {
       axios.post("http://localhost:8000/post/advertisement/delete/",
         {
@@ -89,7 +90,7 @@ export default {
       // Delete the index
       this.ads.splice(ad_index, 1)
     },
-
+    //get the events
     fetchAdEvents: function(ad_id) {
       // Fetch bookings for each advertisement.
       alert('fetching...')
@@ -102,7 +103,7 @@ export default {
         })
         .then(response => {
             // JSON responses are automatically parsed.
-            console.log(response.data)
+            //console.log(response.data)
             return response.data
         })
         .catch(e => {
@@ -123,7 +124,7 @@ export default {
       .then(response => {
         // JSON responses are automatically parsed.
         this.ads = response.data
-        console.log(this.ads)
+        //console.log(this.ads)
       })
       .catch(e => {
           this.errors.push(e)

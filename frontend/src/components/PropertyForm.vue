@@ -238,9 +238,11 @@
         axios.post('http://localhost:8000/post/advertisement/create/',{body:this.form,images:this.files,user:router.app.$auth.getUserProfile()})
         this.$router.push({ name: 'success' })
       },
+      //used for get image file
       getFiles(files){
         this.files = files
       },
+      //used for check if the input field is actually fulled
       getValidationClass (fieldName) {
         const field = this.$v.form[fieldName]
 
@@ -265,6 +267,7 @@
         this.form.nBathrooms = null
         this.form.amenities = null
       },
+      // clear form
       saveUser () {
         this.sending = true
 
@@ -275,6 +278,7 @@
           this.clearForm()
         }, 1500)
       },
+      //
       validateUser () {
         this.$v.$touch()
 
@@ -289,11 +293,12 @@
       * @param {Object} placeResultData PlaceResult object
       * @param {String} id Input container ID
       */
+      //get all the datas
       getAddressData: function (addressData, placeResultData, id) {
           this.form.address = placeResultData.formatted_address
           this.form.city = placeResultData.address_components[2]['long_name']
           this.form.zipCode = placeResultData.address_components[6]['long_name']
-          console.log(placeResultData)
+          //console.log(placeResultData)
 
           // console.log(placeResultData)
           // alert(document.getElementById('map').value)
