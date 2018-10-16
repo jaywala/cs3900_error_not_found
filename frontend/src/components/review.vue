@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>all the bookings</h1>
+    <h1 style = "margin-top: 100px;">all the bookings</h1>
     <div v-for="book in bookings" class="col-md-4">
       <h3>{{book.title}}</h3>
       <h4>{{book.status}}</h4>

@@ -29,13 +29,13 @@
           </div>
           <div class="navbar navbar-dark navbar-static-top bg-dark box-shadow" style="position: fixed; width: 100%;">
             <div class="container d-flex justify-content-between" >
-              <a href="/" class="navbar-brand d-flex align-items-center">
+              <router-link to="{name: home}" class="navbar-brand d-flex align-items-center">
                 <i class="fas fa-home fa-2x fa-flip-vertical"></i>
                 <strong>&nbsp;NotAirbnb</strong>
-              </a>
+              </router-link>
 
               <div class="navbar-right">
-                
+
                 <a class="align-items-center">
                   <i class="fas fa-search fa-2x"></i>
                 </a>
@@ -43,7 +43,7 @@
                   <template slot="button-content">
                     <i class="fas fa-chevron-circle-down fa-2x"></i><span class="sr-only">Search</span>
                   </template>
-                
+
                   <router-link to="/search" v-if="authenticated()" tag="b-dropdown-item">Search</router-link>
                   <router-link to="/manage/" v-if="authenticated()" tag="b-dropdown-item">Manage properties</router-link>
                   <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">Add property</router-link>
@@ -60,7 +60,7 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              
+
             </div>
           </div>
         </header>
@@ -84,10 +84,10 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
 
-              <b-nav-item href="/search/"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></b-nav-item>
+              <router-link to="/"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></router-link>
 
-              <b-nav-item href="/trips/">Trips</b-nav-item>
-              <b-nav-item href="/help/">Help</b-nav-item>
+              <router-link to="/review/" > Trips</router-link>
+              <router-link to="/request/" >Request</router-link>
 
               <b-nav-item-dropdown right no-caret>
                 <!-- Using button-content slot -->
@@ -122,13 +122,13 @@
           <p class="float-right">
             <a href="#">Back to top</a>
           </p>
-          
+
           <p>Developed by Gladys Chan, Zihan Qiu, Jay Motwani and Joseph Hilsberg as part of <a href="http://legacy.handbook.unsw.edu.au/undergraduate/courses/2018/COMP3900.html">COMP3900</a></p>
         </div>
       </header>
     <br>
   </div>
-  
+
 </template>
 
 <script>
@@ -139,7 +139,7 @@ import router from '@/router'
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined'
         ? args[number]
         : match

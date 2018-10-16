@@ -69,10 +69,12 @@ def user_profile_update(request):
     print('-----------> data to UPDATE <-----------\n', data, \
           '\n------------------------')
 
-    new_email = data['body']['email']
-    new_user_name = data['body']['nickname']
-    new_name = data['body']['name']
-    new_profile_pic = data['body']['picture']
+    #new_email = data['body']['email']
+    #new_user_name = data['body']['nickname']
+    new_name = data['body']['given_name'] +' ' +data['body']['family_name']
+
+
+    #new_profile_pic = data['body']['picture']
 
     user.set_email(new_email)
     user.set_user_name(new_user_name)
