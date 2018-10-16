@@ -2,15 +2,15 @@
   <div id="app" class="container content" style = "margin-top: 100px">
   <md-field>
       <label>Given name</label>
-      <md-input v-model="this.message.given_name"></md-input>
+      <md-input v-model="message.given_name"></md-input>
     </md-field>
     <md-field>
       <label>Family name</label>
-      <md-input v-model="this.message.family_name"></md-input>
+      <md-input v-model="message.family_name"></md-input>
     </md-field>
     <md-field>
       <label>E-mail (Read-Only)</label>
-      <md-input v-model="this.message.email" readonly></md-input>
+      <md-input v-model="message.email" readonly></md-input>
     </md-field>
     <md-button class="md-dense md-raised md-primary" @click = "submit()">submit</md-button>
 </div>

@@ -36,11 +36,15 @@
               </div>
               <div class="row" style="padding-top:50px;">
                 <h5>Description</h5>
+              </div>
+              <div class="row">
                 <p>{{this.message[0].accommodation_description}}</p>
               </div>
               <hr>
               <div class="row">
                 <h5>Amenities</h5>
+              </div>
+              <div class="row">
                 <p>{{this.message[0].amenities}}</p>
               </div>
               <hr>
@@ -161,9 +165,11 @@ export default {
           for (i=0; i<ratings.length; i++) {
             total += ratings[i].rating
           }
+
+          if (ratings.length != 0) {
             this.avg_rating = Math.round(total / ratings.length);
             this.inverse_rating = 5 - this.avg_rating
-            
+          }
             
         })
         .catch(e => {

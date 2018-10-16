@@ -382,9 +382,14 @@ export default {
         this.markers = markers;
 
         // Resize map
-        this.mapCenter.lat = this.message.lat;
-        this.mapCenter.lng = this.message.lng;
-        this.$refs.map1.resize()
+        if (this.message.lat && this.message.lng) {
+          this.mapCenter.lat = this.message.lat;
+          this.mapCenter.lng = this.message.lng;
+          if (this.$refs.map1) {
+            this.$refs.map1.resize()
+          }
+        }
+
       })
       .catch(e => {
 

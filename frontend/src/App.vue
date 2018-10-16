@@ -84,10 +84,10 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
 
-              
+
               <b-nav-item><router-link to="/search"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></router-link></b-nav-item>
-              <b-nav-item href="/trips/">Trips</b-nav-item>
-              <b-nav-item href="/help/">Help</b-nav-item>
+              <b-nav-item ><router-link to = "/review" style = "color:antiquewhite">Trips</router-link></b-nav-item>
+              <b-nav-item ><router-link to = "/request" style = "color:antiquewhite">Request</router-link></b-nav-item>
 
               <b-nav-item-dropdown right no-caret>
                 <!-- Using button-content slot -->
@@ -134,7 +134,6 @@
 <script>
 import Vue from 'vue'
 import router from '@/router'
-
 // First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -147,7 +146,6 @@ if (!String.prototype.format) {
     });
   };
 }
-
 export default {
   name: 'App',
   data() {
@@ -181,9 +179,7 @@ export default {
   top: 0px;
   z-index: 10000;
 }
-
 .content {
   padding-top: 80px;
 }
-
 </style>

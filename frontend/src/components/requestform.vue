@@ -77,6 +77,7 @@ import axios from 'axios'
       this.request = response.data
     })
     .catch(e => {
+
       this.errors.push(e)
     })
    },
