@@ -718,9 +718,17 @@ def event_create(request):
         new_id = max_id + 1
         event_id = new_id
 
-    checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    try:
+        checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
+    except:
+        return HttpResponse(status = 400)
+
+    try:
+        checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
+    except:
+        return HttpResponse(status = 400)
+
     checkIn = datetime.strptime(checkIn[0], "%Y-%m-%d").date()
-    checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
     checkOut = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
 
     start_day = checkIn
