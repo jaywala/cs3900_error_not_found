@@ -81,7 +81,7 @@ urlpatterns = [
     path('get/advertisement/', views.get_all_ads),
     path('get/advertisement/single/', views.get_single_ad),
     path('get/everythingUser/', views.get_users_ads),
-    path('get/freeDates/',views.get_free_dates)
+    path('get/occupiedDates/',views.get_occupied_dates),
 
     #---------------- Search module views ----------------#
 

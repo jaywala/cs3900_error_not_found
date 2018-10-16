@@ -1827,7 +1827,7 @@ def private(request):
     return HttpResponse("You should not see this message if not authenticated!")
 
 
-def get_free_dates(request):
+def get_occupied_dates(request):
     """
     Gets 3 months of avaiable dates for a propertyself.
     """
@@ -1843,17 +1843,13 @@ def get_free_dates(request):
 
         d1 = datetime.today()
 
-        free_dates = []
-        for i in range(90):
-            free_dates.append(d1 + datetime.timedelta(i))
-
         for e in event:
             day = e.get_start_day()
             checkOut = e.get_end_day()
             while day != checkOut:
-                if day in free_dates:
-                    free_dates.remove(day)
+                occupied_dates.append(day)
                 day = day + datetime.timedelta(1)
+            occupied_dates.append(checkOut)
 
 
 
