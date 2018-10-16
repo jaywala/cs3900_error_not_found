@@ -1,12 +1,14 @@
 import auth0 from 'auth0-js'
 import Vue from 'vue'
 
-// exchange the object with your own from the setup step above.
+// use auth0 to handle authentication
+
+//define the auth config
 let webAuth = new auth0.WebAuth({
-    domain: 'cs3900.au.auth0.com',
-    clientID: 'CyF2yOxLafjmlJ75djXxCdeslXo2LU9N',
+  domain: 'cs3900.au.auth0.com',
+  clientID: 'CyF2yOxLafjmlJ75djXxCdeslXo2LU9N',
   // make sure port is 8080
-    redirectUri: 'http://localhost:8080/callback',
+  redirectUri: 'http://localhost:8080/callback',
   // we will use the api/v2/ to access the user information as payload
   audience: 'http://djangovuejs.digituz.com.br',
   responseType: 'token id_token',
@@ -14,8 +16,11 @@ let webAuth = new auth0.WebAuth({
   apiUrl: 'http://localhost:8000/assignment'
 })
 
+
+//define main auth class
 let auth = new Vue({
   computed: {
+    //id_token used to handle authentication
     token: {
       get: function() {
         return localStorage.getItem('id_token')
@@ -24,6 +29,7 @@ let auth = new Vue({
         localStorage.setItem('id_token', id_token)
       }
     },
+    //The Access Token is a credential that can be used by an application to access an API
     accessToken: {
       get: function() {
         return localStorage.getItem('access_token')
@@ -32,6 +38,7 @@ let auth = new Vue({
         localStorage.setItem('access_token', accessToken)
       }
     },
+    //store expire time (around 4 hrs)
     expiresAt: {
       get: function() {
         return localStorage.getItem('expires_at')
@@ -41,6 +48,7 @@ let auth = new Vue({
         localStorage.setItem('expires_at', expiresAt)
       }
     },
+    //current user (who loggedin)
     user: {
       get: function() {
         return JSON.parse(localStorage.getItem('user'))
@@ -50,6 +58,7 @@ let auth = new Vue({
       }
     }
   },
+
   methods: {
     login() {
       webAuth.authorize()
@@ -66,19 +75,16 @@ let auth = new Vue({
     handleAuthentication() {
       return new Promise((resolve, reject) => {
         webAuth.parseHash((err, authResult) => {
-
           if (authResult && authResult.accessToken && authResult.idToken) {
             this.expiresAt = authResult.expiresIn
             this.accessToken = authResult.accessToken
             this.token = authResult.idToken
             this.user = authResult.idTokenPayload
             resolve()
-
           } else if (err) {
             this.logout()
             reject(err)
           }
-
         })
       })
     },

@@ -130,7 +130,7 @@
         style="width: 100%; height: 500px"
       >
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
-        
+
         {{infoContent}}
       </gmap-info-window>
 
@@ -319,7 +319,7 @@ export default {
         this.message.lat = placeResultData.geometry.location.lat();
         this.message.lng = placeResultData.geometry.location.lng();
         console.log(this.message)
-        
+
     },
     searchAds() {
 
@@ -360,8 +360,6 @@ export default {
       axios.get("http://127.0.0.1:8000/get/search/",{params:this.message})
       .then(response => {
         // JSON responses are automatically parsed.
-        console.log("response data: ")
-        console.log(response.data)
         this.ads = response.data
 
         // Load Markers
@@ -375,7 +373,7 @@ export default {
               },
               infoText: this.ads[step].ad.accommodation_name,
               detailsLink: "/detail/"+this.ads[step].ad.poster_id+"/"+this.ads[step].ad.ad_id
-              
+
             })
         }
 
@@ -394,7 +392,6 @@ export default {
       .catch(e => {
 
         this.errors.push(e)
-        alert(this.errors)
       })
 
     },
