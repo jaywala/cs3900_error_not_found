@@ -76,10 +76,12 @@ export default {
         },
         get(){
             return router.app.$auth.getUserProfile()
-        },
+        }, 
+        //submit a review
         submit(n){
             axios.post('http://localhost:8000/post/review/create/',{body:this.reviews[n],user:this.$auth.getUserProfile(),event:this.bookings[n]})
         },
+        //cancel a booking
         cancelbooking(n){
             axios.post('http://localhost:8000/post/event/delete/',{body:this.bookings[n],user:this.$auth.getUserProfile()})
             .then(response => {

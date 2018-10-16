@@ -38,9 +38,12 @@
         :trigger-element-id="'datepicker-trigger'"
         :mode="'range'"
         :fullscreen-mobile="true"
+        :disabledDates="occupied_dates"
+        :minDate="todays_date"
         :date-one="bookdetail.start_day"
         :date-two="bookdetail.end_day"
         :offset-y="10"
+
         @date-one-selected="val => { bookdetail.start_day = val }"
         @date-two-selected="val => { bookdetail.end_day = val }"
       />
@@ -69,7 +72,7 @@
       <md-card-actions>
         <md-button type="submit" class="md-primary md-raised" style="width:100%" @click = "makebook()">Book</md-button>
       </md-card-actions>
-      {{bookdetail}}
+      <!-- {{bookdetail}} -->
     </md-card-content>
   </md-card>
 </div>
@@ -107,6 +110,8 @@ export default {
     },
   },
   data: () => ({
+    todays_date: null,
+    occupied_dates: [],
     showSuccess: false,
     showWarning: false,
     showError: false,
@@ -127,18 +132,45 @@ export default {
   },
 
   mounted () {
-  this.user = this.bookdetail.ad_owner;
-  //console.log(this.$router.currentRoute)
-  axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})
-  .then(response => {
-    // JSON responses are automatically parsed.
-    this.message = response.data
-  })
-  .catch(e => {
-    this.errors.push(e)
-  })
-  //console.log(this.message)
-}
+    this.user = this.bookdetail.ad_owner;
+    //console.log(this.$router.currentRoute)
+    axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.message = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+    //console.log(this.message)
+
+    // DatePicker Date Selection
+    var today = new Date()
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    this.todays_date = yyyy + '-' + mm + '-' + dd
+
+    //console.log(this.$router.currentRoute.params.poster_id)
+
+    axios.get("http://localhost:8000/get/occupiedDates/",
+      {
+        params: {
+          poster_id: this.$router.currentRoute.params.poster_id,
+          ad_id: this.$router.currentRoute.params.ad_id,
+        }
+    })
+    .then(response => {
+      // JSON responses are automatically parsed.
+      this.occupied_dates = response.data
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })
+
+
+  }
+
 }
 </script>
 
