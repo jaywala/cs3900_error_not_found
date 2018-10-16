@@ -866,11 +866,11 @@ def event_update(request):
             booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' has changed details'
             h_email = host_email(poster_name, property_name, booked_period, booker_name)
-            #send_email(ad_owner, h_email, subject)
+            send_email(ad_owner, h_email, subject)
 
             subject = 'Confirmation of changes to booking accommodation: ' + property_name
             b_email = booker_email(booker_name, property_name, booked_period)
-            #send_email(booker, b_email, subject)
+            send_email(booker, b_email, subject)
 
             return HttpResponse(status=200)
         else:
