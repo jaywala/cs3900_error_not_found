@@ -102,9 +102,10 @@
 
                   <router-link to="/manage/" v-if="authenticated()" tag="b-dropdown-item">Manage properties</router-link>
                   <router-link to="/newbook" v-if="authenticated()" tag = "b-dropdown-item">Add property</router-link>
-                  <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">edit profile</router-link>
-
                   <b-dropdown-divider></b-dropdown-divider>
+                  <router-link to="/editprofile" v-if="authenticated()" tag = "b-dropdown-item">Edit profile</router-link>
+
+                  
                   <b-dropdown-item class="btn btn-primary btn-margin" v-if="!authenticated()" @click="login()">
                     Log In
                   </b-dropdown-item>
