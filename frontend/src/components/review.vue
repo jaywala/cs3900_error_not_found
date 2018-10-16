@@ -2,34 +2,35 @@
   <div>
     <h1 style = "margin-top: 100px;">all the bookings</h1>
     {{bookings}}
-    <div v-for="book in bookings" class="col-md-4">
+    <div v-for="(book,n) in bookings" class="col-md-4">
       <md-card md-with-hover>
       <md-ripple>
         <md-card-header>
-          <div class="md-title">{{book.booking_status}}</div>
-          <div class="md-subhead">from:{{book.start_day}} to:{{book.end_day}}</div>
+          <div class="md-title">{{book.event.booking_status}}</div>
+          <div class="md-subhead">{{book.ad.accommodation_name}}</div>
+          <div class="md-subhead">from:{{book.event.start_day}} to:{{book.event.end_day}}</div>
         </md-card-header>
 
         <md-card-content>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non.
+          <div v-if="book.event.booking_status != 'finished'">
+              <md-radio v-model="reviews[n].radio" value="1" hidden>1</md-radio>
+              <md-textarea v-model="reviews[n].textarea" value = "dommm" hidden></md-textarea>
+          </div>
+          <div v-if = "book.event.booking_status == 'finished'">
+            <md-radio v-model="reviews[n].radio" value="1">1</md-radio>
+            <md-radio v-model="reviews[n].radio" value="2">2</md-radio>
+            <md-radio v-model="reviews[n].radio" value="3">3</md-radio>
+            <md-radio v-model="reviews[n].radio" value="4">4</md-radio>
+            <md-radio v-model="reviews[n].radio" value="5">5</md-radio>
+            <md-field>
+          <label>Textarea</label>
+          <md-textarea v-model="reviews[n].textarea"></md-textarea>
+          </md-field>
+          </div>
         </md-card-content>
-        <div class="" v-if="book.status == 'booked'">
-          <button type="button" name="button" @click = "cancelbooking(book.title)">cancel</button>
-        </div>
-        <div v-if = "book.status == 'finished'">
-          <md-radio v-model="radio" value="1">1</md-radio>
-          <md-radio v-model="radio" value="2">2</md-radio>
-          <md-radio v-model="radio" value="3">3</md-radio>
-          <md-radio v-model="radio" value="4">4</md-radio>
-          <md-radio v-model="radio" value="5">5</md-radio>
-          <md-field>
-        <label>Textarea</label>
-        <md-textarea v-model="textarea"></md-textarea>
-        </md-field>
-        </div>
         <md-card-actions>
-          <md-button>Action</md-button>
-          <md-button>Action</md-button>
+          <router-link :to="{ name: 'detailpage', params: { poster_id:book.ad.poster_id, ad_id:book.ad.ad_id } }" ><md-button class="md-primary md-raised">View</md-button></router-link>
+          <md-button class=" md-raised" type="button" name="button" @click = "cancelbooking(book.title)">cancel</md-button>
         </md-card-actions>
       </md-ripple>
     </md-card>
@@ -76,7 +77,7 @@ export default {
             title:"commited",
           }
       ],
-      radio: Number
+      reviews:[],
     }
   },
 
@@ -87,6 +88,10 @@ export default {
            // JSON responses are automatically parsed.
            console.log(response.data)
            this.bookings = response.data
+           for (var i = 0; i < response.data.length; i ++ ){
+              var newdd = {textarea:null,radio:null}
+              this.reviews.push(newdd)
+            }
        })
        .catch(e => {
            this.errors.push(e)
