@@ -123,8 +123,9 @@
 
     <div class="map">
       <GmapMap
-        :center="{lat:-33.8688, lng:151.2099}"
-        :zoom="12"
+        :center="mapCenter"
+        :zoom="mapZoom"
+        ref="map1"
         map-type-id="terrain"
         style="width: 100%; height: 500px"
       >
@@ -218,6 +219,11 @@ export default {
   },
   data() {
     return {
+      mapCenter: {
+        lat:-33.8688,
+        lng:151.2099
+      },
+      mapZoom: 12,
       infoContent: '',
       infoWindowPos: null,
       infoWinOpen: false,
@@ -374,12 +380,18 @@ export default {
         }
 
         this.markers = markers;
+
+        // Resize map
+        this.mapCenter.lat = this.message.lat;
+        this.mapCenter.lng = this.message.lng;
+        this.$refs.map1.resize()
       })
       .catch(e => {
 
         this.errors.push(e)
         alert(this.errors)
       })
+
     },
     initMap() {
       this.map = L.map('map').setView([38.63, -90.23], 12);
