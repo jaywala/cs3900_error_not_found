@@ -20,6 +20,7 @@ from datetime import datetime, time
 import math
 import subprocess
 import os
+import pandas as pd
 
 #------------------------------User_Profile (booker, poster) ------------------------------#
 
@@ -1779,3 +1780,41 @@ def public(request):
 def private(request):
     print("hello+",request.body)
     return HttpResponse("You should not see this message if not authenticated!")
+
+
+def get_free_dates(request):
+    """
+    Gets 3 months of avaiable dates for a propertyself.
+    """
+
+    if 'email' in request.GET and 'ad_id' in request.GET:
+        poster = request.GET['email']
+        ad_id = request.GET['ad_id']
+
+        try:
+            event = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
+        except Event.DoesNotExist:
+            return HttpResponse(status=404)
+
+        d1 = datetime.today()
+
+        free_dates = []
+        for i in range(90):
+            free_dates.append(d1 + datetime.timedelta(i))
+
+        for e in event:
+            day = e.get_start_day()
+            checkOut = e.get_end_day()
+            while day != checkOut:
+                if day in free_dates:
+                    free_dates.remove(day)
+                day = day + datetime.timedelta(1)
+
+
+
+        return JsonResponse(available_dates, safe=False)
+    else:
+        return HttpResponse(status=400)
+
+
+
