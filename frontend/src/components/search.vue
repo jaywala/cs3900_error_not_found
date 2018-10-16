@@ -121,6 +121,32 @@
 
     </div>
 
+    <div class="map">
+      <GmapMap
+        :center="mapCenter"
+        :zoom="mapZoom"
+        ref="map1"
+        map-type-id="terrain"
+        style="width: 100%; height: 500px"
+      >
+      <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
+        
+        {{infoContent}}
+      </gmap-info-window>
+
+        <GmapMarker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :draggable="false"
+          @mouseover="toggleInfoWindow(m,i)"
+          @mouseout="toggleInfoWindow(m,i)"
+          @click="accessDetailsPage(m,i)"
+        />
+      </GmapMap>
+    </div>
+
     <div id="search-result">
 
       <!-- Results -->
@@ -134,36 +160,31 @@
         <div class="col-md-12">
           <md-content class="md-scrollbar">
             <div id="ads" v-if="this.ads">
-              <h2>{{ this.ads.length/2 + 1 }} Search Results</h2>
+              <h2>{{ this.ads.length }} Search Results</h2>
 
               <div class="album py-5 bg-light"> <!-- Listings -->
                 <div class="row">
-                  <div v-for="(ad,n) in this.ads" class="col-md-4">
-                    <div v-if="n%2 == 0"class="">
-
-
-                      <div class="card mb-4 box-shadow">
-
-                        <div class="card-body">
-                          <p class="card-text">{{ad.property_type}}</p>
-                          <router-link :to="{ name: 'detailpage', params: { poster_id:ad.poster_id, ad_id:ad.ad_id}}" > <h4 class="card-text">{{ad.accommodation_name}}</h4></router-link>
-                          <p class="card-text">${{ad.base_price}} AUD per night</p>
-                          <div class="d-flex justify-content-between align-items-center">
-                          </div>
+                  <div v-for="advert in this.ads" class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                      <div class="card-body">
+                        <p class="card-text">{{advert.ad.property_type}}</p>
+                        <router-link :to="{ name: 'detailpage', params: { poster_id:advert.ad.poster_id, ad_id:advert.ad.ad_id}}" > <h5 class="card-text">{{advert.ad.accommodation_name}}</h5></router-link>
+                        <p class="card-text">${{advert.ad.base_price}} AUD per night</p>
+                        <div class="d-flex justify-content-between align-items-center">
                         </div>
-                      </div>
-                  </div>
-                    <div v-if="n%2 == 1"class="">
-                      <Slider
+
+                    <Slider
                       :pagination-visible="true"
                       :pagination-clickable = "true"
                         :async-data="ad"
                         direction="horizontal">
-                      <div v-for="img in ad" :key="img.id">
-                          <img :src="img.pic" alt="">
+                      <div v-for="img in advert.images" :key="img.id">
+                          <img :src="img.pic"style="height:200px" alt="">
                       </div>
                     </Slider>
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div> <!-- End of Listings -->
@@ -191,12 +212,41 @@ import Slider from 'vue-plain-slider'
 //import './../vue-airbnb-style-datepicker/dist/vue-airbnb-style-datepicker.min.css'
 
 export default {
+  name: 'search',
   components: {
     VueGoogleAutocomplete,
     Slider,
   },
   data() {
     return {
+      mapCenter: {
+        lat:-33.8688,
+        lng:151.2099
+      },
+      mapZoom: 12,
+      infoContent: '',
+      infoWindowPos: null,
+      infoWinOpen: false,
+      currentMidx: null,
+      //optional: offset infowindow so it visually sits nicely on top of our marker
+      infoOptions: {
+        pixelOffset: {
+          width: 0,
+          height: -35
+        }
+      },
+      markers: [{
+          position: {
+            lat: 10.0,
+            lng: 10.0
+          }
+        }, {
+          position: {
+            lat: 11.0,
+            lng: 11.0
+          }
+        }],
+      errors: [],
       showGuestsDialog: false,
       showPriceDialog: false,
       showDistanceDialog: false,
@@ -209,6 +259,8 @@ export default {
         "distance": '',
         "minPrice": '',
         "maxPrice": '',
+        "lat": '',
+        "lng": '',
       },
       ads: null,
       images: [
@@ -228,6 +280,23 @@ export default {
     },
   },
   methods: {
+    accessDetailsPage(marker,idx) {
+      window.location.replace(marker.detailsLink)
+    },
+    toggleInfoWindow: function(marker, idx) {
+      this.infoWindowPos = marker.position;
+      this.infoContent = marker.infoText;
+      //check if its the same marker that was selected if yes toggle
+      if (this.currentMidx == idx) {
+        this.infoWinOpen = !this.infoWinOpen;
+      }
+      //if different marker set infowindow to open and reset current marker index
+      else {
+        this.infoWinOpen = true;
+        this.currentMidx = idx;
+      }
+    },
+
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
@@ -247,9 +316,10 @@ export default {
     */
     getAddressData: function (addressData, placeResultData, id) {
         this.message.where = placeResultData.formatted_address
-
-        // console.log(placeResultData)
-        // alert(document.getElementById('map').value)
+        this.message.lat = placeResultData.geometry.location.lat();
+        this.message.lng = placeResultData.geometry.location.lng();
+        console.log(this.message)
+        
     },
     searchAds() {
 
@@ -290,13 +360,38 @@ export default {
       axios.get("http://127.0.0.1:8000/get/search/",{params:this.message})
       .then(response => {
         // JSON responses are automatically parsed.
+        console.log("response data: ")
         console.log(response.data)
         this.ads = response.data
+
+        // Load Markers
+        var markers = []
+        var step;
+        for (step = 0; step < this.ads.length; step++) {
+          markers.push({
+              position: {
+                lat: this.ads[step].ad.latitude,
+                lng: this.ads[step].ad.longitude
+              },
+              infoText: this.ads[step].ad.accommodation_name,
+              detailsLink: "/detail/"+this.ads[step].ad.poster_id+"/"+this.ads[step].ad.ad_id
+              
+            })
+        }
+
+        this.markers = markers;
+
+        // Resize map
+        this.mapCenter.lat = this.message.lat;
+        this.mapCenter.lng = this.message.lng;
+        this.$refs.map1.resize()
       })
       .catch(e => {
 
-        _this.errors.push(e)
+        this.errors.push(e)
+        alert(this.errors)
       })
+
     },
     initMap() {
       this.map = L.map('map').setView([38.63, -90.23], 12);

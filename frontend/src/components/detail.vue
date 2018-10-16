@@ -8,38 +8,64 @@
       </div>
       <div class="row">
         <div class="col-8">
-          <small>&lt;{{this.message[0].property_type}}&gt;</small>
+          <small>{{this.message[0].property_type}}</small>
 
           <div class="row">
-            <div class="col-9">
+            <div class="col-12">
               <h1>{{this.message[0].accommodation_name}}</h1>
               <small>{{this.message[0].suburb}}</small>
               <div style="">
-                <div style="margin-right: 16px;">{{this.message[0].num_guests}}guests</div>
-                <div style="margin-right: 16px;">{{this.message[0].num_bedrooms}} bed</div>
-                <div style="margin-right: 16px;">{{this.message[0].num_bathrooms}} bath</div>
+                <div class="row">
+                  <div style="margin-right: 16px;">{{this.message[0].num_guests}} <i class="fas fa-users"></i></div>
+                  <div style="margin-right: 16px;">{{this.message[0].num_bedrooms}} <i class="fas fa-bed"></i></div>
+                  <div style="margin-right: 16px;">{{this.message[0].num_bathrooms}} <i class="fas fa-bath"></i></div>
+                </div>    
               </div>
-              <br>
-              <p>{{this.message[0].accommodation_description}}</p>
-              <p>{{this.message[0].amenities}}</p>
 
-            </div>
+              <div class="row">
+              <Slider
+                style="width:100%;max-height:40%"
+                :pagination-visible="true"
+                :pagination-clickable = "true"
+                  :async-data="message[1]"
+                  direction="horizontal">
+                <div v-for="img in message[1]" :key="img.id">
+                    <img :src="img.pic" alt="">
+                </div>
+              </Slider>
+              </div>
+              <div class="row" style="padding-top:50px;">
+                <h5>Description</h5>
+                <p>{{this.message[0].accommodation_description}}</p>
+              </div>
+              <hr>
+              <div class="row">
+                <h5>Amenities</h5>
+                <p>{{this.message[0].amenities}}</p>
+              </div>
+              <hr>
+              
+              <h5>Ratings</h5>
+              <small>{{this.avg_rating}}</small>
+              <div v-for="n in avg_rating" style="display: inline">
+                <i class="fas fa-star"></i>
+              </div>
+              <div v-for="n in inverse_rating" style="display: inline; margin: -4px;">
+                <i class="far fa-star"></i>
+              </div>
+              <p>
+                <div v-for="review in message[3]">
+                  <strong>{{ review.reviewer }}</strong>
+                  <br>
+                  {{ review.message }}
+                  <hr>
+                </div>
+              </p>
 
-            <div v-for="review in message[3]">
-              <li>{{review.rating}}</li>
             </div>
 
             <div class="col-3">
               <p>Profile image</p>
-              <Slider
-              :pagination-visible="true"
-              :pagination-clickable = "true"
-                :async-data="message[1]"
-                direction="horizontal">
-              <div v-for="img in message[1]" :key="img.id">
-                  <img :src="img.pic" alt="">
-              </div>
-            </Slider>
             </div>
           </div>
         </div>
@@ -83,10 +109,12 @@ export default {
         },
         get(){
             return router.app.$auth.getUserProfile()
-        }
+        },
+
     },
     data () {
         return {
+            errors: [],
             message: {
               ad_id: 1,
               poster: null,
@@ -110,6 +138,8 @@ export default {
               longitude: 151.2265622
             },
             reviews: "hello",
+            avg_rating: null,
+            inverse_rating: null,
         }
     },
 
@@ -122,9 +152,23 @@ export default {
             // JSON responses are automatically parsed.
             console.log(response.data)
             this.message = response.data
+
+          var ratings = this.message[3]
+
+          // Calculate overall rating average.
+          var total = 0;
+          var i;
+          for (i=0; i<ratings.length; i++) {
+            total += ratings[i].rating
+          }
+            this.avg_rating = Math.round(total / ratings.length);
+            this.inverse_rating = 5 - this.avg_rating
+            
+            
         })
         .catch(e => {
             this.errors.push(e)
+            //alert(e)
         })
         /*
         axios.get("http://localhost:8000/get/review"+ this.$router.currentRoute.path+'/')
@@ -132,6 +176,7 @@ export default {
             // JSON responses are automatically parsed.
             this.reviews = response.data
         })*/
+
     }
 
 }

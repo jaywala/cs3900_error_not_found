@@ -27,7 +27,7 @@
         </md-select>
       </md-field>
       <md-card-actions>
-        <md-button type="submit" class="md-primary" @click = "makebook()">Book</md-button>
+        <md-button type="submit" class="md-primary md-raised" style="width:100%" @click = "makebook()">Book</md-button>
       </md-card-actions>
     </md-card-content>
   </md-card>

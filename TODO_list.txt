@@ -64,19 +64,37 @@ TO DO list
 (DONE) - change all user email to lower case in importData
 (DONE) - join JSON, whenever an ad is asked for, give frontend all info related to it.
 (DONE) - update the URLs to new GET system, when getting you need to pass the email and/or id's of ads, etc.
+(DONE) - creating an ad need to give backend a base_price, also need that in the form
+(DONE) - pass backend the lat & long for location search (it's times out in the backend)
+(DONE) - integrate emailing
+(DONE) - email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
+(DONE) - test the clashing events
+(DONE) - write script that runs in the background that constantly checks if events have passed
+                        if passed, change the status from booked to finished
+(DONE) - tell me URL to myTrips page
 
 TODO
-- {frontend} when creating a review, I need the email of the reviewer, current person logged in
+- {frontend} when creating a review, backend needs: --> URL: 'post/review/create/'
+            1. the email of the reviewer, which is the current person logged in --> data['user']['email']
+            2. ad_owner, email of ad owner --> data['body']['ad_owner']
+            3. ad_id, id of ad --> data['body']['ad_id']
 
-- {frontend} creating an ad need to give backend a base_price, also need that in the form
+            when updating a review, backend needs: --> URL: 'post/review/update/'
+            1. rev_id, review id --> data['body']['rev_id']
+            2. ad_id, ad id --> data['body']['ad_id']
+            3. ad_owner, email of owner --> data['body']['ad_owner']
+            4. the email of the reviewer, which is the current person logged in --> data['user']['email']
 
-- {frontend} pass backend the lat & long for location search (it's times out in the backend)
+            when deleting a review, backend needs: --> URL: 'post/review/delete/'
+            1. rev_id, review id --> data['body']['rev_id']
+            2. ad_id, ad id --> data['body']['ad_id']
+            3. ad_owner, email of owner --> data['body']['ad_owner']
+            4. the email of the reviewer, which is the current person logged in --> data['user']['email']
 
-- {Gladys} test the clashing events, still don't think it works perfectly
+            when getting all the reviews for a single ad, backend needs: --> URL: 'get/review/user/'
+            1. ad_owner, email of ad owner --> data['body']['ad_owner']
+            2. ad_id, id of ad --> data['body']['ad_id']
 
-- {gladys} write script that runs in the background that constantly checks if events have passed
-  if passed, change the status of the booking
+- {both ends} make & check request module works (dumb feature) for update
 
-- {gladys} event when over need to change status, booked to finished to reviewed
-
-- {backend} email when making a booking to booker and poster, have link back to "8080/manage" "8080/trips"
+- {are we allowing the deletion of events???} only delete event if the status is booked, don't allow delete if status is finished

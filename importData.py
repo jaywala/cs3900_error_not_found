@@ -87,7 +87,7 @@ def importFromCSV():
                      ad_id=1,
                      # Since this is dummy data, they reviewed their own ad
                      reviewer= (email.replace(" ", "")+ "@example.com"),
-                     rating=4,
+                     rating=random.randint(3, 5),
                      message="Good holiday home",
                      )
             review.save()

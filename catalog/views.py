@@ -15,10 +15,11 @@ from django.db.models import Max
 
 from .geo import position
 from .haversine import haversine
+from .send_email import host_email, booker_email, send_email
 from datetime import datetime, time
 import math
 
-#------------------------------User_Profile------------------------------#
+#------------------------------User_Profile (booker, poster) ------------------------------#
 
 def user_profile_get(request):
     """
@@ -26,11 +27,11 @@ def user_profile_get(request):
     (Model: User_Profile).
     """
 
+    print('-----------> inside GET user_profile_get <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'email' in request.GET:
         email = request.GET['email']
-
-        print('-----------> inside GET user_profile_get <-----------\n',
-              email, '\n------------------------')
 
         try:
             user = User_Profile.objects.get(email=email)
@@ -123,6 +124,7 @@ def is_loggedIn(request):
     """
 
     data = JSONParser().parse(request)
+
     email = data['body']['email']
 
     print('-----------> inside is_loggedIn <-----------\n', email, \
@@ -140,19 +142,19 @@ def is_loggedIn(request):
     return HttpResponse(status=200)
 
 
-#------------------------------Advertisement------------------------------#
+#------------------------------Advertisement (poster) ------------------------------#
 
 def advertisement_get(request):
     """
     Give all the ads for this user.
     (Model: Advertisement)
     """
-    print(request.GET)
+
+    print('-----------> inside GET advertisement <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'email' in request.GET:
         email = request.GET['email']
-
-        print('-----------> inside GET advertisement <-----------\n',
-              email, '\n------------------------')
 
         try:
             ad = Advertisement.objects.filter(poster=email)
@@ -166,12 +168,12 @@ def advertisement_get(request):
 
         return JsonResponse(serializer.data, safe=False)
     else:
-        return HttpResponse(status=404)
+        return HttpResponse(status=400)
 
 
 def advertisement_update(request):
     """
-    Updates Advertisement data.
+    Updates an advertisement's data.
     (Model: Advertisement)
     """
 
@@ -181,7 +183,7 @@ def advertisement_update(request):
     ad_id = data['body']['ad_id']
 
     print('-----------> inside UPDATE advertisement <-----------\n', \
-          poster, ' --- ', ad_id, '\n------------------------')
+          'poster: ', poster, ', ad_id: ', ad_id, '\n------------------------')
 
     try:
         ad = Advertisement.objects.get(ad_id=ad_id, poster=poster)
@@ -196,7 +198,7 @@ def advertisement_update(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price'] TODO frontend need to give me one
+    base_price = data['body']['base_price']
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
@@ -224,7 +226,7 @@ def advertisement_update(request):
     ad.set_latitude(latitude)
     ad.set_longitude(longitude)
 
-    return HttpResponse(status=201)
+    return HttpResponse(status=200)
 
 
 def advertisement_create(request):
@@ -246,11 +248,11 @@ def advertisement_create(request):
     poster_id = u.id
     str_of_id = u.get_list_of_ads()
     if str_of_id == None or str_of_id == "":
-        ad_id = 1 #this is the first ad this user is posting
+        ad_id = 1 # this is the first ad this user is posting
     else:
         temp = str_of_id.split(',')
-        #because the split() gives back this [''] so that's length 1
-        #hence, the len(temp) > 1
+        # because the split() gives back this [''] so that's length 1
+        # hence, the len(temp) > 1
         if len(temp) > 1:
             temp_list = []
             for i in temp:
@@ -270,15 +272,14 @@ def advertisement_create(request):
     for i in list_of_dict_of_images:
         base64 = i['base64']
         image = PropertyImage(image_id=id_counter,
-                                ad_owner=poster,
-                                ad_id=ad_id,
-                                pic=base64
-                                )
+                              ad_owner=poster,
+                              ad_id=ad_id,
+                              pic=base64
+                             )
         image.save()
         id_counter_str = id_counter_str + str(id_counter) + ","
         id_counter += 1
 
-    poster = poster
     list_of_reviews = ""
     list_of_events = ""
     list_of_images = id_counter_str
@@ -288,7 +289,7 @@ def advertisement_create(request):
     house_rules = "" #data['body']['house_rules']
     booking_rules = "" #data['body']['booking_rules']
     amenities = data['body']['amenities']
-    base_price = 50 #data['body']['base_price'] # TODO frontend need to give me one
+    base_price = data['body']['base_price']
     num_guests = data['body']['nGuests']
     num_bedrooms = data['body']['nBedrooms']
     num_bathrooms = data['body']['nBathrooms']
@@ -296,9 +297,9 @@ def advertisement_create(request):
     city = data['body']['city']
     zip_code = data['body']['zipCode']
 
-    #lat, long = position(address)
-    latitude = 0 #lat
-    longitude = 0 #long
+    lat, long = position(address)
+    latitude = lat
+    longitude = long
 
     ad = Advertisement(
             ad_id = ad_id,
@@ -322,7 +323,7 @@ def advertisement_create(request):
             zip_code = zip_code,
             latitude = latitude,
             longitude = longitude,
-        )
+         )
     ad.save()
 
     temp_ad = Advertisement.objects.filter(ad_id=ad_id, poster=poster)
@@ -358,7 +359,7 @@ def advertisement_delete(request):
     ad_id = data['body']['ad_id']
 
     print('-----------> inside DELETE advertisement <-----------\n',
-          poster, '\n------------------------')
+          'poster: ', poster, '\n------------------------')
 
     ad = Advertisement.objects.filter(poster=poster, ad_id=ad_id)
 
@@ -386,7 +387,6 @@ def advertisement_delete(request):
             new_list_of_ads = '' # contruct the string again to put back into db
             for i in new_list:
                 new_list_of_ads = new_list_of_ads + i + ','
-
         u.set_list_of_ads(new_list_of_ads)
 
         # delete all instances of this ad's reviews
@@ -412,22 +412,21 @@ def advertisement_delete(request):
         return HttpResponse(status=400)
 
 
-#------------------------------Advertisement Reviews ------------------------------#
+#------------------------------Advertisement Reviews (booker) ------------------------------#
 
 def review_get(request):
     """
-    Give all reviews this advertisement owns,
+    Give all reviews this advertisement's owns,
     identified by ad_owner and ad_id.
     (Model: Accommodation_Review)
     """
 
+    print('-----------> inside GET Review <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'email' in request.GET and 'ad_id' in request.GET:
         ad_owner = request.GET['email']
         ad_id = request.GET['ad_id']
-
-        print('-----------> inside GET Review <-----------\n', \
-              'ad_owner: ', ad_owner, ', ad_id: ', ad_id, \
-              '\n------------------------')
 
         try:
             rev = Accommodation_Review.objects.filter(ad_owner=ad_owner, ad_id=ad_id)
@@ -441,24 +440,26 @@ def review_get(request):
 
         return JsonResponse(serializer.data, safe=False)
     else:
-        return HttpResponse(status=404)
+        return HttpResponse(status=400)
 
 
 def review_create(request):
     """
     Create a new review for this advertisement,
-    identified by ad_id and ad_owner.
+    identified by ad_id and ad_owner, reviewer.
+    The reviewer is the person currently logged in.
     (Model: Advertisement_Review)
     """
 
     data = JSONParser().parse(request)
+
     ad_owner = data['body']['ad_owner']
     ad_id = data['body']['ad_id']
 
     reviewer = data['user']['email']
 
-    print('-----------> inside CREATE Review <-----------\n', \
-          'ad_owner: ', ad_owner, ', ad_id: ', ad_id,         \
+    print('-----------> inside CREATE Review <-----------\n',
+          'ad_owner: ', ad_owner, ', ad_id: ', ad_id,
           ', reviewer: ', reviewer, '\n------------------------')
 
     # Find the next rev_id for this ads's review
@@ -524,6 +525,7 @@ def review_create(request):
 def review_update(request):
     """
     Updates Advertisement Review for the given rev_id, ad_id and ad_owner.
+    Only the reviewer should be updating.
     (Model: Advertisement_Review)
     """
 
@@ -550,13 +552,14 @@ def review_update(request):
     review.set_rating(rating)
     review.set_message(message)
 
-    return HttpResponse(status=201)
+    return HttpResponse(status=200)
 
 
 def review_delete(request):
     """
     Deletes the advertisement review for the given rev_id,
     ad_id and ad_owner.
+    Only the reviewer should be deleting review.
     (Model: Advertisement_Review)
     """
 
@@ -625,7 +628,6 @@ def review_delete(request):
             # contruct the string again to put back into db
             for i in new_list:
                 new_list_of_posted_revs = new_list_of_posted_revs + i + ';'
-
         a.set_list_of_posted_reviews(new_list_of_posted_revs)
 
         print('-----------> If deleted this should be empty ', rev, \
@@ -636,7 +638,7 @@ def review_delete(request):
         return HttpResponse(status=400)
 
 
-#------------------------------Advertisement Events ------------------------------#
+#------------------------------Advertisement Events (booker) ------------------------------#
 
 def event_get(request):
     """
@@ -644,12 +646,12 @@ def event_get(request):
     (Model: Event)
     """
 
+    print('-----------> inside GET Event <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'email' in request.GET and 'ad_id' in request.GET:
         poster = request.GET['email']
         ad_id = request.GET['ad_id']
-
-        print('-----------> inside GET Event <-----------\n', poster, \
-              ' ad_id: ', ad_id, '\n------------------------')
 
         try:
             event = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
@@ -663,13 +665,14 @@ def event_get(request):
 
         return JsonResponse(serializer.data, safe=False)
     else:
-        return HttpResponse(status=404)
+        return HttpResponse(status=400)
 
 
 def event_create(request):
     """
-    Create a new event for this advertisement, identified by ad_owner (email)
-    ad_id and booker (email).
+    Create a new event for this advertisement,
+    identified by poster_id (integer), ad_id, and booker (email).
+    Booker is the user that is currently logged in.
     (Model: Event)
     """
 
@@ -680,11 +683,19 @@ def event_create(request):
 
     booker = data['user']['email']
 
-    print('-----------> inside CREATE Event <-----------\n ad_owner: ', \
+    print('-----------> inside CREATE Event <-----------\n poster_id: ', \
           poster_id, '\n booker: ', booker, '\n------------------------')
 
     u = Advertisement.objects.get(ad_id=ad_id, poster_id=poster_id)
     ad_owner = u.get_poster()
+
+    # for email
+    user_profile = User_Profile.objects.get(email=ad_owner)
+    poster_name = user_profile.get_name()
+    property_name = u.get_accommodation_name()
+
+    booker_user_profile = User_Profile.objects.get(email=booker)
+    booker_name = booker_user_profile.get_name()
 
     # Find the next event id for this event
     str_of_id = u.get_event_ids()
@@ -703,56 +714,85 @@ def event_create(request):
         event_id = new_id
 
     checkIn = data['detail']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-    checkout = data['detail']['end_day'].split('T')  # only want 2018-09-30
+    checkIn = datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+    checkOut = data['detail']['end_day'].split('T')  # only want 2018-09-30
+    checkOut = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
 
-    start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+    start_day = checkIn
     start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-    end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
+    end_day = checkOut
     end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
     booking_status = "booked"
     notes = "number of guests " + str(data['detail']['guest'])
 
-    event = Event(
-            event_id=event_id,
-            ad_owner=ad_owner,
-            ad_id=ad_id,
-            booker=booker,
-            start_day=start_day,
-            start_day_start_time=start_day_start_time,
-            end_day=end_day,
-            end_day_end_time=end_day_end_time,
-            booking_status=booking_status,
-            notes=notes
-            )
-    event.save()
+    today_date = datetime.today()
+    today_date = str(today_date).split()
+    today_date = datetime.strptime(today_date[0], "%Y-%m-%d").date()
+    if checkIn < today_date: # can't book in the pass
+        print('Check in date is in the past.')
+        return HttpResponse(status=400)
+    elif checkIn > checkOut:
+        print('Check out date is before check in date.')
+        return HttpResponse(status=400)
 
-    temp_event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
+    # is_clashing = True means there is a clash so invalid booking dates
+    is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner)
 
-    if temp_event.exists() and len(temp_event) == 1:
+    if not is_clashing:
+        event = Event(
+                event_id=event_id,
+                ad_owner=ad_owner,
+                ad_id=ad_id,
+                booker=booker,
+                start_day=start_day,
+                start_day_start_time=start_day_start_time,
+                end_day=end_day,
+                end_day_end_time=end_day_end_time,
+                booking_status=booking_status,
+                notes=notes
+                )
+        event.save()
 
-        # update ad's list_of_events
-        a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
-        str_of_event_ids = a.get_event_ids()
-        if str_of_event_ids == None or str_of_event_ids == "":
-            new_str_of_events = str(event_id) + ',' # first review for this ad
+        temp_event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
+
+        if temp_event.exists() and len(temp_event) == 1:
+
+            # update ad's list_of_events
+            a = Advertisement.objects.get(ad_id=ad_id, poster=ad_owner)
+            str_of_event_ids = a.get_event_ids()
+            if str_of_event_ids == None or str_of_event_ids == "":
+                new_str_of_events = str(event_id) + ',' # first review for this ad
+            else:
+                new_str_of_events = str_of_event_ids + str(event_id) + ','
+            a.set_event_ids(new_str_of_events)
+
+            # update user profile list_of_rentals
+            u = User_Profile.objects.get(email=booker)
+            str_of_rentals = u.get_list_of_rentals()
+            # string format: (ad_owner, ad_id, event_id);
+            if str_of_rentals == None or str_of_rentals == "":
+                # first rental for this booker
+                new_str_of_rentals = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
+            else:
+                new_str_of_rentals = str_of_rentals + \
+                    '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
+            u.set_list_of_rentals(new_str_of_rentals)
+
+            # send emails
+            booked_period = str(checkIn) + " to " + str(checkOut)
+            subject = 'Property ' + property_name + ' just got booked'
+            h_email = host_email(poster_name, property_name, booked_period, booker_name)
+            send_email(ad_owner, h_email, subject)
+
+            subject = 'Confirmation of booking accommodation: ' + property_name
+            b_email = booker_email(booker_name, property_name, booked_period)
+            send_email(booker, b_email, subject)
+
+            return HttpResponse(status=201)
         else:
-            new_str_of_events = str_of_event_ids + str(event_id) + ','
-        a.set_event_ids(new_str_of_events)
-
-        # update user profile list_of_rentals
-        u = User_Profile.objects.get(email=booker)
-        str_of_rentals = u.get_list_of_rentals()
-        # string format: (ad_owner, ad_id, event_id);
-        if str_of_rentals == None or str_of_rentals == "":
-            # first rental for this booker
-            new_str_of_rentals = '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
-        else:
-            new_str_of_rentals = str_of_rentals + \
-                '(' + ad_owner + ',' + str(ad_id) + ',' + str(event_id) + ');'
-        u.set_list_of_rentals(new_str_of_rentals)
-
-        return HttpResponse(status=201)
+            return HttpResponse(status=400)
     else:
+        print('Overlapping Dates')
         return HttpResponse(status=400)
 
 
@@ -781,24 +821,61 @@ def event_update(request):
         event = event[0]
 
         checkIn = data['body']['start_day'].split('T') # '2018-09-30T14:00:00.000Z'
-        checkout = data['body']['end_day'].split('T')  # only want 2018-09-30
+        checkIn = datetime.strptime(checkIn[0], "%Y-%m-%d").date()
+        checkOut = data['body']['end_day'].split('T')  # only want 2018-09-30
+        checkOut = datetime.strptime(checkOut[0], "%Y-%m-%d").date()
 
-        start_day =  datetime.strptime(checkIn[0], "%Y-%m-%d").date()
-        start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-        end_day = datetime.strptime(checkout[0], "%Y-%m-%d").date()
-        end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
-        booking_status = "booked"
-        notes = "number of guests " + str(data['body']['guest'])
+        today_date = datetime.today()
+        today_date = str(today_date).split()
+        today_date = datetime.strptime(today_date[0], "%Y-%m-%d").date()
+        if checkIn < today_date: # can't book in the pass
+            print('Check in date is in the past.')
+            return HttpResponse(status=400)
+        elif checkIn > checkOut:
+            print('Check out date is before check in date.')
+            return HttpResponse(status=400)
 
-        event.set_booker(booker)
-        event.set_start_day(start_day)
-        event.set_start_day_start_time(start_day_start_time)
-        event.set_end_day(end_day)
-        event.set_end_day_end_time(end_day_end_time)
-        event.set_booking_status(booking_status)
-        event.set_notes(notes)
+        # is_clashing = True means there is a clash so invalid booking dates
+        is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner, event_id=int(event_id))
 
-        return HttpResponse(status=201)
+        if not is_clashing:
+            start_day = checkIn
+            start_day_start_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+            end_day = checkOut
+            end_day_end_time = datetime.strptime('00:00:00', "%H:%M:%S").time() # default midnight
+            booking_status = "booked"
+            notes = "number of guests " + str(data['body']['guest'])
+
+            event.set_start_day(start_day)
+            event.set_start_day_start_time(start_day_start_time)
+            event.set_end_day(end_day)
+            event.set_end_day_end_time(end_day_end_time)
+            event.set_booking_status(booking_status)
+            event.set_notes(notes)
+
+            # send emails
+            booker_profile = User_Profile.objects.get(email=booker)
+            booker_name = booker_profile.get_name()
+
+            owner_profile = User_Profile.objects.get(email=ad_owner)
+            poster_name = owner_profile.get_name()
+
+            prop = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
+            property_name = prop.get_accommodation_name()
+
+            booked_period = str(checkIn) + " to " + str(checkOut)
+            subject = 'Property ' + property_name + ' has changed details'
+            h_email = host_email(poster_name, property_name, booked_period, booker_name)
+            #send_email(ad_owner, h_email, subject)
+
+            subject = 'Confirmation of changes to booking accommodation: ' + property_name
+            b_email = booker_email(booker_name, property_name, booked_period)
+            #send_email(booker, b_email, subject)
+
+            return HttpResponse(status=200)
+        else:
+            print('Overlapping Dates')
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=400)
 
@@ -891,12 +968,12 @@ def image_get(request):
     (Model: PropertyImage)
     """
 
+    print('-----------> inside GET Image <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'email' in request.GET and 'ad_id' in request.GET:
         poster = request.GET['email']
         ad_id = request.GET['ad_id']
-
-        print('-----------> inside GET Images <-----------\n', poster, \
-              '\n------------------------')
 
         try:
             images = PropertyImage.objects.filter(ad_owner=poster, ad_id=ad_id)
@@ -945,9 +1022,6 @@ def image_create(request):
         new_id = max_id + 1
         image_id = new_id
 
-    image_id = data['body']['image_id']
-    ad_owner = data['body']['ad_owner']
-    ad_id = data['body']['ad_id']
     pic = data['body']['pic']
 
     image = PropertyImage(
@@ -978,7 +1052,7 @@ def image_create(request):
 
 def image_update(request):
     """
-    Updates image, identified by email and ad_id.
+    Updates image, identified by image_id, poster (email) and ad_id.
     (Model: PropertyImage)
     """
 
@@ -1001,14 +1075,15 @@ def image_update(request):
 
         image.set_pic(pic)
 
-        return HttpResponse(status=201)
+        return HttpResponse(status=200)
     else:
-        return HttpResponse(status=400)
+        return HttpResponse(status=404)
 
 
 def image_delete(request):
     """
     Deletes the image with image_id, ad_owner and ad_id.
+    (Model: PropertyImage)
     """
 
     data = JSONParser().parse(request)
@@ -1062,26 +1137,24 @@ def image_delete(request):
 def get_single_ad(request):
     """
     Gives ONE ad, identified by email and ad_id.
+    With the ad, it also gives the ad's images, events, and reviews.
     (Model: Advertisement)
     """
-    print('inside', request.GET)
+
+    print('-----------> inside GET single_ad <-----------\n',
+          'data given: ', request.GET, '\n')
+
     if 'poster_id' in request.GET and 'ad_id' in request.GET:
         poster_id = request.GET['poster_id']
         ad_id = request.GET['ad_id']
 
-        print('-----------> inside GET SINGLE advertisement <-----------\n', \
-              poster_id, '\n------------------------')
-
         ad = Advertisement.objects.get(poster_id=poster_id, ad_id=ad_id)
-        ad_id = ad.get_ad_id()
-        email = ad.get_poster()
+        poster = ad.get_poster()
 
         # Get image id's from the ad model
         image_ids_str = ad.get_image_ids()
         image_ids = []
-        counter = 0
         for i in image_ids_str.split(','):
-            counter += 1
             if i == '':
                 continue
             else:
@@ -1091,9 +1164,7 @@ def get_single_ad(request):
         # Get event ids
         event_ids_str = ad.get_event_ids()
         event_ids = []
-        counter = 0
         for i in event_ids_str.split(','):
-            counter += 1
             if i == '':
                 continue
             else:
@@ -1103,9 +1174,7 @@ def get_single_ad(request):
         # Get review ids
         rev_ids_str = ad.get_rev_ids()
         rev_ids = []
-        counter = 0
         for i in rev_ids_str.split(','):
-            counter += 1
             if i == '':
                 continue
             else:
@@ -1114,77 +1183,30 @@ def get_single_ad(request):
 
         # Contruct JSON with both the SINGLE ad and
         # all it's images, events, reviews
-        ad = Advertisement.objects.get(poster_id=poster_id, ad_id=ad_id)
+        ad = Advertisement.objects.get(poster=poster, ad_id=ad_id)
         adSerializer = AdvertisementSerializer(ad).data
 
-        images = PropertyImage.objects.filter(ad_owner=email, ad_id=ad_id)
+        images = PropertyImage.objects.filter(ad_owner=poster, ad_id=ad_id)
         imageSerializer = PropertyImageSerializer(images, many=True).data
 
-        events = Event.objects.filter(ad_owner=email, ad_id=ad_id)
+        events = Event.objects.filter(ad_owner=poster, ad_id=ad_id)
         eventSerializer = EventSerializer(events, many=True).data
 
-        review = Accommodation_Review.objects.filter(ad_owner=email, ad_id=ad_id)
+        review = Accommodation_Review.objects.filter(ad_owner=poster, ad_id=ad_id)
         reviewSerializer = AccommodationReviewSerializer(review, many=True).data
 
         querylist = [adSerializer, imageSerializer, eventSerializer, reviewSerializer]
 
-        print(querylist)
+        #print(querylist)
 
         return JsonResponse(querylist, safe=False)
     else:
         return HttpResponse(status=400)
 
-        '''
-        try:
-            ad = Advertisement.objects.get(poster=email, ad_id=ad_id)
-        except Advertisement.DoesNotExist:
-            return HttpResponse(status=404)
-
-        serializer = AdvertisementSerializer(ad)
-
-        print('-----------> data given to frontend <-----------\n', \
-              serializer.data, '\n------------------------')
-
-        return JsonResponse(serializer.data)
-        '''
-
-        '''
-        SAMPLE output
-        [   {'ad_id': 1,
-            'poster': 'Stuart@example.com',
-            'list_of_reviews': '1,',
-            'list_of_events': None,
-            'list_of_images': '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,',
-            'accommodation_name': 'Sydney City & Harbour at the door',
-            'accommodation_description': "Come stay with Vinh & Stuart ... reserve",
-            'property_type': 'Townhouse',
-            'house_rules': 'We look forward ...',
-            'booking_rules': 'no cancellation',
-            'amenities': 'TV,Internet,Wifi,Air conditioning',
-            'base_price': 98.0,
-            'num_guests': 2,
-            'num_bedrooms': 1,
-            'num_bathrooms': 1.0,
-            'address': 'Pyrmont',
-            'city': 'Pyrmont, Australia',
-            'zip_code': '2009',
-            'latitude': -33.86515255,
-            'longitude': 151.1918959
-            },
-            [   OrderedDict([('id', 11),
-                              ('image_id', 1),
-                              ('ad_owner', 'Stuart@example.com'),
-                              ('ad_id', 1),
-                              ('pic', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAYCqq2muYpGTyT//2Q==.....')]),
-                OrderedDict([('id',.....')])
-            ]
-        ]
-        '''
-
 
 def get_all_ads(request):
     """
-    Gets all the ads in the db.
+    Gets all the ads in the database.
     (Model: Advertisement)
     """
 
@@ -1208,19 +1230,16 @@ def get_users_ads(request):
     Gets all the ads, images, events, and reviews for this user.
     """
 
-    print("params give: ", request.GET, "\n")
+    print('-----------> inside GET users_ads <-----------\n',
+          'data given: ', request.GET, '\n')
 
     if 'email' in request.GET:
         email = request.GET['email']
-
-        print('-----------> inside GET get_users_ads\n',
-              email, '\n------------------------')
 
         try:
             ads = Advertisement.objects.filter(poster=email)
         except Advertisement.DoesNotExist:
             return HttpResponse(status=404)
-
 
         querylist = []
 
@@ -1242,15 +1261,14 @@ def get_users_ads(request):
                 'events': eventsSerializer,
                 'reviews': reviewsSerializer
             }
-
             querylist.append(temp_dict)
 
-        print('-----------> data given to frontend <-----------\n', \
-              querylist, '\n------------------------')
+        #print('-----------> data given to frontend <-----------\n', \
+        #      querylist, '\n------------------------')
 
         return JsonResponse(querylist, safe=False)
     else:
-        return HttpResponse(status=404)
+        return HttpResponse(status=400)
 
 
 def get_prop_requests(request):
@@ -1275,6 +1293,10 @@ def get_prop_requests(request):
 
 
 def create_prop_request(request):
+    """
+    Creates a property request.
+    (Model: PropertyRequest)
+    """
 
     data = JSONParser().parse(request)
 
@@ -1285,9 +1307,7 @@ def create_prop_request(request):
     p = PropertyRequest(name=name, email=email, text=text)
     p.save()
 
-    #temp = PropertyRequest.objects.get(p.id)
-    #p.set_id(temp.id)
-
+    # this allows frontend view to refesh with new request
     try:
         a = PropertyRequest.objects.all()
     except PropertyRequest.DoesNotExist:
@@ -1300,18 +1320,19 @@ def create_prop_request(request):
 
 def update_prop_request(request):
     """
-    Posts a property request.
+    Updates a property request.
+    (Model: PropertyRequest)
     """
 
-    print('-----------> inside POST property request <-----------\n')
+    print('-----------> inside UPDATE property request <-----------\n')
 
     data = JSONParser().parse(request)
 
     name = data['body']['name']
     email = data['body']['email']
     text = data['body']['detail']
+
     id = data['body']['id']
-    #im_id = data['body']['im_id']
 
     p = PropertyRequest.objects.get(pk=id)
     p.set_name(name)
@@ -1368,15 +1389,21 @@ def search(request):
         maxPrice = request.GET['maxPrice']
     if 'distance' in request.GET:
         distance = request.GET['distance']
+    if 'lat' in request.GET:
+        lat = request.GET['lat']
+    if 'lng' in request.GET:
+        long = request.GET['lng']
 
     print('-----------> inside GET search <-----------\n',
-          'checkin: ', checkIn,
+          'checkIn: ', checkIn,
           '\ncheckOut: ', checkOut,
           '\nlocation: ', location,
           '\nnGuests: ', nGuests,
           '\nminPrice: ', minPrice,
           '\nmaxPrice: ', maxPrice,
           '\ndistance', distance,
+          '\nlat', lat,
+          '\nlong', long,
           '\n'
          )
 
@@ -1395,14 +1422,14 @@ def search(request):
     for a in ads:
 
         search_distance = None
-        if location != "null" and location != "":
+        if lat != "null" and lat != "" and long != "null" and long != "":
 
-            search_latitude, search_longitude = 0, 0 #position(location)
-            search_loc = (search_longitude, search_latitude)
+            search_latitude, search_longitude = lat, long
+            search_loc = (float(search_longitude), float(search_latitude))
 
             ads_latitude = a.get_latitude()
             ads_longitude = a.get_longitude()
-            ads_loc = (ads_longitude, ads_latitude)
+            ads_loc = (float(ads_longitude), float(ads_latitude))
 
             if distance != "null" and distance != "":
                 search_distance = float(distance)
@@ -1421,32 +1448,17 @@ def search(request):
 
         is_clashing = None
         if checkIn != "null" and checkOut != "null" and checkIn != "" and checkOut != "":
-            event_ids = a.get_event_ids()
-            # convert string into list
-            event_ids = event_ids.split(',')
 
-            is_clashing = False
-            for i in event_ids:
-                if i == "":
-                    continue
-                i = int(i)
-                e = Event.objects.get(event_id=i, ad_owner=a.poster, ad_id=a.ad_id)
-
-                checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
-                checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
-
-                if checkIn >= e.get_start_day() and checkIn <= e.get_end_day():
-                    is_clashing = True
-                elif checkIn == e.get_start_day() or checkIn == e.get_end_day():
-                    is_clashing = True
-                elif checkOut >= e.get_start_day() and checkOut <= e.get_end_day():
-                    is_clashing = True
-                elif checkOut == e.get_start_day() or checkOut == e.get_end_day():
-                    is_clashing = True
-
+            checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
+            checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
+            ad_id = a.ad_id
+            ad_owner = a.poster
+            is_clashing = check_overlap(checkIn, checkOut, ad_id, ad_owner)
+            # check_overlap returns True if there is a clash of events
+            # so we only add event if is_clash returns False
+            # not False = True, which means we go into if statement
+            # and add event
             if not is_clashing:
-                # if it's not clashing then is_clashing would equal False
-                # so not is_clashing equals true
                 pk_list.append(a.pk)
 
         if is_clashing == None: # checkIn & checkOut was not given
@@ -1454,16 +1466,21 @@ def search(request):
 
     # here we use the actual primary keys given buy the database
     suitable_ads = Advertisement.objects.filter(pk__in=pk_list)
-    #adSerializer = AdvertisementSerializer(suitable_ads, many=True)
+
 
     querylist = []
     for a in suitable_ads:
-        ad = Advertisement.objects.get(poster=a.poster, ad_id=a.ad_id)
-        adSerializer = AdvertisementSerializer(ad).data
+        adSerializer = AdvertisementSerializer(a).data
+
         images = PropertyImage.objects.filter(ad_owner=a.poster, ad_id=a.ad_id)
-        imSerializer = PropertyImageSerializer(images, many=True).data
-        querylist.append(adSerializer)
-        querylist.append(imSerializer)
+        imagesSerializer = PropertyImageSerializer(images, many=True).data
+
+        temp_dict = {
+            'ad': adSerializer,
+            'images': imagesSerializer,
+        }
+
+        querylist.append(temp_dict)
 
     #print(querylist)
     print('DONE SEARCHING')
@@ -1510,6 +1527,48 @@ def bookers_bookings(request):
         return JsonResponse(eventSerializer.data, safe=False)
     else:
         return HttpResponse(status=400)
+
+
+#------------------------------ Event Validity Functions ------------------------------#
+
+def check_overlap(checkIn, checkOut, ad_id, ad_owner, event_id = None):
+    """
+    checkIn and checkOut MUST be of type "datetime.date".
+    checkIn = datetime.strptime(str(checkIn), "%Y-%m-%d").date()
+    checkOut = datetime.strptime(str(checkOut), "%Y-%m-%d").date()
+
+    Given two dates representing an event/booking,
+    this function will check if it overlaps with existing events/bookings
+    for this advertisement.
+    """
+
+    is_clashing = False
+    events = Event.objects.filter(ad_id=ad_id, ad_owner=ad_owner)
+    for e in events:
+        if event_id == e.get_event_id():
+            # when updating event we don't want to check it against itself
+            continue
+        else:
+            start = e.get_start_day()
+            end   = e.get_end_day()
+            if checkIn == start or checkIn == end or \
+               checkOut == start or checkOut == end:
+                is_clashing = True
+                break
+            elif start < checkIn and checkOut < end:
+                is_clashing = True
+                break
+            elif checkIn < start and end < checkOut:
+                is_clashing = True
+                break
+            elif start < checkIn and checkIn < end and end < checkOut:
+                is_clashing = True
+                break
+            elif checkIn < start and start < checkOut and checkOut < end:
+                is_clashing = True
+                break
+
+    return is_clashing
 
 
 #------------------------------Test Views------------------------------#

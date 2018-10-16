@@ -28,6 +28,7 @@
     "vue-material": "^1.0.0-beta-10.2",
     "vue-plain-slider": "^1.1.0",
     "vue-router": "^3.0.1",
+    "vue2-google-maps": "^0.10.2",
     "vuejs-datepicker": "^1.5.3",
     "vuelidate": "^0.7.4"
   },
