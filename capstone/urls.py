@@ -28,6 +28,12 @@ from django.contrib import admin
 
 from catalog import views
 
+'''
+NOTE:
+
+    - first refers to the part of the email before the @ sign
+    - second refers to the part of the email after the @ sign
+'''
 
 urlpatterns = [
 

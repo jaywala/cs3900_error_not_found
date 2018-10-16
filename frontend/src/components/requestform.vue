@@ -47,13 +47,15 @@ import axios from 'axios'
       submit() {
         this.message.name = this.getProfile().nickname
         this.message.email = this.getProfile().email
-        this.request.push(this.message)
         axios.post("http://localhost:8000/post/PropertyRequest/create/",{body: this.message})
         .then(response => {
           // JSON responses are automatically parsed.
           console.log(response.data)
           this.request = response.data
         })
+        window.setTimeout(() => {
+          this.message.detail = null
+        }, 150)
       },
       getProfile(){
         return router.app.$auth.getUserProfile()

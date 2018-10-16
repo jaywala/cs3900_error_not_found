@@ -145,14 +145,6 @@
       <img src="" width="50%" alt="" :src="img.base64" v-for="img in files">
     </div>
 
-
-
-    <div v-if="files.length != 0">
-      <h3 class="text-center mt-25">Callback Object</h3>
-      <div class="pre-container" align="left">
-        <pre>{{ files }}</pre>
-      </div>
-    </div>
   </div>
 </template>
 

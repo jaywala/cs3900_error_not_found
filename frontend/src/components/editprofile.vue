@@ -1,20 +1,18 @@
 <template >
-  <div id="app" class="container content">
-  <h1 v-if="authenticated()">{{this.message}}</h1>
+  <div id="app" class="container content" style = "margin-top: 100px">
   <md-field>
-      <label>Initial Value</label>
+      <label>Given name</label>
       <md-input v-model="this.message.given_name"></md-input>
     </md-field>
     <md-field>
-      <label>Initial Value</label>
+      <label>Family name</label>
       <md-input v-model="this.message.family_name"></md-input>
     </md-field>
     <md-field>
-      <label>Initial Value (Read Only)</label>
+      <label>E-mail (Read-Only)</label>
       <md-input v-model="this.message.email" readonly></md-input>
     </md-field>
     <md-button class="md-dense md-raised md-primary" @click = "submit()">submit</md-button>
-  <h2>hello</h2>
 </div>
 </template>
 
@@ -58,9 +56,10 @@ export default {
   },
   mounted () {
     this.url = "http://localhost:8000/get/user/"
-    axios.get(this.url,{email:this.$auth.getUserProfile().email})
+    axios.get(this.url,{params:{email:this.$auth.getUserProfile().email}})
     .then(response => {
       // JSON responses are automatically parsed.
+      console.log(response.data)
       this.message = response.data
     })
     .catch(e => {
