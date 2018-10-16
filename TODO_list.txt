@@ -96,5 +96,3 @@ TODO
             2. ad_id, id of ad --> data['body']['ad_id']
 
 - {both ends} make & check request module works (dumb feature) for update
-
-- {are we allowing the deletion of events???} only delete event if the status is booked, don't allow delete if status is finished

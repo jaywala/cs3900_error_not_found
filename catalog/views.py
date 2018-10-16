@@ -1194,6 +1194,7 @@ def get_single_ad(request):
 
         review = Accommodation_Review.objects.filter(ad_owner=poster, ad_id=ad_id)
         reviewSerializer = AccommodationReviewSerializer(review, many=True).data
+        #print('im', imageSerializer, 'ev', eventSerializer, 'rev', reviewSerializer)
 
         querylist = [adSerializer, imageSerializer, eventSerializer, reviewSerializer]
 
