@@ -121,6 +121,31 @@
 
     </div>
 
+    <div class="map">
+      <GmapMap
+        :center="{lat:-33.8688, lng:151.2099}"
+        :zoom="12"
+        map-type-id="terrain"
+        style="width: 100%; height: 500px"
+      >
+      <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
+        
+        {{infoContent}}
+      </gmap-info-window>
+
+        <GmapMarker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :draggable="false"
+          @mouseover="toggleInfoWindow(m,i)"
+          @mouseout="toggleInfoWindow(m,i)"
+          @click="accessDetailsPage(m,i)"
+        />
+      </GmapMap>
+    </div>
+
     <div id="search-result">
 
       <!-- Results -->
@@ -193,6 +218,29 @@ export default {
   },
   data() {
     return {
+      infoContent: '',
+      infoWindowPos: null,
+      infoWinOpen: false,
+      currentMidx: null,
+      //optional: offset infowindow so it visually sits nicely on top of our marker
+      infoOptions: {
+        pixelOffset: {
+          width: 0,
+          height: -35
+        }
+      },
+      markers: [{
+          position: {
+            lat: 10.0,
+            lng: 10.0
+          }
+        }, {
+          position: {
+            lat: 11.0,
+            lng: 11.0
+          }
+        }],
+      errors: [],
       showGuestsDialog: false,
       showPriceDialog: false,
       showDistanceDialog: false,
@@ -226,6 +274,23 @@ export default {
     },
   },
   methods: {
+    accessDetailsPage(marker,idx) {
+      window.location.replace(marker.detailsLink)
+    },
+    toggleInfoWindow: function(marker, idx) {
+      this.infoWindowPos = marker.position;
+      this.infoContent = marker.infoText;
+      //check if its the same marker that was selected if yes toggle
+      if (this.currentMidx == idx) {
+        this.infoWinOpen = !this.infoWinOpen;
+      }
+      //if different marker set infowindow to open and reset current marker index
+      else {
+        this.infoWinOpen = true;
+        this.currentMidx = idx;
+      }
+    },
+
     formatDates(dateOne, dateTwo) {
       let formattedDates = ''
       if (dateOne) {
@@ -292,10 +357,28 @@ export default {
         console.log("response data: ")
         console.log(response.data)
         this.ads = response.data
+
+        // Load Markers
+        var markers = []
+        var step;
+        for (step = 0; step < this.ads.length; step++) {
+          markers.push({
+              position: {
+                lat: this.ads[step].ad.latitude,
+                lng: this.ads[step].ad.longitude
+              },
+              infoText: this.ads[step].ad.accommodation_name,
+              detailsLink: "/detail/"+this.ads[step].ad.poster_id+"/"+this.ads[step].ad.ad_id
+              
+            })
+        }
+
+        this.markers = markers;
       })
       .catch(e => {
 
-        _this.errors.push(e)
+        this.errors.push(e)
+        alert(this.errors)
       })
     },
     initMap() {
