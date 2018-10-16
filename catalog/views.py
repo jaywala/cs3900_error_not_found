@@ -19,6 +19,7 @@ from .send_email import host_email, booker_email, send_email
 from datetime import datetime, time
 import math
 import subprocess
+import os
 
 #------------------------------User_Profile (booker, poster) ------------------------------#
 
@@ -795,8 +796,11 @@ def event_create(request):
             # send emails
             booked_period = str(checkIn) + " to " + str(checkOut)
             subject = 'Property ' + property_name + ' just got booked'
+
+            current_path = os.path.dirname(os.path.abspath(__file__))
+            run_path = current_path + '/send_email.py'
             try:
-                temp_var = subprocess.run(['python3 send_email.py host',
+                temp_var = subprocess.run(['python3', run_path, 'host',
                 poster_name, property_name, booked_period, booker_name,
                 ad_owner, subject])
 
@@ -810,7 +814,7 @@ def event_create(request):
 
             subject = 'Confirmation of booking accommodation: ' + property_name
             try:
-                temp_var = subprocess.run(['python3 send_email.py booker',
+                temp_var = subprocess.run(['python3', run_path, 'booker',
                 booker_name, property_name, booked_period, booker, subject])
 
             except subprocess.CalledProcessError as e:
