@@ -70,10 +70,10 @@
 
           <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-              <a href="/" class="navbar-brand d-flex align-items-center">
+              <router-link to="/" class="navbar-brand d-flex align-items-center">
                 <i class="fas fa-home fa-2x fa-flip-vertical" style="color:#7B414C"></i>
                 <strong style="color:#7B414C">&nbsp;NotAirbnb</strong>
-              </a>
+              </router-link>
 
           <b-collapse is-nav id="nav_collapse">
 
@@ -84,10 +84,10 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
 
-              <router-link to="/"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></router-link>
 
-              <router-link to="/review/" > Trips</router-link>
-              <router-link to="/request/" >Request</router-link>
+              <b-nav-item><router-link to="/search"><i class="fas fa-search fa-1x" style="color:antiquewhite"></i></router-link></b-nav-item>
+              <b-nav-item ><router-link to = "/review" style = "color:antiquewhite">Trips</router-link></b-nav-item>
+              <b-nav-item ><router-link to = "/request" style = "color:antiquewhite">Request</router-link></b-nav-item>
 
               <b-nav-item-dropdown right no-caret>
                 <!-- Using button-content slot -->
@@ -134,7 +134,6 @@
 <script>
 import Vue from 'vue'
 import router from '@/router'
-
 // First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -147,7 +146,6 @@ if (!String.prototype.format) {
     });
   };
 }
-
 export default {
   name: 'App',
   data() {
@@ -181,9 +179,7 @@ export default {
   top: 0px;
   z-index: 10000;
 }
-
 .content {
   padding-top: 80px;
 }
-
 </style>

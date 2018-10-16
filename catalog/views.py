@@ -29,7 +29,7 @@ def user_profile_get(request):
 
     print('-----------> inside GET user_profile_get <-----------\n',
           'data given: ', request.GET, '\n')
-
+    print('email' in request.GET)
     if 'email' in request.GET:
         email = request.GET['email']
 
@@ -72,12 +72,9 @@ def user_profile_update(request):
     new_email = data['body']['email']
     new_given_name = data['body']['given_name']
     new_family_name = data['body']['family_name']
-    new_profile_pic = data['body']['picture']
-
     user.set_email(new_email)
     user.set_given_name(new_given_name)
     user.set_family_name(new_family_name)
-    user.set_profile_pic(new_profile_pic)
 
     return HttpResponse(status=200)
 
@@ -87,10 +84,18 @@ def create_user(data):
     Creates a new user profile.
     (Model: User_Profile)
     """
-
+    print(data)
     email = data['body']['email']
-    given_name = data['body']['given_name']
-    family_name = data['body']['family_name']
+
+    if 'given_name' in data['body']:
+        given_name = data['body']['given_name']
+    else:
+        given_name = ""
+    if 'family_name' in data['body']:
+        family_name = data['body']['family_name']
+    else:
+        family_name = ""
+
     profile_pic = data['body']['picture']
     list_of_ads = ""
     list_of_rentals = ""
