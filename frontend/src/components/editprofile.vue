@@ -1,7 +1,19 @@
 <template >
   <div id="app" class="container content">
   <h1 v-if="authenticated()">{{this.message}}</h1>
-  {{this.url}}
+  <md-field>
+      <label>Initial Value</label>
+      <md-input v-model="this.message.given_name"></md-input>
+    </md-field>
+    <md-field>
+      <label>Initial Value</label>
+      <md-input v-model="this.message.family_name"></md-input>
+    </md-field>
+    <md-field>
+      <label>Initial Value (Read Only)</label>
+      <md-input v-model="this.message.email" readonly></md-input>
+    </md-field>
+    <md-button class="md-dense md-raised md-primary" @click = "submit()">submit</md-button>
   <h2>hello</h2>
 </div>
 </template>
@@ -26,6 +38,9 @@ export default {
     },
     token(){
       return router.app.$auth.getAuthToken()
+    },
+    submit(){
+      axios.post('http://localhost:8000/post/user/update/',{body:this.message})
     }
   },
   data () {
@@ -42,8 +57,8 @@ export default {
     }
   },
   mounted () {
-    this.url = "http://localhost:8000/get/user/"+this.$auth.getUserProfile().email+"/"
-    axios.get(this.url)
+    this.url = "http://localhost:8000/get/user/"
+    axios.get(this.url,{email:this.$auth.getUserProfile().email})
     .then(response => {
       // JSON responses are automatically parsed.
       this.message = response.data
