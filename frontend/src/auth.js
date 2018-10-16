@@ -58,20 +58,24 @@ let auth = new Vue({
       }
     }
   },
-
+  //all methods goes here
   methods: {
+    // used for user loggin call auth0 login page
     login() {
       webAuth.authorize()
     },
+    //clear all local tokens and log out
     logout() {
       localStorage.removeItem('access_token')
       localStorage.removeItem('id_token')
       localStorage.removeItem('expires_at')
       webAuth.logout()
     },
+    //check if an user is authenticated
     isAuthenticated() {
       return new Date().getTime() < this.expiresAt
     },
+    // store token after user logged in
     handleAuthentication() {
       return new Promise((resolve, reject) => {
         webAuth.parseHash((err, authResult) => {
@@ -88,9 +92,11 @@ let auth = new Vue({
         })
       })
     },
+    //return tokens
     getAuthToken(){
       return localStorage.getItem('access_token');
     },
+    //return user profile
     getUserProfile () {
       const accessToken = localStorage.getItem('access_token')
       if (accessToken) return this.user
