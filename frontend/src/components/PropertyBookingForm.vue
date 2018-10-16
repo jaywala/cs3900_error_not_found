@@ -19,12 +19,34 @@
       <strong><div class="md-title">${{ this.message[0].base_price }}</div></strong>per night
     </md-card-header>
     <md-card-content >
+      <!--
       <md-datepicker v-model="bookdetail.start_day" >
         <label>Check In date</label>
       </md-datepicker>
       <md-datepicker v-model="bookdetail.end_day">
         <label>Check Out date</label>
       </md-datepicker>
+      -->
+    <div class="datepicker-trigger">
+      <AirbnbStyleDatepicker
+        :trigger-element-id="'datepicker-trigger'"
+        :mode="'range'"
+        :fullscreen-mobile="true"
+        :date-one="bookdetail.start_day"
+        :date-two="bookdetail.end_day"
+        :offset-y="10"
+        @date-one-selected="val => { bookdetail.start_day = val }"
+        @date-two-selected="val => { bookdetail.end_day = val }"
+      />
+
+      <div v-if="this.bookdetail.start_day && this.bookdetail.end_day" style="display: inline">
+        <input type="button" id="datepicker-trigger" class="md-button md-primary md-raised md-theme-default" :value="datesRange">
+      </div>
+      <div v-else style="display: inline">
+        <input  type="button" id="datepicker-trigger" class="md-button md-secondary md-raised md-theme-default" value="Dates">
+      </div>
+    </div>
+
       <md-field style="width:180px">
         <label for="nGuests">Number of Guests</label>
         <md-select v-model = "bookdetail.guest"name="nGuests" id="nGuests">
@@ -52,6 +74,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import router from '../router'
 import auth from '../auth'
+import format from 'date-fns/format'
 
 export default {
   name: 'LabeledDatepicker',
@@ -62,25 +85,39 @@ export default {
         (response) => { this.showSuccess = true; },
         (error) => { this.showError = true; }
       );
-    }
+    },
+
+    formatDates(dateOne, dateTwo) {
+      let formattedDates = ''
+      if (dateOne) {
+        formattedDates = format(dateOne, this.bookdetail.dateFormat)
+      }
+      if (dateTwo) {
+        formattedDates += ' - ' + format(dateTwo, this.bookdetail.dateFormat)
+      }
+      return formattedDates
+    },
   },
   data: () => ({
     showSuccess: false,
     showError: false,
     bookdetail : {
+      "dateFormat": '',
       start_day : null,
       end_day : null,
       guest : null,
     },
+    
 
     message: null
   }),
+  computed: {
+    datesRange () {
+      return this.bookdetail.start_day + "  -  " + this.bookdetail.end_day;
+    },
+  },
 
   mounted () {
-    var event1 = new Date('18 October 2018 14:48 UTC');
-    var event2 = new Date();
-    this.bookdetail.start_day = event2.toISOString()
-    this.bookdetail.end_day = event1.toISOString()
   this.user = this.bookdetail.ad_owner;
   console.log(this.$router.currentRoute)
   axios.get("http://localhost:8000/get/advertisement/single/", {params: this.$router.currentRoute.params})

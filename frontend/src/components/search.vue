@@ -28,7 +28,7 @@
         :fullscreen-mobile="true"
         :date-one="message.dateOne"
         :date-two="message.dateTwo"
-        :offset-y="10"
+        :offset-y="50"
         @date-one-selected="val => { message.dateOne = val }"
         @date-two-selected="val => { message.dateTwo = val }"
       />
