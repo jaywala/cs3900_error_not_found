@@ -466,6 +466,8 @@ def review_create(request):
     ad_id = data['event']['ad']['ad_id']
 
     reviewer = data['user']['email']
+    booker = reviewer
+    event_id = data['event']['event']['event_id']
 
     print('-----------> inside CREATE Review <-----------\n',
           'ad_owner: ', ad_owner, ', ad_id: ', ad_id,
@@ -501,6 +503,11 @@ def review_create(request):
             )
     review.save()
 
+
+    e = Event.objects.get(ad_owner=ad_owner, ad_id=ad_id, event_id=event_id)
+    # change Event status to reviewed
+    e.set_booking_status('reviewed')
+
     temp_review = Accommodation_Review.objects.filter(rev_id=rev_id, ad_id=ad_id, ad_owner=ad_owner)
 
     if temp_review.exists() and len(temp_review) == 1:
@@ -526,7 +533,51 @@ def review_create(request):
                 '(' + ad_owner + ',' + str(ad_id) + ',' + str(rev_id) + ');'
         u.set_list_of_posted_reviews(new_str_of_posted_revs)
 
-        return HttpResponse(status=201)
+        # return data
+
+        u = User_Profile.objects.get(email=booker)
+
+        # string format: (ad_owner, ad_id, event_id);
+        str_of_bookings = u.get_list_of_rentals()
+        list_of_bookings = str_of_bookings.split(';')
+
+        event_pks = []
+        for i in list_of_bookings:
+
+            if i == "" or i == "null":
+                continue
+
+            str_event = i.split(',')
+            ad_owner = str_event[0].replace('(', "")
+            ad_id = str_event[1]
+            event_id = str_event[2].replace(")", "")
+            print('here-->', ad_owner, ad_id, event_id)
+            e = Event.objects.get(event_id=int(event_id), ad_owner=ad_owner,
+                                  ad_id=int(ad_id))
+            event_pks.append(e.pk)
+
+        bookers_events = Event.objects.filter(pk__in=event_pks)
+
+        querylist = []
+        for ev in bookers_events:
+
+            ad = Advertisement.objects.get(poster=ev.ad_owner, ad_id=ev.ad_id)
+            reviewer =  ev.get_booker()
+            rev = Accommodation_Review.objects.get(reviewer=reviewer, ad_owner=ad_owner)
+            revSerializer = AccommodationReviewSerializer(rev).data
+            adSerializer = AdvertisementSerializer(ad).data
+            eventSerializer = EventSerializer(ev).data
+
+
+            temp_dict = {
+                'ad': adSerializer,
+                'event': eventSerializer,
+                'review': revSerializer,
+             }
+
+            querylist.append(temp_dict)
+
+        return JsonResponse(querylist, safe=False)
     else:
         return HttpResponse(status=400)
 
@@ -1029,10 +1080,14 @@ def event_delete(request):
             ad = Advertisement.objects.get(poster=ev.ad_owner, ad_id=ev.ad_id)
             adSerializer = AdvertisementSerializer(ad).data
             eventSerializer = EventSerializer(ev).data
+            reviewer =  booker
+            rev = Accommodation_Review.objects.get(reviewer=reviewer, ad_owner=ad_owner)
+            revSerializer = AccommodationReviewSerializer(rev).data
 
             temp_dict = {
                 'ad': adSerializer,
                 'event': eventSerializer,
+                'review': revSerializer,
             }
 
             querylist.append(temp_dict)
@@ -1615,10 +1670,18 @@ def bookers_bookings(request):
             ad = Advertisement.objects.get(poster=ev.ad_owner, ad_id=ev.ad_id)
             adSerializer = AdvertisementSerializer(ad).data
             eventSerializer = EventSerializer(ev).data
+            reviewer =  booker
+            rev = Accommodation_Review.objects.filter(reviewer=reviewer, ad_owner=ad_owner)
+            print('HERE-->', rev, len(rev))
+            if len(rev) != 0:
+                revSerializer = AccommodationReviewSerializer(rev, many=True).data
+            else:
+                revSerializer =[]
 
             temp_dict = {
                 'ad': adSerializer,
                 'event': eventSerializer,
+                'review': revSerializer,
             }
 
             querylist.append(temp_dict)
@@ -1860,6 +1923,3 @@ def get_occupied_dates(request):
         return JsonResponse(occupied_dates, safe=False)
     else:
         return HttpResponse(status=400)
-
-
-

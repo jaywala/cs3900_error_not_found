@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-12">
               <h1>{{this.message[0].accommodation_name}}</h1>
-              <small>{{this.message[0].suburb}}</small>
+              <small>{{this.message[0].city}}</small>
               <div style="">
                 <div class="row">
                   <div style="margin-right: 16px;">{{this.message[0].num_guests}} <i class="fas fa-users"></i></div>
