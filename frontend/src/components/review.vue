@@ -18,7 +18,7 @@
             <div class="" v-if = "book.event.booking_status == 'reviewed'">
             </div>
           <div class="" v-if="book.event.booking_status == 'booked'">
-              you have the change to cancel the booking one day before you arrive
+              You have the chance to cancel the booking one day before your check in date.
           </div>
           <div v-if="book.event.booking_status != 'finished'">
               <md-radio v-model="reviews[n].rating" value="1" hidden>1</md-radio>
