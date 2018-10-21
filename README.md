@@ -21,7 +21,7 @@ cd frontend
 npm install
 ```
 
-### Every time you add a python dependancy to the project, run:
+### Every time you add a python dependency to the project, run:
 ```
 pip freeze > requirements.txt
 ```
