@@ -1,6 +1,47 @@
 week2
-
-
-
+group of 4
+Brainstorm
+Task3 or Task2
 
 week3
+Finally want to go Task3
+Use django - vue js
+like airbnb styles
+
+week4
+trello generated
+initial the project
+auth0 used and start the front end
+
+week5
+auth0 implement the security
+token handle
+login handle
+
+week6
+page designed --login
+              --main pages
+              --detail page
+
+week7
+start implement axios
+interact with backend
+
+week8
+fixed the security issue
+when axios get data from backend Server
+
+week9
+implement search components
+and imageView components
+
+week10
+review and manage components
+
+week11
+front end most of the works Done
+vue router finished
+
+week12
+manage datePicker
+tech- fast react on page changing no refresh needed.
