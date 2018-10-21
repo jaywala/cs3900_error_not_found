@@ -30,6 +30,7 @@ pip freeze > requirements.txt
 After setting up the development environment & ensuring you've activated the v-env:
 ```
 python manage.py runserver &
+python check_events.py & 
 cd frontend
 npm run dev &
 ```
