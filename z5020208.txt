@@ -6,6 +6,40 @@ Week 2
 
 
 Week 3
+- Brainstrorm ideas on all the different projects
+- Decide to go with project 3 and epic stories for it
+- Started writing project proposal
 
 Week 4
 Monday: (Skype Meeting)
+- Added user stories to Trello board with deadlines
+- setup project on github Repository
+- Setup backend and frontend frameworks
+- install requirements in a new virtualenv
+
+Week 5
+- Find airbnb data to import
+- Discuss backend database models
+
+Week 6
+- Write python script to import dummy data into database models
+
+Week 8
+- Research images to base64 to save propertyy images
+
+Week 9
+- Implement base 64 images convertion into import data
+
+Mid sem break
+- Online meetings to discuss progress of frontend and backend
+
+Week 10
+- Combine backend and frontend
+- Increase images in database
+
+Week 11
+- Get more images for database for properties
+
+Week 12
+- Add date conversion functions
+- Testing of backend and frontend
