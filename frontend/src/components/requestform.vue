@@ -21,7 +21,7 @@
       <label>request detail</label>
       <md-textarea v-model="message.detail"></md-textarea>
     </md-field>
-    <md-button class="md-dense md-raised md-primary" @click = "submit()">public</md-button>
+    <md-button class="md-dense md-raised md-primary" @click = "submit()">Post</md-button>
   </div>
 </template>
 
