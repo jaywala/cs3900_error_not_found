@@ -16,7 +16,7 @@ from django.db.models import Max
 
 from .geo import position
 from .haversine import haversine
-from .send_email import host_email, booker_email, send_email
+from .send_email import host_email, booker_email, send_email, cancel_host_email, cancel_booker_email
 from datetime import datetime, time, timedelta
 import math
 import subprocess
@@ -979,6 +979,29 @@ def event_delete(request):
           '\n------------------------')
 
     event = Event.objects.filter(event_id=event_id, ad_owner=ad_owner, ad_id=ad_id)
+    print(event)
+
+    checkIn = event[0].get_start_day()
+    checkOut = event[0].get_end_day()
+
+    the_ad = Advertisement.objects.get(poster=ad_owner, ad_id=ad_id)
+    property_name = the_ad.get_accommodation_name()
+    owner = User_Profile.objects.get(email=ad_owner)
+    poster_name = owner.get_given_name()
+    booker_user = User_Profile.objects.get(email=booker)
+    booker_name = booker_user.get_given_name()
+
+
+    # subprocess did not speed up the emailing, even though it's
+    # parallel according to docs. so leaving this as is.
+    booked_period = str(checkIn) + " to " + str(checkOut)
+    subject = 'Property ' + property_name + ' has been cancelled'
+    h_email = cancel_host_email(poster_name, property_name, booked_period, booker_name)
+    send_email(ad_owner, h_email, subject)
+
+    subject = 'Cancellation for the booking: ' + property_name
+    b_email = cancel_booker_email(booker_name, property_name, booked_period)
+    send_email(booker, b_email, subject)
 
     if event.exists() and len(event) == 1:
 
