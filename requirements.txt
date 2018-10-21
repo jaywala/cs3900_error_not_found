@@ -4,11 +4,9 @@ certifi==2018.8.13
 cffi==1.11.5
 chardet==3.0.4
 cryptography==2.3
-defusedxml==0.5.0
 Django==2.1
 django-cors-headers==2.4.0
 django-rest-auth==0.9.3
-django-rest-multiple-models==2.1.1
 django-vue==0.0.1
 djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
