@@ -30,7 +30,7 @@ pip freeze > requirements.txt
 
 #-------------------Note to TUTOR-------------------#
 
-When we run “make” the command “python manage.py runserver &” does not stay running in the background. Can you please run “make”, then open a new terminal navigate to the root directory “cs3900_error_not_found”, then run this command “python manage.py runserver”.
+When we run “make” the command “python manage.py runserver &” SOMETIMES does not stay running in the background. Can you please run “make”, then open a new terminal navigate to the root directory “cs3900_error_not_found”, then run this command “python manage.py runserver”, IF that happens.
 
 OR
 
