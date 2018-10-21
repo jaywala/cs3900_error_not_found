@@ -27,6 +27,14 @@ pip freeze > requirements.txt
 ```
 
 ## Instructions for RUNNING the project locally.
+
+#-------------------Note to TUTOR-------------------#
+
+When we run “make” the command “python manage.py runserver &” does not stay run in the background. Can you please run make, then open a new terminal navigate to the root directory “cs3900_error_not_found”, then run this command “python manage.py runserver”. Thank you.
+
+#---------------------------------------------------#
+
+
 After setting up the development environment & ensuring you've activated the v-env:
 Change your directory back to the root directory (i.e. cs3900_error_not_found).
 
