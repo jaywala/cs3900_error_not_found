@@ -39,17 +39,23 @@ Run the Script
 make
 ```
 
-If you would like to do this manually, instead of using the make command:
-Run the following for the first time to make the database:
+If you would like to do this manually or the makefile did not work properly:
+
+Run the following to make the database (ONLY THE FIRST TIME):
 ```
 python manage.py makemigrations
 python manage.py migrate
 python importData.py
 ```
+
 Run the following every time to run project locally:
 ```
-python manage.py runserver &
 python check_events.py &
+python manage.py runserver &
+```
+Open new terminal, navigate to root directory (cs3900cs3900_error_not_found)
+and activate virtual environment like you did above.
+```
 cd frontend
 npm run dev &
 ```
