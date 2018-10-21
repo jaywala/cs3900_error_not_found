@@ -7,6 +7,31 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
+def cancel_host_email(host,property_name,dates,user):
+    message = """\
+    <html>
+      <head></head>
+      <body style="border:3px; border-style:solid; border-color:#3081EA; padding: 1em;">
+        <p ><font face="Trebuchet MS" color="#474B50">
+           Hi {host}<br>
+           <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; This is a confirmation email to notify your property, <strong>{property_name}</strong><br>
+           &nbsp; &nbsp; &nbsp; &nbsp; has been CANCELED for the dates, <strong>{dates}</strong> by <strong>{user}</strong>.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/manage/">here</a></strong> to manage your bookings.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+
+           Best Regards,<br>
+           <font color="#3081EA">NotAirBnB Team</font>
+           </font>
+        </p>
+      </body>
+    </html>
+    """.format(host=host, property_name=property_name, dates=dates, user=user)
+
+    return message
+
+
 def host_email(host,property_name,dates,user):
     message = """\
     <html>
@@ -28,6 +53,31 @@ def host_email(host,property_name,dates,user):
       </body>
     </html>
     """.format(host=host, property_name=property_name, dates=dates, user=user)
+
+    return message
+
+
+def cancel_booker_email(user,property_name,dates): #TODO change the link when ready
+    message = """\
+    <html>
+      <head></head>
+      <body style="border:3px; border-style:solid; border-color:#3081EA; padding: 1em;">
+        <p ><font face="Trebuchet MS" color="#474B50">
+           Hi {user}<br>
+           <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; This is an email to confirm your booking of, <strong>{property_name}</strong><br>
+           &nbsp; &nbsp; &nbsp; &nbsp; for the dates <strong>{dates}</strong> has been CANCELED.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+           &nbsp; &nbsp; &nbsp; &nbsp; Click <strong><a href="http://localhost:8080/trips/">here</a></strong> to manage your bookings.<br>
+           &nbsp; &nbsp; &nbsp; &nbsp; <br>
+
+           Best Regards,<br>
+           <font color="#3081EA">NotAirBnB Team</font>
+           </font>
+        </p>
+      </body>
+    </html>
+    """.format(user=user, property_name=property_name, dates=dates)
 
     return message
 

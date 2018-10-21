@@ -34,6 +34,7 @@ export default {
     }
   },
   mounted() {
+    //used to handle auth and return to main page
     this.$auth.handleAuthentication().then((data) => {
       this.message = this.$auth.getUserProfile()
       axios.post("http://localhost:8000/post/userLoggedIn/", {body: this.message})

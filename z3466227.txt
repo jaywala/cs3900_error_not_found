@@ -61,3 +61,4 @@ wrote a send email function.
 
 Week 12
 Making sure the back and frontend are GETTING and POSTING the right data.
+Fixing bugs.

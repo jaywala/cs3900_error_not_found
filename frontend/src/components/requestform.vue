@@ -21,7 +21,7 @@
       <label>request detail</label>
       <md-textarea v-model="message.detail"></md-textarea>
     </md-field>
-    <md-button class="md-dense md-raised md-primary" @click = "submit()">public</md-button>
+    <md-button class="md-dense md-raised md-primary" @click = "submit()">Post</md-button>
   </div>
 </template>
 
@@ -44,6 +44,7 @@ import axios from 'axios'
       },
     }),
     methods: {
+      //submit a request
       submit() {
         this.message.name = this.getProfile().nickname
         this.message.email = this.getProfile().email
@@ -57,9 +58,11 @@ import axios from 'axios'
           this.message.detail = null
         }, 150)
       },
+      //get user profile
       getProfile(){
         return router.app.$auth.getUserProfile()
       },
+      // delete request
       deleter(r){
         axios.post("http://localhost:8000/post/PropertyRequest/delete/",{body: r})
         .then(response => {

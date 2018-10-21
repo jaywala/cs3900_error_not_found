@@ -217,6 +217,7 @@ export default {
     VueGoogleAutocomplete,
     Slider,
   },
+  // all datas
   data() {
     return {
       mapCenter: {
@@ -274,6 +275,7 @@ export default {
       parameters:null,
     }
   },
+  //computed means computed all the time dynamicly
   computed: {
     datesRange () {
       return this.message['dateOne'] + "  -  " + this.message['dateTwo'];
